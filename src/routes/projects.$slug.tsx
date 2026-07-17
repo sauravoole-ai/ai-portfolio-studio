@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
+import type { Project } from "@/lib/content";
 import { projects } from "@/lib/content";
 
 export const Route = createFileRoute("/projects/$slug")({
@@ -46,7 +47,7 @@ function NotFound() {
 }
 
 function ProjectPage() {
-  const { project } = Route.useLoaderData();
+  const { project } = Route.useLoaderData() as { project: Project };
   const idx = projects.findIndex((p) => p.slug === project.slug);
   const next = projects[(idx + 1) % projects.length];
 

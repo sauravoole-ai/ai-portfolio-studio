@@ -8,8 +8,10 @@ const nav = [
   { to: "/projects", label: "Projects" },
   { to: "/writing", label: "Writing" },
   { to: "/about", label: "About" },
+  { to: "/discovery", label: "Discovery" },
   { to: "/contact", label: "Contact" },
 ] as const;
+
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);

@@ -29,22 +29,43 @@ function Home() {
     <SiteShell>
       {/* Hero */}
       <section className="container-editorial pt-20 pb-16 md:pt-32 md:pb-24 animate-rise">
-        <p className="eyebrow">Portfolio · {SITE.location}</p>
+        <p className="eyebrow">Applied AI Product Builder · {SITE.location}</p>
         <h1 className="mt-6 max-w-4xl font-display text-5xl leading-[1.02] tracking-tight sm:text-6xl md:text-7xl">
-          Building AI products that feel{" "}
-          <em className="italic text-[color:var(--terracotta)]">considered</em>,
-          not conjured.
+          Designing and shipping AI products that solve real problems.
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          I'm [Your Name] — a product builder working on the interface layer of
-          applied AI. I design, engineer and ship end-to-end: research through
-          production surface. Currently taking a small number of collaborations
-          for {new Date().getFullYear()}.
+          I turn complex AI capabilities into useful, reliable products — from
+          early prototypes and API integrations to production interfaces people
+          actually want to use.
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm">
-          <Link to="/projects" className="link-underline">Selected work</Link>
-          <Link to="/writing" className="link-underline">Writing & build logs</Link>
-          <Link to="/contact" className="link-underline">Get in touch</Link>
+        <div className="mt-10 flex flex-wrap items-center gap-4">
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+          >
+            View Projects
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <Link
+            to="/writing"
+            className="inline-flex items-center gap-2 rounded-full border border-foreground px-6 py-3 text-sm font-medium transition-colors hover:bg-foreground hover:text-background"
+          >
+            Read Build Logs
+          </Link>
+        </div>
+        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-border pt-8 text-sm text-muted-foreground">
+          <span className="flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--terracotta)]" />
+            Deployed AI applications
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--terracotta)]" />
+            API integrations
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--terracotta)]" />
+            AI-assisted development
+          </span>
         </div>
       </section>
 

@@ -167,7 +167,7 @@ function Discovery() {
           </form>
         ) : (
           <Recommendation
-            answers={answers as Required<Answers>}
+            answers={answers as { product: ProductType; stage: Stage; support: Support }}
             onReset={reset}
           />
         )}
@@ -249,7 +249,7 @@ function Recommendation({
   answers,
   onReset,
 }: {
-  answers: Required<Answers>;
+  answers: { product: ProductType; stage: Stage; support: Support };
   onReset: () => void;
 }) {
   const rec = recommend(answers);

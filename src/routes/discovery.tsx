@@ -61,7 +61,7 @@ type Answers = {
   support: Support | null;
 };
 
-function recommend(a: Required<Answers>) {
+function recommend(a: { product: ProductType; stage: Stage; support: Support }) {
   const directionByProduct: Record<ProductType, string> = {
     "internal-tool":
       "A focused internal copilot that removes one painful workflow — measured on time saved per week, not features shipped.",

@@ -1,11 +1,17 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
-import type { Project } from "@/lib/content";
-import { projects } from "@/lib/content";
+import { listPublishedProjects, type PublishedProject } from "@/lib/projects.functions";
+
+const projectsQueryOptions = queryOptions({
+  queryKey: ["projects", "published"],
+  queryFn: () => listPublishedProjects(),
+});
 
 export const Route = createFileRoute("/projects/$slug")({
-  loader: ({ params }) => {
-    const project = projects.find((p) => p.slug === params.slug);
+  loader: async ({ params, context }) => {
+    const projects = await context.queryClient.ensureQueryData(projectsQueryOptions);
+    const project = projects.find((p: PublishedProject) => p.slug === params.slug);
     if (!project) throw notFound();
     return { project };
   },
@@ -19,12 +25,14 @@ export const Route = createFileRoute("/projects/$slug")({
       };
     }
     const { project } = loaderData;
+    const title = project.title ?? "Untitled project";
+    const summary = project.summary ?? "";
     return {
       meta: [
-        { title: `${project.name} — Case study` },
-        { name: "description", content: project.summary },
-        { property: "og:title", content: `${project.name} — Case study` },
-        { property: "og:description", content: project.summary },
+        { title: `${title} — Case study` },
+        { name: "description", content: summary },
+        { property: "og:title", content: `${title} — Case study` },
+        { property: "og:description", content: summary },
       ],
     };
   },
@@ -47,9 +55,10 @@ function NotFound() {
 }
 
 function ProjectPage() {
-  const { project } = Route.useLoaderData() as { project: Project };
-  const idx = projects.findIndex((p) => p.slug === project.slug);
-  const next = projects[(idx + 1) % projects.length];
+  const { project } = Route.useLoaderData();
+  const { data: projects } = useSuspenseQuery(projectsQueryOptions);
+  const idx = projects.findIndex((p: PublishedProject) => p.slug === project.slug);
+  const next = projects.length > 1 ? projects[(idx + 1) % projects.length] : null;
 
   return (
     <SiteShell>
@@ -59,104 +68,44 @@ function ProjectPage() {
             ← Projects
           </Link>
           <h1 className="mt-6 max-w-4xl font-display text-4xl leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-            {project.name}
+            {project.title ?? "Untitled project"}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            {project.tagline}
-          </p>
-
-          <dl className="mt-12 grid grid-cols-2 gap-y-6 border-y border-border py-6 md:grid-cols-4">
-            <MetaItem label="Year" value={project.year} />
-            <MetaItem label="Role" value={project.role} />
-            <MetaItem label="Status" value={project.status} />
-            <MetaItem label="Stack" value={project.stack.join(" · ")} />
-          </dl>
+          {project.summary ? (
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+              {project.summary}
+            </p>
+          ) : null}
         </header>
 
-        <section className="container-editorial grid gap-12 pb-20 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16">
-          <h2 className="eyebrow md:pt-2">Overview</h2>
-          <p className="max-w-2xl font-display text-2xl leading-snug md:text-3xl">
-            {project.summary}
-          </p>
-        </section>
-
         <section className="border-t border-border">
           <div className="container-editorial grid gap-12 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
-            <h2 className="eyebrow md:pt-2">The problem</h2>
-            <p className="max-w-2xl text-lg leading-relaxed">{project.problem}</p>
-          </div>
-        </section>
-
-        <section className="border-t border-border">
-          <div className="container-editorial grid gap-12 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
-            <h2 className="eyebrow md:pt-2">Approach</h2>
-            <ol className="max-w-2xl space-y-6">
-              {project.approach.map((step, i) => (
-                <li key={i} className="grid grid-cols-[3ch_1fr] gap-4">
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className="text-lg leading-relaxed">{step}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        <section className="border-t border-border bg-secondary/40">
-          <div className="container-editorial py-16 md:py-24">
-            <p className="eyebrow">By the numbers</p>
-            <div className="mt-8 grid gap-8 sm:grid-cols-3">
-              {project.metrics.map((m) => (
-                <div key={m.label} className="border-t border-border pt-6">
-                  <p className="font-display text-4xl md:text-5xl">{m.value}</p>
-                  <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
-                </div>
-              ))}
+            <h2 className="eyebrow md:pt-2">Case study</h2>
+            <div className="max-w-2xl space-y-6 text-lg leading-relaxed text-muted-foreground">
+              <p>[Case study content will appear here once the project detail schema is expanded — problem, approach, outcome, and metrics.]</p>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border">
-          <div className="container-editorial grid gap-12 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
-            <h2 className="eyebrow md:pt-2">Outcome</h2>
-            <ul className="max-w-2xl space-y-4">
-              {project.outcome.map((o, i) => (
-                <li key={i} className="border-l-2 border-[color:var(--terracotta)] pl-4 text-lg leading-relaxed">
-                  {o}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        <nav className="border-t border-border">
-          <Link
-            to="/projects/$slug"
-            params={{ slug: next.slug }}
-            className="group container-editorial flex flex-col justify-between gap-4 py-12 md:flex-row md:items-end md:py-16"
-          >
-            <div>
-              <p className="eyebrow">Next project</p>
-              <p className="mt-3 font-display text-3xl md:text-4xl group-hover:text-[color:var(--terracotta)] transition-colors">
-                {next.name}
-              </p>
-            </div>
-            <span className="text-sm text-muted-foreground">
-              {next.tagline} <span aria-hidden>→</span>
-            </span>
-          </Link>
-        </nav>
+        {next && next.slug ? (
+          <nav className="border-t border-border">
+            <Link
+              to="/projects/$slug"
+              params={{ slug: next.slug }}
+              className="group container-editorial flex flex-col justify-between gap-4 py-12 md:flex-row md:items-end md:py-16"
+            >
+              <div>
+                <p className="eyebrow">Next project</p>
+                <p className="mt-3 font-display text-3xl transition-colors group-hover:text-[color:var(--terracotta)] md:text-4xl">
+                  {next.title ?? "Untitled"}
+                </p>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {next.summary ?? ""} <span aria-hidden>→</span>
+              </span>
+            </Link>
+          </nav>
+        ) : null}
       </article>
     </SiteShell>
-  );
-}
-
-function MetaItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="eyebrow">{label}</dt>
-      <dd className="mt-2 text-sm">{value}</dd>
-    </div>
   );
 }

@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet, useMatches } from "@tanstack/react-router";
 import { SiteShell, PageHeader } from "@/components/site-shell";
+import { PremiumEmptyState } from "@/components/premium-empty-state";
 
 export const Route = createFileRoute("/writing")({
   head: () => ({
@@ -30,10 +31,13 @@ function WritingLayout() {
         title="From the workbench."
         lede="Long essays about the craft of applied AI, short build logs from projects in flight, and notes kept in public."
       />
-      <section className="container-editorial pb-24">
-        <p className="border-y border-border py-16 text-center text-sm text-muted-foreground">
-          No essays or build logs have been published yet.
-        </p>
+      <section className="container-editorial pb-16 md:pb-24">
+        <PremiumEmptyState
+          eyebrow="Publishing index"
+          heading="Essays, build logs, and notes will appear here when they are ready."
+          explanation="This space is reserved for genuine writing from the workbench; nothing has been published yet."
+          atmosphere="quiet"
+        />
       </section>
     </SiteShell>
   );

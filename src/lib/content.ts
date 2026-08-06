@@ -7,10 +7,12 @@ export const SITE = {
   tagline:
     "Designing and shipping AI products that feel considered — from research prototype to production surface.",
   location: "[Location]",
-  email: "[Contact Email]",
-  github: "[GitHub]",
-  twitter: "[Twitter]",
-  linkedin: "[LinkedIn]",
+  github: "GitHub",
+  githubUrl: "https://github.com/sauravoole-ai",
+  linkedin: "LinkedIn",
+  linkedinUrl: "https://www.linkedin.com/in/saurav-kumarjha/",
+  instagram: "Instagram",
+  instagramUrl: "https://www.instagram.com/sauravjha_ai/",
 };
 
 // Capability groups are generic scaffolding, not personal claims.

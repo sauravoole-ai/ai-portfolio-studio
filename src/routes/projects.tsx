@@ -1,8 +1,7 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { ArrowUpRight } from "lucide-react";
-import { PremiumEmptyState } from "@/components/premium-empty-state";
-import { SiteShell, PageHeader } from "@/components/site-shell";
+import { ArrowRight } from "lucide-react";
+import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects } from "@/lib/projects.functions";
 
 const projectsQueryOptions = queryOptions({
@@ -57,51 +56,77 @@ function ProjectsIndex() {
 
   return (
     <SiteShell>
-      <PageHeader
-        eyebrow="Projects · 2023–2026"
-        title="Selected work, considered."
-        lede="A small, curated set of AI products I've designed, engineered or shipped. Each has a short case study — problem, approach, outcome."
-      />
-      <section className="container-editorial pb-16 md:pb-24">
+      <section className="work-route-intro animate-rise">
+        <div className="container-editorial work-route-intro__inner">
+          <div className="work-route-intro__copy">
+            <p className="eyebrow text-accent">Projects · 2023–2026</p>
+            <h1 className="mt-6 text-5xl leading-[0.98] tracking-[-0.05em] sm:text-6xl md:text-7xl">
+              Selected work, considered.
+            </h1>
+            <p className="mt-7 text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
+              A small, curated set of AI products I've designed, engineered or shipped. Each has a
+              short case study — problem, approach, outcome.
+            </p>
+          </div>
+
+          <figure className="work-route-intro__visual">
+            <img
+              src="/work-route-visual.webp"
+              alt="A young boy pauses beside a window overlooking distant woods in a quiet workspace."
+              width={1536}
+              height={1024}
+            />
+          </figure>
+        </div>
+      </section>
+      <section className="work-project-index container-editorial pb-8 md:pb-12">
         {projects.length === 0 ? (
-          <PremiumEmptyState
-            eyebrow="Project index"
-            heading="Case studies will appear here once projects are published."
-            explanation="This index is ready for genuine project work, with space for a clear problem, approach, and outcome."
-            action={{ label: "Start a conversation", to: "/contact" }}
-            atmosphere="mist"
-          />
+          <div className="work-project-empty">
+            <p className="eyebrow text-accent">Project index</p>
+            <h2 className="mt-4 text-2xl leading-tight tracking-[-0.035em] sm:text-3xl">
+              Case studies will appear here once projects are published.
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-7 text-foreground-soft">
+              This index is ready for genuine project work, with space for a clear problem,
+              approach, and outcome.
+            </p>
+          </div>
         ) : (
-          <ul className="space-y-3">
+          <ul className="work-project-grid">
             {projects.map((p, i) => {
+              const title = p.title ?? "Untitled";
               const row = (
                 <>
-                  <span className="font-mono text-xs text-quiet-foreground">
+                  <span className="work-project-card__number font-mono">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-xl font-medium leading-tight tracking-[-0.03em] text-foreground sm:text-2xl">
-                    {p.title ?? "Untitled"}
+                  <span className="work-project-card__copy">
+                    <span className="work-project-card__title">{title}</span>
+                    {p.summary ? (
+                      <span className="work-project-card__summary">{p.summary}</span>
+                    ) : null}
                   </span>
-                  <span className="col-span-2 col-start-2 text-sm leading-6 text-muted-foreground md:col-span-1 md:col-start-auto md:max-w-md">
-                    {p.summary ?? ""}
-                  </span>
-                  <span className="col-start-3 row-start-1 inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface-inset text-foreground-soft transition-[border-color,color,transform] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-accent-muted group-hover:text-accent md:col-start-auto md:row-start-auto">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
+                  {p.slug ? (
+                    <span className="work-project-card__arrow" aria-hidden>
+                      <ArrowRight className="h-4 w-4" />
+                    </span>
+                  ) : null}
                 </>
               );
-
-              const gridClass =
-                "focus-ring group grid min-h-28 grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-4 rounded-[var(--radius-card)] border border-border bg-surface-1 px-5 py-6 shadow-[var(--shadow-xs)] transition-[border-color,background-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-border-strong hover:bg-surface-2 hover:shadow-[var(--shadow-sm)] md:grid-cols-[3rem_minmax(12rem,0.9fr)_minmax(16rem,1.1fr)_auto] md:gap-8 md:px-8";
 
               return (
                 <li key={p.id}>
                   {p.slug ? (
-                    <Link to="/projects/$slug" params={{ slug: p.slug }} className={gridClass}>
+                    <Link
+                      to="/projects/$slug"
+                      params={{ slug: p.slug }}
+                      className="work-project-card work-project-card--linked focus-ring group"
+                      aria-label={`View project: ${title}`}
+                    >
                       {row}
                     </Link>
                   ) : (
-                    <div className={gridClass}>{row}</div>
+                    <article className="work-project-card work-project-card--static">{row}</article>
                   )}
                 </li>
               );

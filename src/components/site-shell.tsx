@@ -1,11 +1,17 @@
 import type { ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
 import { PoeticAtmosphere } from "./poetic-atmosphere";
 
 export function SiteShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const hasInnerAtmosphere = ["/projects", "/writing", "/about", "/contact"].includes(pathname);
+
   return (
-    <div className="site-ambient flex min-h-screen flex-col overflow-x-clip">
+    <div
+      className={`site-ambient flex min-h-screen flex-col overflow-x-clip${hasInnerAtmosphere ? " site-ambient--inner" : ""}`}
+    >
       <PoeticAtmosphere className="poetic-atmosphere--shell" variant="mist" />
       <a
         href="#main-content"

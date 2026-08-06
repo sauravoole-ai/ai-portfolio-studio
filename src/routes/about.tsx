@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteShell, PageHeader } from "@/components/site-shell";
+import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/content";
 import { capabilities } from "@/lib/content";
 
@@ -21,26 +21,44 @@ export const Route = createFileRoute("/about")({
 function About() {
   return (
     <SiteShell>
-      <PageHeader
-        eyebrow="About"
-        title="Building software that respects the person using it."
-        lede={`${SITE.name} — ${SITE.role}. This page is a structural placeholder ready for a real biography, principles and timeline.`}
-      />
+      <section className="work-route-intro about-route-intro animate-rise">
+        <div className="container-editorial work-route-intro__inner">
+          <div className="work-route-intro__copy">
+            <p className="eyebrow text-accent">About</p>
+            <h1 className="mt-6 text-5xl leading-[0.98] tracking-[-0.05em] sm:text-6xl md:text-7xl">
+              Building software that respects the person using it.
+            </h1>
+            <p className="mt-7 text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
+              {SITE.name} — {SITE.role}. This page is a structural placeholder ready for a real
+              biography, principles and timeline.
+            </p>
+          </div>
 
-      <section className="container-editorial grid gap-8 pb-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16">
+          <figure className="work-route-intro__visual">
+            <img
+              src="/about-route-visual.webp"
+              alt="A young boy follows a winding rural road beneath diffused moonlight."
+              width={1536}
+              height={1024}
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section className="about-editorial-section about-biography container-editorial grid gap-8 pb-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16">
         <h2 className="eyebrow md:pt-2">Biography</h2>
-        <div className="max-w-2xl space-y-6 text-lg leading-relaxed text-muted-foreground">
+        <div className="about-biography__copy max-w-2xl space-y-6 text-lg leading-relaxed text-muted-foreground">
           <p>[Short paragraph — who you are, what you build, and what you care about.]</p>
           <p>[Second paragraph — how you work, who you work with, and what you're currently focused on.]</p>
         </div>
       </section>
 
-      <section className="border-t border-border">
-        <div className="container-editorial grid gap-12 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
+      <section className="about-editorial-section about-principles border-t border-border">
+        <div className="about-editorial-section__grid container-editorial grid gap-12 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
           <h2 className="eyebrow md:pt-2">Principles</h2>
           <ol className="max-w-2xl space-y-10">
             {[1, 2, 3].map((i) => (
-              <li key={i} className="grid grid-cols-[3ch_1fr] gap-4">
+              <li key={i} className="about-principles__item grid grid-cols-[3ch_1fr] gap-4">
                 <span className="pt-2 font-mono text-xs text-muted-foreground">
                   {String(i).padStart(2, "0")}
                 </span>
@@ -56,12 +74,12 @@ function About() {
         </div>
       </section>
 
-      <section className="border-t border-border-subtle bg-surface-inset/55">
-        <div className="container-editorial grid gap-8 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
+      <section className="about-editorial-section about-process border-t border-border-subtle bg-surface-inset/55">
+        <div className="about-editorial-section__grid container-editorial grid gap-8 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
           <h2 className="eyebrow text-mint md:pt-2">Working process</h2>
           <div className="max-w-2xl space-y-8">
             {["Understand", "Shape", "Build", "Learn"].map((stage, index) => (
-              <div key={stage} className="grid grid-cols-[3ch_minmax(0,1fr)] gap-4 border-b border-border-subtle pb-8 last:border-0 last:pb-0">
+              <div key={stage} className="about-process__stage grid grid-cols-[3ch_minmax(0,1fr)] gap-4 border-b border-border-subtle pb-8 last:border-0 last:pb-0">
                 <span className="pt-1 font-mono text-xs text-quiet-foreground">{String(index + 1).padStart(2, "0")}</span>
                 <div>
                   <h3 className="text-xl font-medium tracking-[-0.03em]">[{stage} — process detail]</h3>
@@ -73,10 +91,10 @@ function About() {
         </div>
       </section>
 
-      <section className="border-t border-border-subtle">
-        <div className="container-editorial grid gap-8 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
+      <section className="about-editorial-section about-capabilities border-t border-border-subtle">
+        <div className="about-editorial-section__grid container-editorial grid gap-8 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
           <h2 className="eyebrow text-violet md:pt-2">Capabilities</h2>
-          <div className="grid max-w-3xl gap-10 sm:grid-cols-3">
+          <div className="about-capabilities__grid grid max-w-3xl gap-10 sm:grid-cols-3">
             {capabilities.map((group) => (
               <div key={group.heading}>
                 <h3 className="text-lg font-medium tracking-[-0.025em]">{group.heading}</h3>
@@ -89,17 +107,17 @@ function About() {
         </div>
       </section>
 
-      <section className="border-t border-border-subtle">
-        <div className="container-editorial grid gap-8 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
+      <section className="about-editorial-section about-journey border-t border-border-subtle">
+        <div className="about-editorial-section__grid container-editorial grid gap-8 py-16 md:grid-cols-[16ch_minmax(0,1fr)] md:gap-16 md:py-24">
           <h2 className="eyebrow md:pt-2">Professional journey</h2>
-          <div className="max-w-2xl border-y border-border-subtle py-10">
+          <div className="about-journey__record max-w-2xl border-y border-border-subtle py-10">
             <h3 className="text-2xl font-medium tracking-[-0.035em]">[Professional journey]</h3>
             <p className="mt-4 text-base leading-7 text-muted-foreground">[Add an honest chronology of roles, transitions, areas of focus, and current direction. No dates or achievements have been assumed.]</p>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-border">
+      <section className="about-contact-cta border-t border-border">
         <div className="container-editorial py-20 text-center md:py-28">
           <h2 className="mx-auto max-w-3xl text-3xl font-medium leading-tight tracking-[-0.045em] md:text-5xl">
             If any of this rhymes with a problem you're working on,{" "}

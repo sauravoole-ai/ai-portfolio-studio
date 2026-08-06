@@ -1,22 +1,27 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { SITE } from "@/lib/content";
 
 const footerNav = [
   { to: "/projects", label: "Projects" },
   { to: "/writing", label: "Writing" },
   { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
 ] as const;
 
 const footerLinkClass =
-  "focus-ring inline-flex min-h-12 items-center rounded-lg text-base text-muted-foreground transition-colors hover:text-foreground md:min-h-11 md:text-sm";
+  "site-footer__link focus-ring inline-flex min-h-12 items-center gap-1.5 rounded-md text-base text-muted-foreground md:min-h-11 md:text-sm";
+
+const socialLinks = [
+  { label: SITE.github, href: SITE.githubUrl },
+  { label: SITE.linkedin, href: SITE.linkedinUrl },
+  { label: SITE.instagram, href: SITE.instagramUrl },
+] as const;
 
 export function SiteFooter() {
   return (
     <footer className="relative mt-24 border-t border-border-subtle bg-surface-inset md:mt-36">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/35 to-transparent" aria-hidden />
-      <div className="container-wide grid gap-14 py-16 md:grid-cols-[1.6fr_0.8fr_1fr] md:gap-16 md:py-20">
+      <div className="container-wide grid gap-10 py-14 md:grid-cols-[1.6fr_0.8fr_1fr] md:gap-12 md:py-16">
         <div>
           <div className="flex items-center gap-3">
             <span className="h-2 w-2 rounded-full bg-mint shadow-[0_0_16px_oklch(0.76_0.085_160/0.35)]" aria-hidden />
@@ -28,9 +33,9 @@ export function SiteFooter() {
           <p className="mt-4 max-w-md text-base leading-7 text-foreground-soft">
             {SITE.role}
           </p>
-          <Link to="/contact" className="button-primary focus-ring group mt-8">
+          <Link to="/contact" className="site-footer__cta button-primary focus-ring group mt-8">
             Start a conversation
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
           </Link>
         </div>
 
@@ -49,10 +54,20 @@ export function SiteFooter() {
 
         <div>
           <p className="eyebrow text-foreground-soft">Elsewhere</p>
-          <ul className="mt-4 space-y-0 md:mt-5">
-            <li><a href="#" className={footerLinkClass}>{SITE.github}</a></li>
-            <li><a href="#" className={footerLinkClass}>{SITE.linkedin}</a></li>
-            <li><a href={`mailto:${SITE.email}`} className={footerLinkClass}>{SITE.email}</a></li>
+          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-0 md:mt-5">
+            {socialLinks.map((item) => (
+              <li key={item.href}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={footerLinkClass}
+                >
+                  {item.label}
+                  <span aria-hidden>↗</span>
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowUpRight, RefreshCcw } from "lucide-react";
+import { ArrowRight, RefreshCcw } from "lucide-react";
 import { SiteShell, PageHeader } from "@/components/site-shell";
 
 export const Route = createFileRoute("/discovery")({
@@ -161,7 +161,7 @@ function Discovery() {
                 disabled={!complete}
                 className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm text-background transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
               >
-                See recommendation <ArrowUpRight className="h-4 w-4" />
+                See recommendation <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </form>
@@ -287,7 +287,7 @@ function Recommendation({
             to="/contact"
             className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm text-background"
           >
-            Start a conversation <ArrowUpRight className="h-4 w-4" />
+            Start a conversation <ArrowRight className="h-4 w-4" />
           </Link>
           <button
             type="button"

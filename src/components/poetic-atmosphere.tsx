@@ -18,6 +18,16 @@ export function PoeticAtmosphere({
     >
       <div className="poetic-atmosphere__light" />
       <svg
+        className="poetic-atmosphere__veils"
+        viewBox="0 0 1200 620"
+        preserveAspectRatio="none"
+        focusable="false"
+      >
+        <path d="M-80 510C170 348 350 500 558 402C760 306 914 296 1280 428V680H-80Z" />
+        <path d="M-100 560C176 430 372 552 610 464C846 376 1012 408 1300 494V680H-100Z" />
+        <path d="M-60 602C210 522 420 590 676 526C906 468 1082 494 1260 548V680H-60Z" />
+      </svg>
+      <svg
         className="poetic-atmosphere__contours"
         viewBox="0 0 1200 520"
         preserveAspectRatio="none"

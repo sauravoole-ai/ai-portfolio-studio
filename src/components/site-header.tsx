@@ -1,113 +1,187 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { SITE } from "@/lib/content";
 
 const nav = [
   { to: "/", label: "Home" },
-  { to: "/projects", label: "Projects" },
-  { to: "/writing", label: "Writing" },
+  { to: "/projects", label: "Work" },
+  { to: "/writing", label: "Journal" },
   { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/contact", label: "Connect" },
 ] as const;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [brandHidden, setBrandHidden] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRootRef = useRef<HTMLDivElement>(null);
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const routeTone = pathname === "/"
+    ? "home"
+    : pathname.startsWith("/projects")
+      ? "work"
+      : pathname.startsWith("/writing")
+        ? "journal"
+        : pathname.startsWith("/about")
+          ? "about"
+          : pathname.startsWith("/contact")
+            ? "connect"
+            : "inner";
+  const nextRoute = routeTone === "home"
+    ? { to: "/projects", label: "Work" }
+    : routeTone === "work"
+      ? { to: "/writing", label: "Journal" }
+      : routeTone === "journal"
+        ? { to: "/about", label: "About" }
+        : routeTone === "about"
+          ? { to: "/contact", label: "Connect" }
+          : { to: "/", label: "Home" };
+  const nextRouteLabel = `Next: ${nextRoute.label}`;
+
+  useEffect(() => {
+    if (open) {
+      setBrandHidden(false);
+      return;
+    }
+
+    const nearTopThreshold = 120;
+    const directionThreshold = 6;
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    let frameId = 0;
+
+    const updateBrandVisibility = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
+
+      if (currentScrollY <= nearTopThreshold) {
+        setBrandHidden(false);
+      } else if (Math.abs(scrollDelta) >= directionThreshold) {
+        setBrandHidden(scrollDelta > 0);
+      }
+
+      if (Math.abs(scrollDelta) >= directionThreshold || currentScrollY <= nearTopThreshold) {
+        lastScrollY = currentScrollY;
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        frameId = requestAnimationFrame(updateBrandVisibility);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(frameId);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
 
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
+    const closeAndRestoreFocus = () => {
       setOpen(false);
       requestAnimationFrame(() => triggerRef.current?.focus());
     };
-    const desktopQuery = window.matchMedia("(min-width: 1024px)");
-    const closeAtDesktop = () => {
-      if (desktopQuery.matches) setOpen(false);
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeAndRestoreFocus();
+    };
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (!menuRootRef.current?.contains(event.target as Node)) closeAndRestoreFocus();
     };
 
     window.addEventListener("keydown", closeOnEscape);
-    desktopQuery.addEventListener("change", closeAtDesktop);
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
     return () => {
       window.removeEventListener("keydown", closeOnEscape);
-      desktopQuery.removeEventListener("change", closeAtDesktop);
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
     };
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4">
-      <div className="container-wide rounded-[var(--radius-floating)] border border-border/80 bg-surface-1/95 shadow-[var(--shadow-sm)] backdrop-blur-md supports-[backdrop-filter]:bg-surface-1/88">
-        <div className="flex h-[4.25rem] items-center justify-between gap-5">
-          <Link
-            to="/"
-            className="focus-ring group inline-flex min-h-12 items-center rounded-xl"
-            aria-label={`${SITE.name} — home`}
-          >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-accent-muted/60 bg-accent/10" aria-hidden>
-              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_oklch(0.79_0.125_194/0.5)]" />
-            </span>
-            <span className="ml-3 text-[0.9375rem] font-semibold tracking-[-0.015em] text-foreground">
-              {SITE.name}
-            </span>
-            <span className="ml-3 hidden border-l border-border pl-3 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors group-hover:text-foreground-soft xl:inline">
-              {SITE.role}
-            </span>
-          </Link>
+    <header
+      className={`site-header site-header--${routeTone} fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4`}
+    >
+      <div className="container-wide site-header__layout">
+        <div className={`site-brand-capsule${brandHidden ? " site-brand-capsule--hidden" : ""}`}>
+          <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent-muted/60 bg-accent/10" aria-hidden>
+            <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_oklch(0.79_0.125_194/0.5)]" />
+          </span>
+          <span className="ml-3 whitespace-nowrap text-[0.9375rem] font-semibold tracking-[-0.015em] text-foreground">
+            {SITE.name}
+          </span>
+          <span className="site-brand-capsule__role ml-3 border-l border-border pl-3 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+            {SITE.role}
+          </span>
+        </div>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {nav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="focus-ring group relative rounded-full px-4 py-2.5 text-sm font-medium text-muted-foreground transition-[color,background-color] duration-200 hover:bg-surface-2 hover:text-foreground data-[status=active]:bg-surface-3 data-[status=active]:text-foreground"
-                activeProps={{ className: "bg-surface-3 text-foreground" }}
-                activeOptions={{ exact: item.to === "/" }}
-              >
-                {item.label}
-                <span className="absolute inset-x-4 -bottom-px h-px scale-x-0 bg-accent transition-transform group-data-[status=active]:scale-x-100" aria-hidden />
-              </Link>
-            ))}
-          </nav>
-
+        <div ref={menuRootRef} className="site-nav-control">
           <button
             ref={triggerRef}
             type="button"
             onClick={() => setOpen((value) => !value)}
-            className="focus-ring inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-2 text-foreground transition-[border-color,background-color,transform] hover:border-border-strong hover:bg-surface-3 active:scale-95 lg:hidden"
-            aria-label={open ? "Close navigation" : "Open navigation"}
+            className="site-nav-trigger focus-ring"
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            aria-controls="mobile-navigation"
+            aria-controls="site-navigation"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span>Menu</span>
           </button>
-        </div>
 
-        {open ? (
-          <div className="animate-menu-reveal border-t border-border/80 pb-3 pt-2 lg:hidden">
-            <nav id="mobile-navigation" className="flex flex-col" aria-label="Mobile">
+          {open ? (
+            <nav
+              id="site-navigation"
+              className="site-nav-dropdown animate-menu-reveal"
+              aria-label="Primary"
+            >
               {nav.map((item, index) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setOpen(false)}
-                  className="focus-ring group flex min-h-14 items-center justify-between rounded-xl px-4 text-base font-medium text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground data-[status=active]:bg-surface-3 data-[status=active]:text-foreground"
-                  activeProps={{ className: "bg-surface-3 text-foreground" }}
-                  activeOptions={{ exact: item.to === "/" }}
-                >
-                  <span className="flex items-center gap-3">
-                    <span className="h-1.5 w-1.5 rounded-full bg-quiet-foreground group-data-[status=active]:bg-accent" aria-hidden />
-                    {item.label}
-                  </span>
-                  <span className="font-mono text-xs text-quiet-foreground" aria-hidden>
-                    0{index + 1}
-                  </span>
-                </Link>
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => {
+                  setOpen(false);
+                  requestAnimationFrame(() => triggerRef.current?.focus());
+                }}
+                className="site-nav-dropdown__item focus-ring group"
+                activeProps={{ className: "text-foreground" }}
+                activeOptions={{ exact: item.to === "/" }}
+              >
+                <span className="flex items-center gap-3">
+                  <span className="site-nav-dropdown__indicator" aria-hidden />
+                  {item.label}
+                </span>
+                <span className="site-nav-dropdown__number font-mono text-xs text-quiet-foreground" aria-hidden>
+                  0{index + 1}
+                </span>
+              </Link>
               ))}
             </nav>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
+      </div>
+
+      <div
+        className={`site-next-route${open ? " site-next-route--hidden" : ""}`}
+        aria-hidden={open || undefined}
+      >
+        <span className="site-next-route__label" aria-hidden>
+          {nextRouteLabel}
+        </span>
+        <Link
+          to={nextRoute.to}
+          className="site-next-route__link focus-ring"
+          aria-label={nextRouteLabel}
+          tabIndex={open ? -1 : undefined}
+        >
+          <ArrowRight className="site-next-route__icon" aria-hidden />
+        </Link>
       </div>
     </header>
   );

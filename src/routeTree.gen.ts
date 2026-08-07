@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DiscoveryRouteImport } from './routes/discovery'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as StudioRouteImport } from './routes/studio'
 import { Route as WritingRouteImport } from './routes/writing'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as WritingSlugRouteImport } from './routes/writing.$slug'
@@ -43,6 +44,11 @@ const ProjectsRoute = ProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WritingRoute = WritingRouteImport.update({
   id: '/writing',
   path: '/writing',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/discovery': typeof DiscoveryRoute
   '/projects': typeof ProjectsRouteWithChildren
+  '/studio': typeof StudioRoute
   '/writing': typeof WritingRouteWithChildren
   '/projects/$slug': typeof ProjectsSlugRoute
   '/writing/$slug': typeof WritingSlugRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/discovery': typeof DiscoveryRoute
   '/projects': typeof ProjectsRouteWithChildren
+  '/studio': typeof StudioRoute
   '/writing': typeof WritingRouteWithChildren
   '/projects/$slug': typeof ProjectsSlugRoute
   '/writing/$slug': typeof WritingSlugRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/discovery': typeof DiscoveryRoute
   '/projects': typeof ProjectsRouteWithChildren
+  '/studio': typeof StudioRoute
   '/writing': typeof WritingRouteWithChildren
   '/projects/$slug': typeof ProjectsSlugRoute
   '/writing/$slug': typeof WritingSlugRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/discovery'
     | '/projects'
+    | '/studio'
     | '/writing'
     | '/projects/$slug'
     | '/writing/$slug'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/discovery'
     | '/projects'
+    | '/studio'
     | '/writing'
     | '/projects/$slug'
     | '/writing/$slug'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/discovery'
     | '/projects'
+    | '/studio'
     | '/writing'
     | '/projects/$slug'
     | '/writing/$slug'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DiscoveryRoute: typeof DiscoveryRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
+  StudioRoute: typeof StudioRoute
   WritingRoute: typeof WritingRouteWithChildren
 }
 
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/writing': {
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DiscoveryRoute: DiscoveryRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
+  StudioRoute: StudioRoute,
   WritingRoute: WritingRouteWithChildren,
 }
 export const routeTree = rootRouteImport

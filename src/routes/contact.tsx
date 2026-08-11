@@ -7,12 +7,12 @@ import { SITE } from "@/lib/content";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — [Your Name]" },
+      { title: `Contact — ${SITE.name}` },
       {
         name: "description",
-        content: "Get in touch with [Your Name] about applied AI product work, collaborations or writing.",
+        content: `Get in touch with ${SITE.name} about AI product work or collaboration.`,
       },
-      { property: "og:title", content: "Contact — [Your Name]" },
+      { property: "og:title", content: `Contact — ${SITE.name}` },
       { property: "og:description", content: "Get in touch about applied AI product work." },
     ],
   }),
@@ -37,8 +37,8 @@ function Contact() {
               Begin with the shape of an idea.
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
-              Use the project pathway to structure a potential brief, or reach out directly for a
-              general conversation.
+              Have a project, collaboration, or opportunity in mind? You can use the form to
+              structure a note or reach me through the links below.
             </p>
           </div>
 
@@ -64,6 +64,10 @@ function Contact() {
                 <div>
                   <dt className="text-muted-foreground">Based in</dt>
                   <dd className="mt-1 text-foreground-soft">{SITE.location}</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Education</dt>
+                  <dd className="mt-1 text-foreground-soft">{SITE.education}</dd>
                 </div>
                 <div>
                   <dt className="text-muted-foreground">Elsewhere</dt>

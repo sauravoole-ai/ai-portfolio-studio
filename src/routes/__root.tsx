@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SITE } from "../lib/content";
 
 function NotFoundComponent() {
   return (
@@ -77,14 +78,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "[Your Name] — Applied AI Product Builder" },
+      { title: `${SITE.name} — ${SITE.role}` },
       {
         name: "description",
-        content:
-          "Portfolio, writing and build logs of [Your Name] — an applied AI product builder shipping considered software from prototype to production.",
+        content: `${SITE.name}, ${SITE.role}. ${SITE.tagline}`,
       },
-      { name: "author", content: "[Your Name]" },
-      { property: "og:title", content: "[Your Name] — Applied AI Product Builder" },
+      { name: "author", content: SITE.name },
+      { property: "og:title", content: `${SITE.name} — ${SITE.role}` },
       {
         property: "og:description",
         content: "Selected AI projects, essays, and build logs.",

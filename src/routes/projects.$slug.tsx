@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects, type PublishedProject } from "@/lib/projects.functions";
+import { SITE } from "@/lib/content";
 
 const projectsQueryOptions = queryOptions({
   queryKey: ["projects", "published"],
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/projects/$slug")({
     if (!loaderData) {
       return {
         meta: [
-          { title: "Project not found — [Your Name]" },
+          { title: `Project not found — ${SITE.name}` },
           { name: "robots", content: "noindex" },
         ],
       };

@@ -33,6 +33,9 @@ export function SiteFooter() {
           <p className="mt-4 max-w-md text-base leading-7 text-foreground-soft">
             {SITE.role}
           </p>
+          <p className="mt-2 max-w-md text-base leading-7 text-muted-foreground">
+            {SITE.tagline}
+          </p>
           <Link to="/contact" className="site-footer__cta button-primary focus-ring group mt-8">
             Start a conversation
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
@@ -75,7 +78,7 @@ export function SiteFooter() {
       <div className="border-t border-border-subtle">
         <div className="container-wide flex flex-col items-start justify-between gap-3 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center">
           <span>© {new Date().getFullYear()} {SITE.name}</span>
-          <span className="font-mono text-xs tracking-wide">Applied AI · Product · Writing</span>
+          <span className="font-mono text-xs tracking-wide">{SITE.role}</span>
         </div>
       </div>
     </footer>

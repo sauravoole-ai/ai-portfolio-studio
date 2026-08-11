@@ -1,12 +1,9 @@
-// Structural placeholders only. Real content is loaded from Supabase
-// (projects, posts) or will be filled in by the site owner.
-
 export const SITE = {
-  name: "[Your Name]",
-  role: "Applied AI Product Builder",
-  tagline:
-    "Designing and shipping AI products that feel considered — from research prototype to production surface.",
-  location: "[Location]",
+  name: "Saurav Kumar Jha",
+  role: "AI Product Builder",
+  tagline: "Translating ideas into AI products.",
+  location: "India",
+  education: "B.Tech ECE · Tezpur University · 2027",
   github: "GitHub",
   githubUrl: "https://github.com/sauravoole-ai",
   linkedin: "LinkedIn",
@@ -15,30 +12,20 @@ export const SITE = {
   instagramUrl: "https://www.instagram.com/sauravjha_ai/",
 };
 
-// Capability groups are generic scaffolding, not personal claims.
 export const capabilities = [
   {
-    heading: "Product",
-    items: [
-      "Zero-to-one product definition",
-      "Interaction design for AI surfaces",
-      "Research & evaluation frameworks",
-    ],
+    heading: "AI Product Development",
+    description:
+      "Turning ideas into functional AI applications using AI-assisted development across interface, backend, APIs, and deployment.",
   },
   {
-    heading: "Engineering",
-    items: [
-      "TypeScript, Python",
-      "Retrieval, embeddings, evals",
-      "Agent orchestration & tracing",
-    ],
+    heading: "Applied AI Integration",
+    description:
+      "Integrating LLMs, retrieval, agents, automation, and related AI capabilities into product workflows.",
   },
   {
-    heading: "Craft",
-    items: [
-      "Editorial visual systems",
-      "Design engineering",
-      "Long-form writing",
-    ],
+    heading: "Connected & AIoT Projects",
+    description:
+      "Exploring AI-enabled products that connect software with sensors, MCU-based hardware, and connected devices.",
   },
 ];

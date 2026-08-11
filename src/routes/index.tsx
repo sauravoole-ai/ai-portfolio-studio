@@ -16,13 +16,12 @@ export const Route = createFileRoute("/")({
       { title: `${SITE.name} — ${SITE.role}` },
       {
         name: "description",
-        content:
-          "A creative product studio where applied AI, thoughtful craft, and useful digital work meet.",
+        content: `${SITE.name}, ${SITE.role}. ${SITE.tagline}`,
       },
       { property: "og:title", content: `${SITE.name} — ${SITE.role}` },
       {
         property: "og:description",
-        content: "Applied AI, product craft, and creative practice brought together with care.",
+        content: SITE.tagline,
       },
     ],
   }),
@@ -42,13 +41,10 @@ function Home() {
             <div className="home-entry__copy animate-rise w-full max-w-[42rem]">
               <p className="eyebrow text-foreground-soft/85">{SITE.role}</p>
               <h1 className="mt-5 max-w-[12.5ch] text-[clamp(2.35rem,5.2vw,4.75rem)] font-normal leading-[1.01] tracking-[-0.045em] text-foreground/92 sm:mt-6">
-                Modern work, shaped with{" "}
-                <span className="font-display font-normal italic tracking-[-0.02em] text-accent/78">
-                  quieter intelligence.
-                </span>
+                {SITE.name}
               </h1>
               <p className="mt-6 max-w-[30rem] text-sm leading-6 text-foreground-soft/82 sm:mt-7 sm:text-base sm:leading-7">
-                Applied AI, product craft, and creative practice—brought together with care.
+                {SITE.tagline}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 sm:mt-9">
                 <Link to="/projects" className="home-entry__primary-action button-primary focus-ring group">

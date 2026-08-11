@@ -2,17 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, RefreshCcw } from "lucide-react";
 import { SiteShell, PageHeader } from "@/components/site-shell";
+import { SITE } from "@/lib/content";
 
 export const Route = createFileRoute("/discovery")({
   head: () => ({
     meta: [
-      { title: "Project Discovery — [Your Name]" },
+      { title: `Project Discovery — ${SITE.name}` },
       {
         name: "description",
         content:
           "A short three-question flow to shape your AI product idea into a direction, a next step, and a way to work together.",
       },
-      { property: "og:title", content: "Project Discovery — [Your Name]" },
+      { property: "og:title", content: `Project Discovery — ${SITE.name}` },
       {
         property: "og:description",
         content: "Answer three questions and get a tailored project direction.",

@@ -3,6 +3,7 @@ import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-route
 import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedPosts } from "@/lib/posts.functions";
+import { SITE } from "@/lib/content";
 
 const postsQueryOptions = queryOptions({
   queryKey: ["posts", "published"],
@@ -12,12 +13,12 @@ const postsQueryOptions = queryOptions({
 export const Route = createFileRoute("/writing")({
   head: () => ({
     meta: [
-      { title: "Writing & Build Logs — [Your Name]" },
+      { title: `Writing & Build Logs — ${SITE.name}` },
       {
         name: "description",
         content: "Essays, notes and build logs on applied AI, product craft and shipping.",
       },
-      { property: "og:title", content: "Writing & Build Logs — [Your Name]" },
+      { property: "og:title", content: `Writing & Build Logs — ${SITE.name}` },
       {
         property: "og:description",
         content: "Essays, notes and build logs on applied AI and product craft.",

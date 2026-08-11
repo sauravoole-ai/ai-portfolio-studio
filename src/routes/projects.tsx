@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects } from "@/lib/projects.functions";
+import { SITE } from "@/lib/content";
 
 const projectsQueryOptions = queryOptions({
   queryKey: ["projects", "published"],
@@ -12,12 +13,12 @@ const projectsQueryOptions = queryOptions({
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
-      { title: "Projects — [Your Name]" },
+      { title: `Projects — ${SITE.name}` },
       {
         name: "description",
-        content: "Selected AI product work by [Your Name] — case studies and shipped surfaces.",
+        content: `Selected AI product work by ${SITE.name}.`,
       },
-      { property: "og:title", content: "Projects — [Your Name]" },
+      { property: "og:title", content: `Projects — ${SITE.name}` },
       {
         property: "og:description",
         content: "Selected AI product work — case studies and shipped surfaces.",

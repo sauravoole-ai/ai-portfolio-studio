@@ -2,6 +2,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 import { getPublishedPostBySlug } from "@/lib/posts.functions";
+import { SITE } from "@/lib/content";
 
 const postQueryOptions = (slug: string) =>
   queryOptions({
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/writing/$slug")({
         }
       : {
           meta: [
-            { title: "Not found — [Your Name]" },
+            { title: `Not found — ${SITE.name}` },
             { name: "robots", content: "noindex" },
           ],
         },

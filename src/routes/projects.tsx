@@ -26,12 +26,12 @@ export const Route = createFileRoute("/projects")({
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQueryOptions),
-  errorComponent: ({ error }) => (
+  errorComponent: () => (
     <SiteShell>
       <div className="container-editorial py-32 text-center">
         <p className="eyebrow">Something went wrong</p>
         <h1 className="mt-4 font-display text-3xl">We couldn't load projects.</h1>
-        <p className="mt-4 text-sm text-muted-foreground">{error.message}</p>
+        <p className="mt-4 text-sm text-muted-foreground">Please try again later.</p>
       </div>
     </SiteShell>
   ),
@@ -103,6 +103,10 @@ function ProjectsIndex() {
                   </span>
                   <span className="work-project-card__copy">
                     <span className="work-project-card__title">{title}</span>
+                    <span className="work-project-card__meta">
+                      <span>{p.status}</span>
+                      {p.stack.length ? <span>{p.stack.slice(0, 3).join(" · ")}</span> : null}
+                    </span>
                     {p.summary ? (
                       <span className="work-project-card__summary">{p.summary}</span>
                     ) : null}

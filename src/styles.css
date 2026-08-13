@@ -814,6 +814,16 @@
   line-height: 1.65;
 }
 
+.work-project-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: var(--quiet-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
 .work-project-card__arrow {
   display: inline-flex;
   width: 2.75rem;
@@ -1481,7 +1491,8 @@
 }
 
 .studio-field input,
-.studio-field textarea {
+.studio-field textarea,
+.studio-field select {
   width: 100%;
   min-height: 2.875rem;
   border: 1px solid var(--border-strong);
@@ -1497,7 +1508,8 @@
 }
 
 .studio-field input:hover,
-.studio-field textarea:hover {
+.studio-field textarea:hover,
+.studio-field select:hover {
   border-color: var(--accent-muted);
 }
 

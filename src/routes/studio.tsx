@@ -24,6 +24,8 @@ import {
   resolveStudioAuthState,
   studioQueryKeys,
   validatePostDraft,
+  validateProjectDraft,
+  PROJECT_STATUSES,
 } from "@/lib/studio.logic";
 
 export const Route = createFileRoute("/studio")({
@@ -381,12 +383,24 @@ function ProjectForm({ project, onClose }: { project: StudioProject | null; onCl
   const client = useQueryClient();
   const [title, setTitle] = useState(project?.title ?? "");
   const [slug, setSlug] = useState(project?.slug ?? "");
+  const [slugEdited, setSlugEdited] = useState(Boolean(project));
   const [summary, setSummary] = useState(project?.summary ?? "");
+  const [problem, setProblem] = useState(project?.problem ?? "");
+  const [approach, setApproach] = useState(project?.approach ?? "");
+  const [keyFeatures, setKeyFeatures] = useState((project?.key_features ?? []).join("\n"));
+  const [stack, setStack] = useState((project?.stack ?? []).join("\n"));
+  const [outcome, setOutcome] = useState(project?.outcome ?? "");
+  const [status, setStatus] = useState(project?.status ?? "Live");
+  const [liveUrl, setLiveUrl] = useState(project?.live_url ?? "");
+  const [githubUrl, setGithubUrl] = useState(project?.github_url ?? "");
+  const [coverImageUrl, setCoverImageUrl] = useState(project?.cover_image_url ?? "");
   const [published, setPublished] = useState(project?.published ?? false);
+  const [sortOrder, setSortOrder] = useState(String(project?.sort_order ?? 0));
   const [feedback, setFeedback] = useState("");
+  const draft = { title, slug, summary, problem, approach, keyFeatures, stack, outcome, status, liveUrl, githubUrl, coverImageUrl, published, sortOrder };
   const save = useMutation({
     mutationFn: () => {
-      const values = buildProjectPayload({ title, slug, summary, published });
+      const values = buildProjectPayload(draft);
       return project ? updateStudioProject(project.id, values) : createStudioProject(values);
     },
     onSuccess: async () => {
@@ -397,11 +411,37 @@ function ProjectForm({ project, onClose }: { project: StudioProject | null; onCl
     },
     onError: () => setFeedback("Save failed."),
   });
+  function submit(event: FormEvent) {
+    event.preventDefault();
+    setFeedback("");
+    const validationError = validateProjectDraft(draft);
+    if (validationError) {
+      setFeedback(validationError);
+      return;
+    }
+    save.mutate();
+  }
   return (
-    <form className="studio-editor studio-form" onSubmit={(event) => { event.preventDefault(); setFeedback(""); save.mutate(); }}>
-      <StudioField label="Title"><input value={title} onChange={(event) => setTitle(event.target.value)} /></StudioField>
-      <StudioField label="Slug"><input value={slug} onChange={(event) => setSlug(event.target.value)} /></StudioField>
-      <StudioField label="Summary"><textarea rows={4} value={summary} onChange={(event) => setSummary(event.target.value)} /></StudioField>
+    <form className="studio-editor studio-form" onSubmit={submit}>
+      <StudioField label="Title"><input required value={title} onChange={(event) => { const value = event.target.value; setTitle(value); if (!project) setSlug(nextCreateSlug(value, slug, slugEdited)); }} /></StudioField>
+      <StudioField label="Slug"><input required value={slug} onChange={(event) => { setSlugEdited(true); setSlug(event.target.value); }} /></StudioField>
+      <StudioField label="Summary"><textarea required rows={4} value={summary} onChange={(event) => setSummary(event.target.value)} /></StudioField>
+      <StudioField label="Problem"><textarea rows={5} value={problem} onChange={(event) => setProblem(event.target.value)} /></StudioField>
+      <StudioField label="Approach"><textarea rows={5} value={approach} onChange={(event) => setApproach(event.target.value)} /></StudioField>
+      <div className="studio-form__columns">
+        <StudioField label="Key features (one per line)"><textarea rows={6} value={keyFeatures} onChange={(event) => setKeyFeatures(event.target.value)} /></StudioField>
+        <StudioField label="Stack (one item per line)"><textarea rows={6} value={stack} onChange={(event) => setStack(event.target.value)} /></StudioField>
+      </div>
+      <StudioField label="Outcome / Learning"><textarea rows={5} value={outcome} onChange={(event) => setOutcome(event.target.value)} /></StudioField>
+      <div className="studio-form__columns">
+        <StudioField label="Status"><select value={status} onChange={(event) => setStatus(event.target.value)}>{PROJECT_STATUSES.map((item) => <option key={item}>{item}</option>)}</select></StudioField>
+        <StudioField label="Sort order"><input type="number" value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} /></StudioField>
+      </div>
+      <div className="studio-form__columns">
+        <StudioField label="Live URL"><input type="url" value={liveUrl} onChange={(event) => setLiveUrl(event.target.value)} /></StudioField>
+        <StudioField label="GitHub URL"><input type="url" value={githubUrl} onChange={(event) => setGithubUrl(event.target.value)} /></StudioField>
+      </div>
+      <StudioField label="Cover Image URL"><input type="url" value={coverImageUrl} onChange={(event) => setCoverImageUrl(event.target.value)} /></StudioField>
       <label className="studio-check"><input type="checkbox" checked={published} onChange={(event) => setPublished(event.target.checked)} /><span>Published</span></label>
       {feedback ? <p className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`} role="status">{feedback}</p> : null}
       <div className="studio-form__actions"><button className="studio-button studio-button--primary" disabled={save.isPending}>{save.isPending ? "Saving…" : "Save project"}</button><button type="button" className="studio-button" onClick={onClose}>Close</button></div>

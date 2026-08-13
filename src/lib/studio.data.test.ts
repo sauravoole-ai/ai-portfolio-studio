@@ -59,7 +59,7 @@ describe("Studio mocked Supabase data paths", () => {
   });
 
   test("creates and updates projects using the actual schema payload", async () => {
-    const payload = { title: "Project", slug: "project", summary: "Summary", published: true };
+    const payload = { title: "Project", slug: "project", summary: "Summary", problem: null, approach: "Built iteratively", key_features: ["Search"], stack: ["React"], outcome: null, status: "Live", live_url: null, github_url: null, cover_image_url: null, published: true, sort_order: 2 };
     const created = mockClient({ data: { id: 1 } });
     await createStudioData(created.client).createProject(payload);
     assert.deepEqual(created.calls.find((call) => call.method === "insert")?.args, [payload]);
@@ -68,6 +68,12 @@ describe("Studio mocked Supabase data paths", () => {
     await createStudioData(updated.client).updateProject(1, { published: false });
     assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [{ published: false }]);
     assert.deepEqual(updated.calls.find((call) => call.method === "eq")?.args, ["id", 1]);
+  });
+
+  test("lists projects in sort order with a stable secondary order", async () => {
+    const { client, calls } = mockClient({ data: [] });
+    await createStudioData(client).listProjects();
+    assert.deepEqual(calls.filter((call) => call.method === "order").map((call) => call.args), [["sort_order", { ascending: true }], ["created_at", { ascending: false }]]);
   });
 
   test("deletes only the selected project", async () => {

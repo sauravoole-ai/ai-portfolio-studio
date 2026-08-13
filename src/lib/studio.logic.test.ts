@@ -9,7 +9,10 @@ import {
   slugify,
   studioQueryKeys,
   validatePostDraft,
+  validateProjectDraft,
+  linesToArray,
   type PostDraft,
+  type ProjectDraft,
 } from "./studio.logic.ts";
 
 const validPost: PostDraft = {
@@ -76,20 +79,25 @@ describe("Studio post behavior", () => {
 });
 
 describe("Studio project and authorization behavior", () => {
-  test("uses only actual project fields and trims nullable values", () => {
-    assert.deepEqual(
-      buildProjectPayload({ title: " Project ", slug: " project ", summary: " Summary ", published: true }),
-      { title: "Project", slug: "project", summary: "Summary", published: true },
-    );
+  const validProject: ProjectDraft = { title: " Project ", slug: " project ", summary: " Summary ", problem: " Problem ", approach: " Approach ", keyFeatures: " Search\n Alerts ", stack: " React\nSupabase", outcome: " Learning ", status: "Live", liveUrl: "", githubUrl: " https://github.com/example/project ", coverImageUrl: "", published: true, sortOrder: "4" };
+
+  test("builds every project field and converts human-editable arrays", () => {
+    assert.deepEqual(buildProjectPayload(validProject), { title: "Project", slug: "project", summary: "Summary", problem: "Problem", approach: "Approach", key_features: ["Search", "Alerts"], stack: ["React", "Supabase"], outcome: "Learning", status: "Live", live_url: null, github_url: "https://github.com/example/project", cover_image_url: null, published: true, sort_order: 4 });
+    assert.deepEqual(linesToArray(" first\n\n second \r\n"), ["first", "second"]);
   });
 
-  test("converts empty optional project values to null", () => {
-    assert.deepEqual(buildProjectPayload({ title: " ", slug: "", summary: " ", published: false }), {
-      title: null,
-      slug: null,
-      summary: null,
-      published: false,
-    });
+  test("requires title, slug, and summary", () => {
+    for (const field of ["title", "slug", "summary"] as const) assert.match(validateProjectDraft({ ...validProject, [field]: " " }) ?? "", /required/);
+  });
+
+  test("accepts allowed statuses and rejects invalid statuses", () => {
+    for (const status of ["Live", "In Progress", "Archived"]) assert.equal(validateProjectDraft({ ...validProject, status }), null);
+    assert.match(validateProjectDraft({ ...validProject, status: "Planned" }) ?? "", /valid project status/);
+  });
+
+  test("accepts blank optional URLs and rejects invalid supplied URLs", () => {
+    assert.equal(validateProjectDraft({ ...validProject, githubUrl: "" }), null);
+    assert.match(validateProjectDraft({ ...validProject, liveUrl: "not-a-url" }) ?? "", /valid http or https/);
   });
 
   test("represents all authorization states without authorizing early", () => {

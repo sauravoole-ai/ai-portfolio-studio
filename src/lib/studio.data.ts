@@ -46,7 +46,8 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
     async listProjects() {
       const { data, error } = await client
         .from("projects")
-        .select("id, title, slug, summary, published, created_at")
+        .select("*")
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (error) fail("Project listing failed.", error);
       return data ?? [];

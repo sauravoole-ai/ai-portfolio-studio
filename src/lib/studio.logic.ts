@@ -13,8 +13,47 @@ export type ProjectDraft = {
   title: string;
   slug: string;
   summary: string;
+  problem: string;
+  approach: string;
+  keyFeatures: string;
+  stack: string;
+  outcome: string;
+  status: string;
+  liveUrl: string;
+  githubUrl: string;
+  coverImageUrl: string;
   published: boolean;
+  sortOrder: string;
 };
+
+export const PROJECT_STATUSES = ["Live", "In Progress", "Archived"] as const;
+
+export function linesToArray(value: string) {
+  return value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+}
+
+function isOptionalUrlValid(value: string) {
+  if (!value.trim()) return true;
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+export function validateProjectDraft(draft: ProjectDraft) {
+  if (!draft.title.trim() || !draft.slug.trim() || !draft.summary.trim()) {
+    return "Title, slug, and summary are required.";
+  }
+  if (!PROJECT_STATUSES.includes(draft.status as (typeof PROJECT_STATUSES)[number])) {
+    return "Choose a valid project status.";
+  }
+  if (![draft.liveUrl, draft.githubUrl, draft.coverImageUrl].every(isOptionalUrlValid)) {
+    return "Project URLs must be valid http or https URLs.";
+  }
+  return null;
+}
 
 export const studioQueryKeys = {
   posts: [["studio", "posts"], ["posts", "published"]] as const,
@@ -65,10 +104,20 @@ export function buildPostPayload(draft: PostDraft, now = () => new Date()) {
 
 export function buildProjectPayload(draft: ProjectDraft) {
   return {
-    title: draft.title.trim() || null,
-    slug: draft.slug.trim() || null,
-    summary: draft.summary.trim() || null,
+    title: draft.title.trim(),
+    slug: draft.slug.trim(),
+    summary: draft.summary.trim(),
+    problem: draft.problem.trim() || null,
+    approach: draft.approach.trim() || null,
+    key_features: linesToArray(draft.keyFeatures),
+    stack: linesToArray(draft.stack),
+    outcome: draft.outcome.trim() || null,
+    status: draft.status,
+    live_url: draft.liveUrl.trim() || null,
+    github_url: draft.githubUrl.trim() || null,
+    cover_image_url: draft.coverImageUrl.trim() || null,
     published: draft.published,
+    sort_order: Number.parseInt(draft.sortOrder, 10) || 0,
   };
 }
 

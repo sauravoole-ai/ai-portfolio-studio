@@ -73,26 +73,56 @@ export type Database = {
       }
       projects: {
         Row: {
+          approach: string | null
+          cover_image_url: string | null
           created_at: string
+          github_url: string | null
           id: number
+          key_features: string[]
+          live_url: string | null
+          outcome: string | null
+          problem: string | null
           published: boolean | null
           slug: string | null
+          sort_order: number
+          stack: string[]
+          status: string
           summary: string | null
           title: string | null
         }
         Insert: {
+          approach?: string | null
+          cover_image_url?: string | null
           created_at?: string
+          github_url?: string | null
           id?: number
+          key_features?: string[]
+          live_url?: string | null
+          outcome?: string | null
+          problem?: string | null
           published?: boolean | null
           slug?: string | null
+          sort_order?: number
+          stack?: string[]
+          status?: string
           summary?: string | null
           title?: string | null
         }
         Update: {
+          approach?: string | null
+          cover_image_url?: string | null
           created_at?: string
+          github_url?: string | null
           id?: number
+          key_features?: string[]
+          live_url?: string | null
+          outcome?: string | null
+          problem?: string | null
           published?: boolean | null
           slug?: string | null
+          sort_order?: number
+          stack?: string[]
+          status?: string
           summary?: string | null
           title?: string | null
         }

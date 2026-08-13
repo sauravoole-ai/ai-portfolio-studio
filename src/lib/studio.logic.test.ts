@@ -11,6 +11,7 @@ import {
   validatePostDraft,
   validateProjectDraft,
   linesToArray,
+  isMessageStatus,
   type PostDraft,
   type ProjectDraft,
 } from "./studio.logic.ts";
@@ -118,5 +119,11 @@ describe("Studio project and authorization behavior", () => {
   test("declares Studio and public invalidation keys for both resources", () => {
     assert.deepEqual(studioQueryKeys.posts, [["studio", "posts"], ["posts", "published"]]);
     assert.deepEqual(studioQueryKeys.projects, [["studio", "projects"], ["projects", "published"]]);
+    assert.deepEqual(studioQueryKeys.messages, [["studio", "messages"]]);
+  });
+
+  test("accepts only allowed message statuses", () => {
+    for (const status of ["New", "Read", "Archived"]) assert.equal(isMessageStatus(status), true);
+    assert.equal(isMessageStatus("Deleted"), false);
   });
 });

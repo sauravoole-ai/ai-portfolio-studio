@@ -82,6 +82,22 @@ describe("Studio mocked Supabase data paths", () => {
     assert.deepEqual(calls.find((call) => call.method === "eq")?.args, ["id", 7]);
   });
 
+  test("lists newest messages first and updates only the selected status", async () => {
+    const listed = mockClient({ data: [] });
+    await createStudioData(listed.client).listMessages();
+    assert.deepEqual(listed.calls.find((call) => call.method === "order")?.args, ["created_at", { ascending: false }]);
+    const updated = mockClient({ data: { id: "message-1", status: "Read" } });
+    await createStudioData(updated.client).updateMessageStatus("message-1", "Read");
+    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [{ status: "Read" }]);
+    assert.deepEqual(updated.calls.find((call) => call.method === "eq")?.args, ["id", "message-1"]);
+  });
+
+  test("deletes only the selected message", async () => {
+    const { client, calls } = mockClient();
+    await createStudioData(client).deleteMessage("message-2");
+    assert.deepEqual(calls.find((call) => call.method === "eq")?.args, ["id", "message-2"]);
+  });
+
   test("returns controlled errors without exposing raw Supabase messages", async () => {
     const { client } = mockClient({ error: { message: "sensitive database detail" } });
     const originalError = console.error;

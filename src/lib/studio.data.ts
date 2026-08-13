@@ -66,5 +66,19 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
       const { error } = await client.from("projects").delete().eq("id", id);
       if (error) fail("Project deletion failed.", error);
     },
+    async listMessages() {
+      const { data, error } = await client.from("contact_messages").select("*").order("created_at", { ascending: false });
+      if (error) fail("Message listing failed.", error);
+      return data ?? [];
+    },
+    async updateMessageStatus(id: string, status: "New" | "Read" | "Archived") {
+      const { data, error } = await client.from("contact_messages").update({ status }).eq("id", id).select().single();
+      if (error) fail("Message update failed.", error);
+      return data;
+    },
+    async deleteMessage(id: string) {
+      const { error } = await client.from("contact_messages").delete().eq("id", id);
+      if (error) fail("Message deletion failed.", error);
+    },
   };
 }

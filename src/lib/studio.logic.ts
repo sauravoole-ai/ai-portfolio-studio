@@ -27,6 +27,11 @@ export type ProjectDraft = {
 };
 
 export const PROJECT_STATUSES = ["Live", "In Progress", "Archived"] as const;
+export const MESSAGE_STATUSES = ["New", "Read", "Archived"] as const;
+
+export function isMessageStatus(value: string): value is (typeof MESSAGE_STATUSES)[number] {
+  return MESSAGE_STATUSES.includes(value as (typeof MESSAGE_STATUSES)[number]);
+}
 
 export function linesToArray(value: string) {
   return value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
@@ -58,6 +63,7 @@ export function validateProjectDraft(draft: ProjectDraft) {
 export const studioQueryKeys = {
   posts: [["studio", "posts"], ["posts", "published"]] as const,
   projects: [["studio", "projects"], ["projects", "published"]] as const,
+  messages: [["studio", "messages"]] as const,
 };
 
 export function slugify(value: string) {

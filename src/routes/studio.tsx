@@ -8,13 +8,17 @@ import {
   createStudioProject,
   deleteStudioPost,
   deleteStudioProject,
+  deleteStudioMessage,
   isStudioAdmin,
   listStudioPosts,
   listStudioProjects,
+  listStudioMessages,
+  type StudioMessage,
   type StudioPost,
   type StudioProject,
   updateStudioPost,
   updateStudioProject,
+  updateStudioMessageStatus,
 } from "@/lib/studio";
 import {
   buildPostPayload,
@@ -26,6 +30,7 @@ import {
   validatePostDraft,
   validateProjectDraft,
   PROJECT_STATUSES,
+  isMessageStatus,
 } from "@/lib/studio.logic";
 
 export const Route = createFileRoute("/studio")({
@@ -197,7 +202,7 @@ function AdminGate({ session }: { session: Session }) {
 }
 
 function Studio() {
-  const [section, setSection] = useState<"posts" | "projects">("posts");
+  const [section, setSection] = useState<"posts" | "projects" | "messages">("posts");
   return (
     <StudioFrame>
       <header className="studio-header">
@@ -207,8 +212,9 @@ function Studio() {
       <div className="studio-tabs" aria-label="Studio sections">
         <button type="button" aria-pressed={section === "posts"} onClick={() => setSection("posts")}>Posts</button>
         <button type="button" aria-pressed={section === "projects"} onClick={() => setSection("projects")}>Projects</button>
+        <button type="button" aria-pressed={section === "messages"} onClick={() => setSection("messages")}>Messages</button>
       </div>
-      {section === "posts" ? <PostsManager /> : <ProjectsManager />}
+      {section === "posts" ? <PostsManager /> : section === "projects" ? <ProjectsManager /> : <MessagesManager />}
     </StudioFrame>
   );
 }
@@ -375,6 +381,58 @@ function ProjectsManager() {
       </ul>
       {deleteFeedback ? <p className="studio-feedback" role="status">{deleteFeedback}</p> : null}
       {remove.isError ? <p className="studio-feedback studio-feedback--error">Project deletion failed.</p> : null}
+    </section>
+  );
+}
+
+function MessagesManager() {
+  const client = useQueryClient();
+  const messages = useQuery({ queryKey: ["studio", "messages"], queryFn: listStudioMessages });
+  const [confirming, setConfirming] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState("");
+  const updateStatus = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) => {
+      if (!isMessageStatus(status)) throw new Error("Invalid message status.");
+      return updateStudioMessageStatus(id, status);
+    },
+    onSuccess: async () => {
+      setFeedback("Message updated.");
+      await Promise.all(studioQueryKeys.messages.map((queryKey) => client.invalidateQueries({ queryKey })));
+    },
+    onError: () => setFeedback("Message update failed."),
+  });
+  const remove = useMutation({
+    mutationFn: deleteStudioMessage,
+    onSuccess: async () => {
+      setConfirming(null);
+      setFeedback("Message deleted.");
+      await Promise.all(studioQueryKeys.messages.map((queryKey) => client.invalidateQueries({ queryKey })));
+    },
+    onError: () => setFeedback("Message deletion failed."),
+  });
+
+  if (messages.isPending) return <p className="studio-status">Loading messages…</p>;
+  if (messages.isError) return <p className="studio-feedback studio-feedback--error">Messages could not be loaded.</p>;
+  return (
+    <section className="studio-section">
+      <div className="studio-section__heading"><h2 className="font-display text-3xl">Messages</h2></div>
+      {messages.data.length === 0 ? <p className="studio-status">No messages yet.</p> : (
+        <ul className="studio-records">
+          {messages.data.map((message: StudioMessage) => (
+            <li key={message.id} className="studio-message">
+              <div className="studio-message__header"><div><strong>{message.name}</strong><a href={`mailto:${message.email}`}>{message.email}</a></div><span>{new Date(message.created_at).toLocaleString()}</span></div>
+              <p>{message.message}</p>
+              <div className="studio-record__actions">
+                <span className="studio-message__status">{message.status}</span>
+                {message.status === "New" ? <button type="button" className="studio-button" disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: message.id, status: "Read" })}>Mark read</button> : null}
+                {message.status !== "Archived" ? <button type="button" className="studio-button" disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: message.id, status: "Archived" })}>Archive</button> : null}
+                {isDeleteConfirmed(confirming, message.id) ? <><button type="button" className="studio-button studio-button--danger" disabled={remove.isPending} onClick={() => remove.mutate(message.id)}>Confirm delete</button><button type="button" className="studio-button" onClick={() => setConfirming(null)}>Cancel</button></> : <button type="button" className="studio-button studio-button--danger" onClick={() => setConfirming(message.id)}>Delete</button>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {feedback ? <p className={`studio-feedback${feedback.includes("failed") ? " studio-feedback--error" : ""}`} role="status">{feedback}</p> : null}
     </section>
   );
 }

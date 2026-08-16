@@ -1,14 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
-import { SITE } from "@/lib/content";
+import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
+import { getRouteDirections } from "@/lib/apex.logic";
+import { useSiteProfile } from "@/lib/site-profile";
 
 const nav = [
   { to: "/", label: "Home" },
   { to: "/projects", label: "Work" },
   { to: "/writing", label: "Journal" },
   { to: "/about", label: "About" },
-  { to: "/contact", label: "Connect" },
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function SiteHeader() {
@@ -17,6 +18,7 @@ export function SiteHeader() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRootRef = useRef<HTMLDivElement>(null);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const profile = useSiteProfile();
   const routeTone = pathname === "/"
     ? "home"
     : pathname.startsWith("/projects")
@@ -28,16 +30,7 @@ export function SiteHeader() {
           : pathname.startsWith("/contact")
             ? "connect"
             : "inner";
-  const nextRoute = routeTone === "home"
-    ? { to: "/projects", label: "Work" }
-    : routeTone === "work"
-      ? { to: "/writing", label: "Journal" }
-      : routeTone === "journal"
-        ? { to: "/about", label: "About" }
-        : routeTone === "about"
-          ? { to: "/contact", label: "Connect" }
-          : { to: "/", label: "Home" };
-  const nextRouteLabel = `Next: ${nextRoute.label}`;
+  const { previous: previousRoute, next: nextRoute } = getRouteDirections(pathname);
 
   useEffect(() => {
     if (open) {
@@ -114,10 +107,10 @@ export function SiteHeader() {
             <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_oklch(0.79_0.125_194/0.5)]" />
           </span>
           <span className="ml-3 whitespace-nowrap text-[0.9375rem] font-semibold tracking-[-0.015em] text-foreground">
-            {SITE.name}
+            {profile.name}
           </span>
           <span className="site-brand-capsule__role ml-3 border-l border-border pl-3 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-            {SITE.role}
+            {profile.role}
           </span>
         </div>
 
@@ -167,20 +160,37 @@ export function SiteHeader() {
         </div>
       </div>
 
+      {previousRoute ? <div
+        className={`site-previous-route${open ? " site-route-control--hidden" : ""}`}
+        aria-hidden={open || undefined}
+      >
+        <Link
+          to={previousRoute.to}
+          className="site-route-control__link focus-ring"
+          aria-label={previousRoute.label}
+          tabIndex={open ? -1 : undefined}
+        >
+          <ArrowLeft className="site-route-control__icon" aria-hidden />
+        </Link>
+        <span className="site-route-control__label" aria-hidden>
+          {previousRoute.label}
+        </span>
+      </div> : null}
+
       <div
         className={`site-next-route${open ? " site-next-route--hidden" : ""}`}
         aria-hidden={open || undefined}
       >
-        <span className="site-next-route__label" aria-hidden>
-          {nextRouteLabel}
+        <span className="site-route-control__label" aria-hidden>
+          {nextRoute.label}
         </span>
         <Link
           to={nextRoute.to}
-          className="site-next-route__link focus-ring"
-          aria-label={nextRouteLabel}
+          className="site-route-control__link focus-ring"
+          aria-label={nextRoute.label}
           tabIndex={open ? -1 : undefined}
         >
-          <ArrowRight className="site-next-route__icon" aria-hidden />
+          <ArrowRight className="site-route-control__icon" aria-hidden />
         </Link>
       </div>
     </header>

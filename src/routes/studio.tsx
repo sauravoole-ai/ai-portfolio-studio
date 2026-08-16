@@ -19,6 +19,8 @@ import {
   updateStudioPost,
   updateStudioProject,
   updateStudioMessageStatus,
+  getStudioSiteProfile,
+  updateStudioSiteProfile,
 } from "@/lib/studio";
 import {
   buildPostPayload,
@@ -32,6 +34,7 @@ import {
   PROJECT_STATUSES,
   isMessageStatus,
 } from "@/lib/studio.logic";
+import { buildSiteProfileUpdate, validateSiteProfile } from "@/lib/site-profile.logic";
 
 export const Route = createFileRoute("/studio")({
   head: () => ({
@@ -202,7 +205,7 @@ function AdminGate({ session }: { session: Session }) {
 }
 
 function Studio() {
-  const [section, setSection] = useState<"posts" | "projects" | "messages">("posts");
+  const [section, setSection] = useState<"posts" | "projects" | "messages" | "profile">("posts");
   return (
     <StudioFrame>
       <header className="studio-header">
@@ -213,8 +216,9 @@ function Studio() {
         <button type="button" aria-pressed={section === "posts"} onClick={() => setSection("posts")}>Posts</button>
         <button type="button" aria-pressed={section === "projects"} onClick={() => setSection("projects")}>Projects</button>
         <button type="button" aria-pressed={section === "messages"} onClick={() => setSection("messages")}>Messages</button>
+        <button type="button" aria-pressed={section === "profile"} onClick={() => setSection("profile")}>Profile</button>
       </div>
-      {section === "posts" ? <PostsManager /> : section === "projects" ? <ProjectsManager /> : <MessagesManager />}
+      {section === "posts" ? <PostsManager /> : section === "projects" ? <ProjectsManager /> : section === "messages" ? <MessagesManager /> : <ProfileManager />}
     </StudioFrame>
   );
 }
@@ -421,7 +425,9 @@ function MessagesManager() {
           {messages.data.map((message: StudioMessage) => (
             <li key={message.id} className="studio-message">
               <div className="studio-message__header"><div><strong>{message.name}</strong><a href={`mailto:${message.email}`}>{message.email}</a></div><span>{new Date(message.created_at).toLocaleString()}</span></div>
-              <p>{message.message}</p>
+              {message.project_type ? <p className="studio-message__project-type"><strong>Project type:</strong> {message.project_type}</p> : null}
+              {message.build_idea ? <div className="studio-message__body"><strong>Build idea</strong><p>{message.build_idea}</p></div> : null}
+              <div className="studio-message__body"><strong>Context</strong><p>{message.message}</p></div>
               <div className="studio-record__actions">
                 <span className="studio-message__status">{message.status}</span>
                 {message.status === "New" ? <button type="button" className="studio-button" disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: message.id, status: "Read" })}>Mark read</button> : null}
@@ -435,6 +441,28 @@ function MessagesManager() {
       {feedback ? <p className={`studio-feedback${feedback.includes("failed") ? " studio-feedback--error" : ""}`} role="status">{feedback}</p> : null}
     </section>
   );
+}
+
+function ProfileManager() {
+  const client = useQueryClient();
+  const profile = useQuery({ queryKey: ["studio", "profile"], queryFn: getStudioSiteProfile });
+  if (profile.isPending) return <p className="studio-status">Loading profile…</p>;
+  if (profile.isError || !profile.data) return <p className="studio-feedback studio-feedback--error">Profile could not be loaded.</p>;
+  return <ProfileForm key={profile.data.updated_at} profile={profile.data} onSaved={async () => { await Promise.all(studioQueryKeys.profile.map((queryKey) => client.invalidateQueries({ queryKey }))); }} />;
+}
+
+function ProfileForm({ profile, onSaved }: { profile: NonNullable<Awaited<ReturnType<typeof getStudioSiteProfile>>>; onSaved: () => Promise<void> }) {
+  const [name, setName] = useState(profile.name);
+  const [role, setRole] = useState(profile.role);
+  const [location, setLocation] = useState(profile.location);
+  const [degree, setDegree] = useState(profile.degree);
+  const [university, setUniversity] = useState(profile.university);
+  const [graduationYear, setGraduationYear] = useState(profile.graduation_year);
+  const [feedback, setFeedback] = useState("");
+  const draft = { name, role, location, degree, university, graduation_year: graduationYear };
+  const save = useMutation({ mutationFn: () => updateStudioSiteProfile(buildSiteProfileUpdate(draft)), onSuccess: async () => { setFeedback("Saved."); await onSaved(); }, onError: () => setFeedback("Save failed.") });
+  function submit(event: FormEvent) { event.preventDefault(); setFeedback(""); const error = validateSiteProfile(draft); if (error) { setFeedback(error); return; } save.mutate(); }
+  return <section className="studio-section"><div className="studio-section__heading"><div><h2 className="font-display text-3xl">Profile / Site Details</h2><p className="mt-2 text-sm text-muted-foreground">Objective public facts used across the site.</p></div></div><form className="studio-editor studio-form" onSubmit={submit}><StudioField label="Name"><input value={name} onChange={(event) => setName(event.target.value)} /></StudioField><StudioField label="Role"><input value={role} onChange={(event) => setRole(event.target.value)} /></StudioField><div className="studio-form__columns"><StudioField label="Location"><input value={location} onChange={(event) => setLocation(event.target.value)} /></StudioField><StudioField label="Graduation year"><input inputMode="numeric" value={graduationYear} onChange={(event) => setGraduationYear(event.target.value)} /></StudioField></div><StudioField label="Degree"><input value={degree} onChange={(event) => setDegree(event.target.value)} /></StudioField><StudioField label="University"><input value={university} onChange={(event) => setUniversity(event.target.value)} /></StudioField>{feedback ? <p className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`} role="status">{feedback}</p> : null}<div className="studio-form__actions"><button className="studio-button studio-button--primary" disabled={save.isPending}>{save.isPending ? "Saving…" : "Save profile"}</button></div></form></section>;
 }
 
 function ProjectForm({ project, onClose }: { project: StudioProject | null; onClose: () => void }) {

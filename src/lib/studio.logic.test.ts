@@ -120,6 +120,7 @@ describe("Studio project and authorization behavior", () => {
     assert.deepEqual(studioQueryKeys.posts, [["studio", "posts"], ["posts", "published"]]);
     assert.deepEqual(studioQueryKeys.projects, [["studio", "projects"], ["projects", "published"]]);
     assert.deepEqual(studioQueryKeys.messages, [["studio", "messages"]]);
+    assert.deepEqual(studioQueryKeys.profile, [["studio", "profile"], ["site-profile"]]);
   });
 
   test("accepts only allowed message statuses", () => {

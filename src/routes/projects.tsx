@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects } from "@/lib/projects.functions";
 import { SITE } from "@/lib/content";
+import { getProjectHighlights } from "@/lib/apex.logic";
 
 const projectsQueryOptions = queryOptions({
   queryKey: ["projects", "published"],
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/projects")({
       { property: "og:title", content: `Projects — ${SITE.name}` },
       {
         property: "og:description",
-        content: "Selected AI product work — case studies and shipped surfaces.",
+        content: "Selected AI product work documented through concise case studies.",
       },
     ],
   }),
@@ -60,13 +61,13 @@ function ProjectsIndex() {
       <section className="work-route-intro animate-rise">
         <div className="container-editorial work-route-intro__inner">
           <div className="work-route-intro__copy">
-            <p className="eyebrow text-accent">Projects · 2023–2026</p>
+            <p className="eyebrow text-accent">Projects · Selected work</p>
             <h1 className="mt-6 text-5xl leading-[0.98] tracking-[-0.05em] sm:text-6xl md:text-7xl">
-              Selected work, considered.
+              Selected work.
             </h1>
             <p className="mt-7 text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
-              A small, curated set of AI products I've designed, engineered or shipped. Each has a
-              short case study — problem, approach, outcome.
+              AI products documented through the problem, approach, features, and outcome or
+              learning from each build.
             </p>
           </div>
 
@@ -96,6 +97,7 @@ function ProjectsIndex() {
           <ul className="work-project-grid">
             {projects.map((p, i) => {
               const title = p.title ?? "Untitled";
+              const cardStack = getProjectHighlights(title, p.stack);
               const row = (
                 <>
                   <span className="work-project-card__number font-mono">
@@ -105,7 +107,7 @@ function ProjectsIndex() {
                     <span className="work-project-card__title">{title}</span>
                     <span className="work-project-card__meta">
                       <span>{p.status}</span>
-                      {p.stack.length ? <span>{p.stack.slice(0, 3).join(" · ")}</span> : null}
+                      {cardStack.length ? <><span aria-hidden>·</span><span>{cardStack.join(" · ")}</span></> : null}
                     </span>
                     {p.summary ? (
                       <span className="work-project-card__summary">{p.summary}</span>

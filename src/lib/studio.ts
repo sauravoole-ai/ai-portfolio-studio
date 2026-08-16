@@ -5,6 +5,7 @@ import { createStudioData } from "@/lib/studio.data";
 export type StudioPost = Tables<"posts">;
 export type StudioProject = Tables<"projects">;
 export type StudioMessage = Tables<"contact_messages">;
+export type StudioSiteProfile = Tables<"site_profile">;
 export type StudioPostInsert = TablesInsert<"posts">;
 export type StudioPostUpdate = TablesUpdate<"posts">;
 export type StudioProjectInsert = TablesInsert<"projects">;
@@ -58,4 +59,12 @@ export async function updateStudioMessageStatus(id: string, status: "New" | "Rea
 
 export async function deleteStudioMessage(id: string) {
   return studioData.deleteMessage(id);
+}
+
+export async function getStudioSiteProfile() {
+  return studioData.getSiteProfile();
+}
+
+export async function updateStudioSiteProfile(values: TablesUpdate<"site_profile">) {
+  return studioData.updateSiteProfile(values);
 }

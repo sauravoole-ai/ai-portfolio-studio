@@ -80,5 +80,15 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
       const { error } = await client.from("contact_messages").delete().eq("id", id);
       if (error) fail("Message deletion failed.", error);
     },
+    async getSiteProfile() {
+      const { data, error } = await client.from("site_profile").select("*").eq("id", true).maybeSingle();
+      if (error) fail("Profile loading failed.", error);
+      return data;
+    },
+    async updateSiteProfile(values: TablesUpdate<"site_profile">) {
+      const { data, error } = await client.from("site_profile").update(values).eq("id", true).select().single();
+      if (error) fail("Profile update failed.", error);
+      return data;
+    },
   };
 }

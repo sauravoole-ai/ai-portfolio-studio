@@ -3,6 +3,9 @@ export const SITE = {
   role: "AI Product Builder",
   tagline: "Translating ideas into AI products.",
   location: "India",
+  degree: "B.Tech in Electronics & Communication Engineering",
+  university: "Tezpur University",
+  graduationYear: "2027",
   education: "B.Tech ECE · Tezpur University · 2027",
   github: "GitHub",
   githubUrl: "https://github.com/sauravoole-ai",
@@ -16,16 +19,16 @@ export const capabilities = [
   {
     heading: "AI Product Development",
     description:
-      "Turning ideas into functional AI applications using AI-assisted development across interface, backend, APIs, and deployment.",
+      "Turning ideas into usable AI-powered applications through AI-assisted development.",
   },
   {
     heading: "Applied AI Integration",
     description:
-      "Integrating LLMs, retrieval, agents, automation, and related AI capabilities into product workflows.",
+      "LLMs, retrieval, structured outputs, and conversational AI integrated into product workflows.",
   },
   {
     heading: "Connected & AIoT Projects",
     description:
-      "Exploring AI-enabled products that connect software with sensors, MCU-based hardware, and connected devices.",
+      "AI-enabled applications involving sensor workflows, connected devices, and hardware prototyping.",
   },
 ];

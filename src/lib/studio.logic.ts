@@ -64,6 +64,7 @@ export const studioQueryKeys = {
   posts: [["studio", "posts"], ["posts", "published"]] as const,
   projects: [["studio", "projects"], ["projects", "published"]] as const,
   messages: [["studio", "messages"]] as const,
+  profile: [["studio", "profile"], ["site-profile"]] as const,
 };
 
 export function slugify(value: string) {

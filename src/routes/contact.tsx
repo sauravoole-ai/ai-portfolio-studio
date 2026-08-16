@@ -3,6 +3,7 @@ import { PoeticAtmosphere } from "@/components/poetic-atmosphere";
 import { ProjectEnquiryForm } from "@/components/project-enquiry-form";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/content";
+import { useSiteProfile } from "@/lib/site-profile";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
+  const profile = useSiteProfile();
   const socialLinks = [
     { label: SITE.github, href: SITE.githubUrl },
     { label: SITE.linkedin, href: SITE.linkedinUrl },
@@ -34,11 +36,11 @@ function Contact() {
           <div className="connect-route-intro__copy">
             <p className="eyebrow text-accent">Contact</p>
             <h1 className="mt-6 max-w-4xl text-[clamp(3.5rem,7vw,6.75rem)] leading-[0.96] tracking-[-0.06em]">
-              Begin with the shape of an idea.
+              Connect for work.
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
-              Have a project, collaboration, or opportunity in mind? You can use the form to
-              structure a note or reach me through the links below.
+              Have a project, collaboration, or opportunity in mind? Send a message through the
+              form or use the links below.
             </p>
           </div>
 
@@ -63,11 +65,11 @@ function Contact() {
               <dl className="mt-5 space-y-5 text-sm">
                 <div>
                   <dt className="text-muted-foreground">Based in</dt>
-                  <dd className="mt-1 text-foreground-soft">{SITE.location}</dd>
+                  <dd className="mt-1 text-foreground-soft">{profile.location}</dd>
                 </div>
                 <div>
                   <dt className="text-muted-foreground">Education</dt>
-                  <dd className="mt-1 text-foreground-soft">{SITE.education}</dd>
+                  <dd className="mt-1 text-foreground-soft">{profile.degree} · {profile.university} · {profile.graduation_year}</dd>
                 </div>
                 <div>
                   <dt className="text-muted-foreground">Elsewhere</dt>

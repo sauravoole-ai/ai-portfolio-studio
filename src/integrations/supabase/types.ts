@@ -31,28 +31,67 @@ export type Database = {
       }
       contact_messages: {
         Row: {
+          build_idea: string | null
           created_at: string
           email: string
           id: string
           message: string
           name: string
+          project_type: string | null
           status: string
         }
         Insert: {
+          build_idea?: string | null
           created_at?: string
           email: string
           id?: string
           message: string
           name: string
+          project_type?: string | null
           status?: string
         }
         Update: {
+          build_idea?: string | null
           created_at?: string
           email?: string
           id?: string
           message?: string
           name?: string
+          project_type?: string | null
           status?: string
+        }
+        Relationships: []
+      }
+      site_profile: {
+        Row: {
+          degree: string
+          graduation_year: string
+          id: boolean
+          location: string
+          name: string
+          role: string
+          university: string
+          updated_at: string
+        }
+        Insert: {
+          degree: string
+          graduation_year: string
+          id?: boolean
+          location: string
+          name: string
+          role: string
+          university: string
+          updated_at?: string
+        }
+        Update: {
+          degree?: string
+          graduation_year?: string
+          id?: boolean
+          location?: string
+          name?: string
+          role?: string
+          university?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -98,6 +98,16 @@ describe("Studio mocked Supabase data paths", () => {
     assert.deepEqual(calls.find((call) => call.method === "eq")?.args, ["id", "message-2"]);
   });
 
+  test("loads and updates only the singleton site profile", async () => {
+    const loaded = mockClient({ data: { id: true, name: "Saurav" } });
+    await createStudioData(loaded.client).getSiteProfile();
+    assert.deepEqual(loaded.calls.find((call) => call.method === "eq")?.args, ["id", true]);
+    const updated = mockClient({ data: { id: true, name: "Updated" } });
+    await createStudioData(updated.client).updateSiteProfile({ name: "Updated" });
+    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [{ name: "Updated" }]);
+    assert.deepEqual(updated.calls.find((call) => call.method === "eq")?.args, ["id", true]);
+  });
+
   test("returns controlled errors without exposing raw Supabase messages", async () => {
     const { client } = mockClient({ error: { message: "sensitive database detail" } });
     const originalError = console.error;

@@ -16,12 +16,12 @@ export const Route = createFileRoute("/writing")({
       { title: `Writing & Build Logs — ${SITE.name}` },
       {
         name: "description",
-        content: "Essays, notes and build logs on applied AI, product craft and shipping.",
+        content: "Build notes, observations, experiments, lessons, references, and occasional creative pieces.",
       },
       { property: "og:title", content: `Writing & Build Logs — ${SITE.name}` },
       {
         property: "og:description",
-        content: "Essays, notes and build logs on applied AI and product craft.",
+        content: "Build notes, observations, experiments, lessons, references, and occasional creative pieces.",
       },
     ],
   }),
@@ -81,11 +81,11 @@ function WritingIndex() {
           <div className="work-route-intro__copy">
             <p className="eyebrow text-accent">Writing · Build logs · Notes</p>
             <h1 className="mt-6 text-5xl leading-[0.98] tracking-[-0.05em] sm:text-6xl md:text-7xl">
-              From the workbench.
+              Journal.
             </h1>
             <p className="mt-7 text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
-              Long essays about the craft of applied AI, short build logs from projects in flight,
-              and notes kept in public.
+              Build notes, observations, experiments, lessons, references, and occasional creative
+              pieces.
             </p>
           </div>
 

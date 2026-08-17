@@ -21,18 +21,19 @@ export function SiteFooter() {
     { label: SITE.instagram, href: profile.instagram_url },
   ] as const;
   return (
-    <footer className="relative mt-24 border-t border-border-subtle bg-surface-inset md:mt-36">
-      <div className="container-wide grid gap-10 py-14 md:grid-cols-[1.35fr_0.8fr_1fr] md:gap-12 md:py-16">
+    <footer className="site-footer relative mt-16 border-t border-border-subtle md:mt-24">
+      <div className="container-wide grid gap-9 py-10 md:grid-cols-[1.3fr_0.8fr_1fr] md:items-start md:gap-10 md:py-12">
         <div>
-          <Link to="/contact" className="site-footer__cta focus-ring group inline-flex min-h-12 items-center gap-3 rounded-md font-sans text-2xl font-medium tracking-[-0.035em] text-foreground md:text-3xl">
+          <Link to="/contact" className="site-footer__cta focus-ring group inline-flex min-h-11 items-center gap-2.5 rounded-md font-sans text-xl font-medium tracking-[-0.03em] text-foreground md:text-2xl">
             {profile.connect_cta}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
           </Link>
+          <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">{profile.footer_connect_context}</p>
         </div>
 
         <div>
           <p className="eyebrow text-foreground-soft">Explore</p>
-          <ul className="mt-4 space-y-0 md:mt-5">
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-0">
             {footerNav.map((item) => (
               <li key={item.to}>
                 <Link to={item.to} className={footerLinkClass}>
@@ -45,7 +46,7 @@ export function SiteFooter() {
 
         <div>
           <p className="eyebrow text-foreground-soft">Elsewhere</p>
-          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-0 md:mt-5">
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-0">
             {socialLinks.map((item) => (
               <li key={item.href}>
                 <a
@@ -64,7 +65,7 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-border-subtle">
-        <div className="container-wide py-6 text-sm text-muted-foreground">
+        <div className="container-wide py-5 text-sm text-muted-foreground">
           <span>© {new Date().getFullYear()} {profile.name}</span>
         </div>
       </div>

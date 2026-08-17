@@ -3,13 +3,13 @@ import type { Json, Tables, TablesUpdate } from "@/integrations/supabase/types";
 export type SiteProfile = Tables<"site_profile">;
 
 export const SITE_PROFILE_ID = true as const;
-export const SITE_PROFILE_LIMITS = { name: 100, role: 100, location: 100, degree: 160, university: 160, heroTagline: 160, heroSupporting: 300, connectCta: 80, url: 500 } as const;
+export const SITE_PROFILE_LIMITS = { name: 100, role: 100, location: 100, degree: 160, university: 160, heroTagline: 160, heroSupporting: 300, homeBridge: 300, homeBlurb: 200, footerContext: 200, connectCta: 80, url: 500 } as const;
 
 export type Capability = { title: string; description: string };
 export type TechnologyItem = { label: string | null; content: string };
 export type TechnologyGroup = { title: string; items: TechnologyItem[] };
 
-export type SiteProfileDraft = Pick<SiteProfile, "name" | "role" | "location" | "degree" | "university" | "graduation_year" | "hero_tagline" | "hero_supporting" | "connect_cta" | "github_url" | "linkedin_url" | "instagram_url"> & {
+export type SiteProfileDraft = Pick<SiteProfile, "name" | "role" | "location" | "degree" | "university" | "graduation_year" | "hero_tagline" | "hero_supporting" | "home_bridge_text" | "home_work_blurb" | "home_journal_blurb" | "footer_connect_context" | "connect_cta" | "github_url" | "linkedin_url" | "instagram_url"> & {
   bio_fragments: string[];
   capabilities: Capability[];
   technology_groups: TechnologyGroup[];
@@ -36,11 +36,12 @@ function isUrl(value: string) {
 }
 
 export function validateSiteProfile(draft: SiteProfileDraft) {
-  const fields = [draft.name, draft.role, draft.location, draft.degree, draft.university, draft.hero_tagline, draft.hero_supporting, draft.connect_cta];
+  const fields = [draft.name, draft.role, draft.location, draft.degree, draft.university, draft.hero_tagline, draft.hero_supporting, draft.home_bridge_text, draft.home_work_blurb, draft.home_journal_blurb, draft.footer_connect_context, draft.connect_cta];
   if (fields.some((value) => !value.trim())) return "All profile fields are required.";
   if (draft.name.trim().length > SITE_PROFILE_LIMITS.name || draft.role.trim().length > SITE_PROFILE_LIMITS.role || draft.location.trim().length > SITE_PROFILE_LIMITS.location || draft.degree.trim().length > SITE_PROFILE_LIMITS.degree || draft.university.trim().length > SITE_PROFILE_LIMITS.university) return "One or more profile fields are too long.";
   if (!/^\d{4}$/.test(draft.graduation_year.trim())) return "Graduation year must use four digits.";
   if (draft.hero_tagline.trim().length > SITE_PROFILE_LIMITS.heroTagline || draft.hero_supporting.trim().length > SITE_PROFILE_LIMITS.heroSupporting || draft.connect_cta.trim().length > SITE_PROFILE_LIMITS.connectCta) return "One or more branding fields are too long.";
+  if (draft.home_bridge_text.trim().length > SITE_PROFILE_LIMITS.homeBridge || draft.home_work_blurb.trim().length > SITE_PROFILE_LIMITS.homeBlurb || draft.home_journal_blurb.trim().length > SITE_PROFILE_LIMITS.homeBlurb || draft.footer_connect_context.trim().length > SITE_PROFILE_LIMITS.footerContext) return "One or more Home or Footer fields are too long.";
   if (![draft.github_url, draft.linkedin_url, draft.instagram_url].every((value) => value.length <= SITE_PROFILE_LIMITS.url && isUrl(value.trim()))) return "Social links must be valid URLs.";
   if (!draft.bio_fragments.length || draft.bio_fragments.some((item) => !item.trim())) return "Biography fragments cannot be empty.";
   if (!draft.capabilities.length || draft.capabilities.some((item) => !item.title.trim() || !item.description.trim())) return "Capabilities need a title and description.";
@@ -54,6 +55,8 @@ export function buildSiteProfileUpdate(draft: SiteProfileDraft, now = () => new 
     degree: draft.degree.trim(), university: draft.university.trim(),
     graduation_year: draft.graduation_year.trim(), hero_tagline: draft.hero_tagline.trim(),
     hero_supporting: draft.hero_supporting.trim(), connect_cta: draft.connect_cta.trim(),
+    home_bridge_text: draft.home_bridge_text.trim(), home_work_blurb: draft.home_work_blurb.trim(),
+    home_journal_blurb: draft.home_journal_blurb.trim(), footer_connect_context: draft.footer_connect_context.trim(),
     github_url: draft.github_url.trim(), linkedin_url: draft.linkedin_url.trim(), instagram_url: draft.instagram_url.trim(),
     bio_fragments: draft.bio_fragments.map((item) => item.trim()),
     capabilities: draft.capabilities.map((item) => ({ title: item.title.trim(), description: item.description.trim() })),

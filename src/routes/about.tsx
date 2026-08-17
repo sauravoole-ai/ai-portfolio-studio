@@ -42,7 +42,5 @@ function About() {
     </section>
 
     <section className="about-site-gateway border-t border-border-subtle"><div className="container-editorial py-20 md:py-24"><p className="eyebrow">On this site</p><div className="about-site-gateway__links mt-8"><Link to="/projects" className="focus-ring group"><span><strong>Work</strong><small>Products & case studies</small></span><ArrowRight aria-hidden /></Link><Link to="/writing" className="focus-ring group"><span><strong>Journal</strong><small>Writing, experiments & observations</small></span><ArrowRight aria-hidden /></Link></div></div></section>
-
-    <section className="about-contact-cta border-t border-border"><div className="container-editorial py-20 text-center md:py-28"><Link to="/contact" className="button-primary focus-ring group">{profile.connect_cta} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden /></Link></div></section>
   </SiteShell>;
 }

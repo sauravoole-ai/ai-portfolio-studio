@@ -70,6 +70,10 @@ export type Database = {
           degree: string
           github_url: string
           graduation_year: string
+          footer_connect_context: string
+          home_bridge_text: string
+          home_journal_blurb: string
+          home_work_blurb: string
           hero_supporting: string
           hero_tagline: string
           id: boolean
@@ -89,6 +93,10 @@ export type Database = {
           degree: string
           github_url?: string
           graduation_year: string
+          footer_connect_context?: string
+          home_bridge_text?: string
+          home_journal_blurb?: string
+          home_work_blurb?: string
           hero_supporting?: string
           hero_tagline?: string
           id?: boolean
@@ -108,6 +116,10 @@ export type Database = {
           degree?: string
           github_url?: string
           graduation_year?: string
+          footer_connect_context?: string
+          home_bridge_text?: string
+          home_journal_blurb?: string
+          home_work_blurb?: string
           hero_supporting?: string
           hero_tagline?: string
           id?: boolean

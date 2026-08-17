@@ -5,6 +5,7 @@ import { buildSiteProfileUpdate, parseBioFragments, parseCapabilities, parseTech
 const valid: SiteProfileDraft = {
   name: " Saurav Kumar Jha ", role: " AI Product Builder ", location: " India ", degree: " B.Tech in Electronics & Communication Engineering ", university: " Tezpur University ", graduation_year: " 2027 ",
   hero_tagline: " Translating ideas into AI products. ", hero_supporting: " A personal space for products and writing. ", connect_cta: " Connect for work ",
+  home_bridge_text: " Some ideas become products. ", home_work_blurb: " Products and prototypes. ", home_journal_blurb: " Writing and observations. ", footer_connect_context: " AI product builds and collaboration. ",
   github_url: " https://github.com/sauravoole-ai ", linkedin_url: " https://www.linkedin.com/in/saurav-kumarjha/ ", instagram_url: " https://www.instagram.com/sauravjha_ai/ ",
   bio_fragments: [" First fragment ", " Second fragment "],
   capabilities: [{ title: " AI Product Development ", description: " Product work. " }],
@@ -23,7 +24,7 @@ describe("Site profile behavior", () => {
   });
   test("builds a trimmed admin update payload", () => {
     const now = new Date("2026-08-16T10:00:00.000Z");
-    assert.deepEqual(buildSiteProfileUpdate(valid, () => now), { name: "Saurav Kumar Jha", role: "AI Product Builder", location: "India", degree: "B.Tech in Electronics & Communication Engineering", university: "Tezpur University", graduation_year: "2027", hero_tagline: "Translating ideas into AI products.", hero_supporting: "A personal space for products and writing.", connect_cta: "Connect for work", github_url: "https://github.com/sauravoole-ai", linkedin_url: "https://www.linkedin.com/in/saurav-kumarjha/", instagram_url: "https://www.instagram.com/sauravjha_ai/", bio_fragments: ["First fragment", "Second fragment"], capabilities: [{ title: "AI Product Development", description: "Product work." }], technology_groups: [{ title: "Languages", items: [{ label: null, content: "Python · TypeScript" }] }], updated_at: now.toISOString() });
+    assert.deepEqual(buildSiteProfileUpdate(valid, () => now), { name: "Saurav Kumar Jha", role: "AI Product Builder", location: "India", degree: "B.Tech in Electronics & Communication Engineering", university: "Tezpur University", graduation_year: "2027", hero_tagline: "Translating ideas into AI products.", hero_supporting: "A personal space for products and writing.", home_bridge_text: "Some ideas become products.", home_work_blurb: "Products and prototypes.", home_journal_blurb: "Writing and observations.", footer_connect_context: "AI product builds and collaboration.", connect_cta: "Connect for work", github_url: "https://github.com/sauravoole-ai", linkedin_url: "https://www.linkedin.com/in/saurav-kumarjha/", instagram_url: "https://www.instagram.com/sauravjha_ai/", bio_fragments: ["First fragment", "Second fragment"], capabilities: [{ title: "AI Product Development", description: "Product work." }], technology_groups: [{ title: "Languages", items: [{ label: null, content: "Python · TypeScript" }] }], updated_at: now.toISOString() });
   });
   test("validates structured branding and falls back safely", () => {
     assert.deepEqual(parseBioFragments(["One", "Two"], ["Fallback"]), ["One", "Two"]);

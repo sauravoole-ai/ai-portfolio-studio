@@ -5,10 +5,10 @@ export function getRouteDirections(pathname: string): {
   next: RouteDirection;
 } {
   if (pathname.startsWith("/projects/")) {
-    return { previous: { to: "/projects", label: "Back to Work" }, next: { to: "/writing", label: "Next: Journal" } };
+    return { previous: null, next: { to: "/writing", label: "Next: Journal" } };
   }
   if (pathname.startsWith("/writing/")) {
-    return { previous: { to: "/writing", label: "Back to Journal" }, next: { to: "/about", label: "Next: About" } };
+    return { previous: null, next: { to: "/about", label: "Next: About" } };
   }
   if (pathname === "/") return { previous: null, next: { to: "/projects", label: "Next: Work" } };
   if (pathname.startsWith("/projects")) return { previous: { to: "/", label: "Previous: Home" }, next: { to: "/writing", label: "Next: Journal" } };

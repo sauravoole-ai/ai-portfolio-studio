@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { buildContactPayload, CONTACT_LIMITS, isHoneypotFilled, validateContactDraft, type ContactDraft } from "./contact.logic.ts";
+import { buildContactPayload, CONTACT_LIMITS, getContactFieldErrors, isHoneypotFilled, validateContactDraft, type ContactDraft } from "./contact.logic.ts";
 
 const valid: ContactDraft = { name: " Saurav ", email: " hello@example.com ", projectType: " AI-powered web app ", buildIdea: " A retrieval assistant. ", message: " A project note. ", website: "" };
 
@@ -9,6 +9,15 @@ describe("Contact form logic", () => {
     for (const field of ["name", "email", "buildIdea", "message"] as const) assert.match(validateContactDraft({ ...valid, [field]: " " }) ?? "", /required/);
   });
   test("validates email", () => assert.match(validateContactDraft({ ...valid, email: "invalid" }) ?? "", /valid email/));
+  test("maps accessible errors to the invalid fields", () => {
+    assert.deepEqual(getContactFieldErrors({ ...valid, name: "", email: "invalid", buildIdea: "", message: "" }), {
+      name: "Enter your name.",
+      email: "Enter a valid email address.",
+      buildIdea: "Describe what you’re looking to build.",
+      message: "Add brief context for your message.",
+    });
+    assert.deepEqual(getContactFieldErrors(valid), {});
+  });
   test("trims the structured insert payload", () => assert.deepEqual(buildContactPayload(valid), { name: "Saurav", email: "hello@example.com", project_type: "AI-powered web app", build_idea: "A retrieval assistant.", message: "A project note." }));
   test("keeps project type optional", () => assert.equal(validateContactDraft({ ...valid, projectType: "" }), null));
   test("enforces maximum lengths", () => {

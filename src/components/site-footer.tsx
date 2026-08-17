@@ -13,21 +13,19 @@ const footerNav = [
 const footerLinkClass =
   "site-footer__link focus-ring inline-flex min-h-12 items-center gap-1.5 rounded-md text-base text-muted-foreground md:min-h-11 md:text-sm";
 
-const socialLinks = [
-  { label: SITE.github, href: SITE.githubUrl },
-  { label: SITE.linkedin, href: SITE.linkedinUrl },
-  { label: SITE.instagram, href: SITE.instagramUrl },
-] as const;
-
 export function SiteFooter() {
   const profile = useSiteProfile();
+  const socialLinks = [
+    { label: SITE.github, href: profile.github_url },
+    { label: SITE.linkedin, href: profile.linkedin_url },
+    { label: SITE.instagram, href: profile.instagram_url },
+  ] as const;
   return (
     <footer className="relative mt-24 border-t border-border-subtle bg-surface-inset md:mt-36">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/35 to-transparent" aria-hidden />
       <div className="container-wide grid gap-10 py-14 md:grid-cols-[1.35fr_0.8fr_1fr] md:gap-12 md:py-16">
         <div>
-          <Link to="/contact" className="site-footer__cta focus-ring group inline-flex min-h-12 items-center gap-3 rounded-md font-display text-3xl text-foreground md:text-4xl">
-            Connect for work
+          <Link to="/contact" className="site-footer__cta focus-ring group inline-flex min-h-12 items-center gap-3 rounded-md font-sans text-2xl font-medium tracking-[-0.035em] text-foreground md:text-3xl">
+            {profile.connect_cta}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
           </Link>
         </div>

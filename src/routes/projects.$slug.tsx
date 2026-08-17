@@ -66,7 +66,7 @@ function ProjectPage() {
       <article className="animate-rise">
         <header className="container-editorial pt-16 pb-12 md:pt-24 md:pb-16">
           <Link to="/projects" className="eyebrow link-underline">
-            ← Projects
+            ← Back to Work
           </Link>
           <h1 className="mt-6 max-w-4xl font-display text-4xl leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
             {project.title ?? "Untitled project"}
@@ -76,13 +76,13 @@ function ProjectPage() {
               {project.summary}
             </p>
           ) : null}
-          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-foreground-soft">
-            <span>{project.status}</span>
-            {project.stack.length ? <span>{project.stack.join(" · ")}</span> : null}
+          <div className="project-detail-meta mt-7 flex flex-wrap items-baseline gap-x-5 gap-y-2 text-[0.9375rem] leading-7 text-foreground-soft">
+            <span className="font-medium text-mint">{project.status}</span>
+            {project.stack.length ? <span className="max-w-2xl">{project.stack.join(" · ")}</span> : null}
           </div>
         </header>
 
-        {project.cover_image_url ? <figure className="container-editorial pb-12 md:pb-16"><img className="w-full rounded-[var(--radius-card)] border border-border-subtle" src={project.cover_image_url} alt="" /></figure> : null}
+        {project.cover_image_url ? <figure className="container-editorial pb-12 md:pb-16"><div className="aspect-video overflow-hidden rounded-[var(--radius-card)] border border-border-subtle"><img className="h-full w-full object-cover" src={project.cover_image_url} alt="" /></div></figure> : null}
 
         {[project.problem && ["Problem", project.problem], project.approach && ["Approach", project.approach], project.outcome && ["Outcome / Learning", project.outcome]].filter(Boolean).map((section) => {
           const [heading, copy] = section as [string, string];
@@ -106,7 +106,7 @@ function ProjectPage() {
                   {next.title ?? "Untitled"}
                 </p>
               </div>
-              <span className="text-sm text-muted-foreground">
+              <span className="max-w-md text-sm leading-6 text-muted-foreground md:text-right">
                 {next.summary ?? ""} <span aria-hidden>→</span>
               </span>
             </Link>

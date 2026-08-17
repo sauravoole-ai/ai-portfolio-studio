@@ -97,7 +97,7 @@ export function SiteHeader() {
     };
   }, [open]);
 
-  return (
+  return <>
     <header
       className={`site-header site-header--${routeTone} fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4`}
     >
@@ -160,6 +160,9 @@ export function SiteHeader() {
         </div>
       </div>
 
+    </header>
+
+    <nav className="site-route-navigation" aria-label="Route navigation">
       {previousRoute ? <div
         className={`site-previous-route${open ? " site-route-control--hidden" : ""}`}
         aria-hidden={open || undefined}
@@ -193,6 +196,6 @@ export function SiteHeader() {
           <ArrowRight className="site-route-control__icon" aria-hidden />
         </Link>
       </div>
-    </header>
-  );
+    </nav>
+  </>;
 }

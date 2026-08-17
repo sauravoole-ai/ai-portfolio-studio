@@ -64,32 +64,59 @@ export type Database = {
       }
       site_profile: {
         Row: {
+          bio_fragments: Json
+          capabilities: Json
+          connect_cta: string
           degree: string
+          github_url: string
           graduation_year: string
+          hero_supporting: string
+          hero_tagline: string
           id: boolean
+          instagram_url: string
+          linkedin_url: string
           location: string
           name: string
           role: string
+          technology_groups: Json
           university: string
           updated_at: string
         }
         Insert: {
+          bio_fragments?: Json
+          capabilities?: Json
+          connect_cta?: string
           degree: string
+          github_url?: string
           graduation_year: string
+          hero_supporting?: string
+          hero_tagline?: string
           id?: boolean
+          instagram_url?: string
+          linkedin_url?: string
           location: string
           name: string
           role: string
+          technology_groups?: Json
           university: string
           updated_at?: string
         }
         Update: {
+          bio_fragments?: Json
+          capabilities?: Json
+          connect_cta?: string
           degree?: string
+          github_url?: string
           graduation_year?: string
+          hero_supporting?: string
+          hero_tagline?: string
           id?: boolean
+          instagram_url?: string
+          linkedin_url?: string
           location?: string
           name?: string
           role?: string
+          technology_groups?: Json
           university?: string
           updated_at?: string
         }

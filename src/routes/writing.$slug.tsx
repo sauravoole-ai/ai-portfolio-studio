@@ -69,7 +69,7 @@ function PostPage() {
           <Link to="/writing" className="eyebrow link-underline">
             Back to Journal
           </Link>
-          <div className="mt-8 flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+          <div className="mt-8 flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium uppercase tracking-[0.045em] text-muted-foreground">
             {post.category ? <span>{post.category}</span> : null}
             {post.published_at ? (
               <time dateTime={post.published_at}>{formatPublicationDate(post.published_at)}</time>

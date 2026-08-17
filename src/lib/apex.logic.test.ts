@@ -18,8 +18,10 @@ describe("Apex public presentation behavior", () => {
     assert.deepEqual(getRouteDirections("/projects"), { previous: { to: "/", label: "Previous: Home" }, next: { to: "/writing", label: "Next: Journal" } });
     assert.deepEqual(getRouteDirections("/contact").next, { to: "/", label: "Next: Home" });
   });
-  test("uses contextual detail-route back links", () => {
-    assert.deepEqual(getRouteDirections("/projects/example").previous, { to: "/projects", label: "Back to Work" });
-    assert.deepEqual(getRouteDirections("/writing/example").previous, { to: "/writing", label: "Back to Journal" });
+  test("leaves detail-route back navigation to the in-content link", () => {
+    assert.equal(getRouteDirections("/projects/example").previous, null);
+    assert.equal(getRouteDirections("/writing/example").previous, null);
+    assert.deepEqual(getRouteDirections("/projects/example").next, { to: "/writing", label: "Next: Journal" });
+    assert.deepEqual(getRouteDirections("/writing/example").next, { to: "/about", label: "Next: About" });
   });
 });

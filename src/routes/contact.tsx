@@ -11,10 +11,10 @@ export const Route = createFileRoute("/contact")({
       { title: `Contact — ${SITE.name}` },
       {
         name: "description",
-        content: `Get in touch with ${SITE.name} about AI product work or collaboration.`,
+        content: "Share what you’re looking to build, or send a general message.",
       },
       { property: "og:title", content: `Contact — ${SITE.name}` },
-      { property: "og:description", content: "Get in touch about applied AI product work." },
+      { property: "og:description", content: "Share what you’re looking to build, or send a general message." },
     ],
   }),
   component: Contact,
@@ -22,25 +22,17 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const profile = useSiteProfile();
-  const socialLinks = [
-    { label: SITE.github, href: SITE.githubUrl },
-    { label: SITE.linkedin, href: SITE.linkedinUrl },
-    { label: SITE.instagram, href: SITE.instagramUrl },
-  ] as const;
-
   return (
     <SiteShell>
       <section className="work-route-intro connect-route-intro animate-rise">
         <PoeticAtmosphere variant="horizon" />
         <div className="container-wide work-route-intro__inner">
           <div className="connect-route-intro__copy">
-            <p className="eyebrow text-accent">Contact</p>
-            <h1 className="mt-6 max-w-4xl text-[clamp(3.5rem,7vw,6.75rem)] leading-[0.96] tracking-[-0.06em]">
-              Connect for work.
+            <h1 className="max-w-4xl font-sans text-[clamp(3rem,6vw,5.5rem)] font-medium leading-[0.98] tracking-[-0.05em]">
+              Contact
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
-              Have a project, collaboration, or opportunity in mind? Send a message through the
-              form or use the links below.
+              Share what you’re looking to build, or send a general message.
             </p>
           </div>
 
@@ -60,36 +52,8 @@ function Contact() {
           <ProjectEnquiryForm />
 
           <aside className="contact-route-details" aria-label="General contact">
-            <div className="contact-route-details__surface rounded-[var(--radius-card)] border border-border-subtle bg-surface-inset p-6 sm:p-8">
-              <p className="eyebrow">Contact details</p>
-              <dl className="mt-5 space-y-5 text-sm">
-                <div>
-                  <dt className="text-muted-foreground">Based in</dt>
-                  <dd className="mt-1 text-foreground-soft">{profile.location}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Education</dt>
-                  <dd className="mt-1 text-foreground-soft">{profile.degree} · {profile.university} · {profile.graduation_year}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Elsewhere</dt>
-                  <dd className="mt-2 flex flex-wrap gap-x-5">
-                    {socialLinks.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="focus-ring inline-flex min-h-11 items-center gap-1.5 rounded-md text-foreground-soft transition-[color,transform] hover:text-accent active:translate-y-px"
-                      >
-                        {item.label}
-                        <span aria-hidden>↗</span>
-                      </a>
-                    ))}
-                  </dd>
-                </div>
-              </dl>
-            </div>
+            <p className="eyebrow">Based in</p>
+            <p className="mt-3 text-sm leading-6 text-foreground-soft">{profile.location}</p>
           </aside>
         </div>
       </section>

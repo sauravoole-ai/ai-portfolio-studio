@@ -61,9 +61,9 @@ function ProjectsIndex() {
       <section className="work-route-intro animate-rise">
         <div className="container-editorial work-route-intro__inner">
           <div className="work-route-intro__copy">
-            <p className="eyebrow text-accent">Projects · Selected work</p>
+            <p className="eyebrow text-accent">Projects</p>
             <h1 className="mt-6 text-5xl leading-[0.98] tracking-[-0.05em] sm:text-6xl md:text-7xl">
-              Selected work.
+              Selected work
             </h1>
             <p className="mt-7 text-lg leading-8 text-foreground-soft md:text-xl md:leading-9">
               AI products documented through the problem, approach, features, and outcome or
@@ -106,8 +106,8 @@ function ProjectsIndex() {
                   <span className="work-project-card__copy">
                     <span className="work-project-card__title">{title}</span>
                     <span className="work-project-card__meta">
-                      <span>{p.status}</span>
-                      {cardStack.length ? <><span aria-hidden>·</span><span>{cardStack.join(" · ")}</span></> : null}
+                      <span className="work-project-card__status">{p.status}</span>
+                      {cardStack.length ? ` · ${cardStack.join(" · ")}` : null}
                     </span>
                     {p.summary ? (
                       <span className="work-project-card__summary">{p.summary}</span>

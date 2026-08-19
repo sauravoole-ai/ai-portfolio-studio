@@ -3,6 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 import { getPublishedPostBySlug } from "@/lib/posts.functions";
 import { SITE } from "@/lib/content";
+import { buildPublicPageHead } from "@/lib/seo";
 
 const postQueryOptions = (slug: string) =>
   queryOptions({
@@ -18,12 +19,15 @@ export const Route = createFileRoute("/writing/$slug")({
   },
   head: ({ loaderData }) =>
     loaderData
-      ? {
-          meta: [
-            { title: `${loaderData.post.title} — Journal` },
-            { name: "description", content: loaderData.post.excerpt },
-          ],
-        }
+      ? buildPublicPageHead({
+          path: `/writing/${encodeURIComponent(loaderData.post.slug)}`,
+          title: `${loaderData.post.title} — Journal`,
+          description: loaderData.post.excerpt,
+          type: "article",
+          image: loaderData.post.cover_image_url,
+          imageAlt: loaderData.post.title,
+          publishedAt: loaderData.post.published_at,
+        })
       : {
           meta: [
             { title: `Not found — ${SITE.name}` },

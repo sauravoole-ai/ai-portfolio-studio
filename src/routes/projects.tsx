@@ -5,6 +5,7 @@ import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects } from "@/lib/projects.functions";
 import { SITE } from "@/lib/content";
 import { getProjectHighlights } from "@/lib/apex.logic";
+import { buildPublicPageHead } from "@/lib/seo";
 
 const projectsQueryOptions = queryOptions({
   queryKey: ["projects", "published"],
@@ -12,19 +13,10 @@ const projectsQueryOptions = queryOptions({
 });
 
 export const Route = createFileRoute("/projects")({
-  head: () => ({
-    meta: [
-      { title: `Projects — ${SITE.name}` },
-      {
-        name: "description",
-        content: `Selected AI product work by ${SITE.name}.`,
-      },
-      { property: "og:title", content: `Projects — ${SITE.name}` },
-      {
-        property: "og:description",
-        content: "Selected AI product work documented through concise case studies.",
-      },
-    ],
+  head: () => buildPublicPageHead({
+    path: "/projects",
+    title: `Projects — ${SITE.name}`,
+    description: `Selected AI product work by ${SITE.name}.`,
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQueryOptions),
   errorComponent: () => (

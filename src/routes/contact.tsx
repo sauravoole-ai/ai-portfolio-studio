@@ -4,18 +4,13 @@ import { ProjectEnquiryForm } from "@/components/project-enquiry-form";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/content";
 import { useSiteProfile } from "@/lib/site-profile";
+import { buildPublicPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: `Contact — ${SITE.name}` },
-      {
-        name: "description",
-        content: "Share what you’re looking to build, or send a general message.",
-      },
-      { property: "og:title", content: `Contact — ${SITE.name}` },
-      { property: "og:description", content: "Share what you’re looking to build, or send a general message." },
-    ],
+  head: () => buildPublicPageHead({
+    path: "/contact",
+    title: `Contact — ${SITE.name}`,
+    description: "Share what you’re looking to build, or send a general message.",
   }),
   component: Contact,
 });

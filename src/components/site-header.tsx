@@ -162,7 +162,7 @@ export function SiteHeader() {
 
     </header>
 
-    <nav className="site-route-navigation" aria-label="Route navigation">
+    <nav className={`site-route-navigation site-route-navigation--${routeTone}`} aria-label="Route navigation">
       {previousRoute ? <div
         className={`site-previous-route${open ? " site-route-control--hidden" : ""}`}
         aria-hidden={open || undefined}

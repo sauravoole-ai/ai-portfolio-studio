@@ -2,21 +2,24 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { SITE } from "@/lib/content";
-import { useSiteProfile } from "@/lib/site-profile";
+import { siteProfileQueryOptions, useSiteProfile } from "@/lib/site-profile";
+import { buildProfilePageJsonLd, buildPublicPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [
-    { title: `About — ${SITE.name}` },
-    { name: "description", content: `About ${SITE.name} — AI product work, tools, and areas of exploration.` },
-    { property: "og:title", content: `About — ${SITE.name}` },
-    { property: "og:description", content: "AI product work, tools, and areas of exploration." },
-  ] }),
+  head: () => buildPublicPageHead({
+    path: "/about",
+    title: `About — ${SITE.name}`,
+    description: `About ${SITE.name} — AI product work, tools, and areas of exploration.`,
+  }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(siteProfileQueryOptions),
   component: About,
 });
 
 function About() {
   const profile = useSiteProfile();
+  const profileJsonLd = JSON.stringify(buildProfilePageJsonLd(profile)).replaceAll("<", "\\u003c");
   return <SiteShell>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: profileJsonLd }} />
     <section className="work-route-intro about-route-intro animate-rise">
       <div className="container-editorial work-route-intro__inner">
         <div className="work-route-intro__copy"><p className="eyebrow text-accent">Profile</p><h1 className="mt-6 font-sans text-[clamp(3rem,6vw,5.5rem)] font-medium leading-[0.98] tracking-[-0.05em]">About</h1></div>

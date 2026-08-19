@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects, type PublishedProject } from "@/lib/projects.functions";
 import { SITE } from "@/lib/content";
+import { buildPublicPageHead } from "@/lib/seo";
 
 const projectsQueryOptions = queryOptions({
   queryKey: ["projects", "published"],
@@ -28,14 +29,13 @@ export const Route = createFileRoute("/projects/$slug")({
     const { project } = loaderData;
     const title = project.title ?? "Untitled project";
     const summary = project.summary ?? "";
-    return {
-      meta: [
-        { title: `${title} — Case study` },
-        { name: "description", content: summary },
-        { property: "og:title", content: `${title} — Case study` },
-        { property: "og:description", content: summary },
-      ],
-    };
+    return buildPublicPageHead({
+      path: `/projects/${encodeURIComponent(project.slug ?? "")}`,
+      title: `${title} — Case study`,
+      description: summary,
+      image: project.cover_image_url,
+      imageAlt: title,
+    });
   },
   notFoundComponent: NotFound,
   component: ProjectPage,

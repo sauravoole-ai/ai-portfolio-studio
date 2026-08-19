@@ -1,24 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
-import { SITE } from "@/lib/content";
 import { useSiteProfile } from "@/lib/site-profile";
+import { buildPublicPageHead, HOME_DESCRIPTION, HOME_TITLE } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: `${SITE.name} — ${SITE.role}` },
-      {
-        name: "description",
-        content: `${SITE.name}, ${SITE.role}. ${SITE.tagline}`,
-      },
-      { property: "og:title", content: `${SITE.name} — ${SITE.role}` },
-      {
-        property: "og:description",
-        content: SITE.tagline,
-      },
-    ],
-  }),
+  head: () => buildPublicPageHead({ path: "/", title: HOME_TITLE, description: HOME_DESCRIPTION }),
   component: Home,
 });
 
@@ -31,7 +18,7 @@ function Home() {
         <section className="home-entry relative isolate flex min-h-[calc(100svh-5.25rem)] overflow-hidden">
           <div className="home-entry__wash absolute inset-0" aria-hidden />
 
-          <div className="container-wide relative z-10 flex min-h-full flex-1 items-start pb-20 pt-16 sm:items-center sm:py-24 md:py-28 lg:py-32">
+          <div className="home-entry__inner container-wide relative z-10 flex min-h-full flex-1 items-start pb-20 pt-16 sm:items-center sm:py-24 md:py-28 lg:py-32">
             <div className="home-entry__copy animate-rise w-full max-w-[42rem]">
               <h1 className="max-w-[13ch] font-sans text-[clamp(2.35rem,5vw,4.5rem)] font-medium leading-[1.04] tracking-[-0.045em] text-foreground/92">
                 {profile.hero_tagline}
@@ -52,7 +39,7 @@ function Home() {
 
         <section className="home-bridge relative isolate overflow-hidden">
           <div className="home-bridge__wash absolute inset-0" aria-hidden />
-          <div className="container-wide relative z-10 py-20 sm:py-24 md:py-28">
+          <div className="home-bridge__inner container-wide relative z-10 py-20 sm:py-24 md:py-28">
             <p className="home-bridge__statement max-w-3xl font-sans text-[clamp(1.45rem,2.7vw,2.35rem)] font-medium leading-[1.3] tracking-[-0.035em] text-foreground-soft">
               {profile.home_bridge_text}
             </p>

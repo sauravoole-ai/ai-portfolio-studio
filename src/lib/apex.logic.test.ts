@@ -14,9 +14,11 @@ describe("Apex public presentation behavior", () => {
     assert.deepEqual(getProjectHighlights("Future project", ["React", "Supabase", "Flask", "Render"]), ["React", "Supabase", "Flask"]);
   });
   test("keeps Home forward-only and maps top-level routes", () => {
-    assert.equal(getRouteDirections("/").previous, null);
+    assert.deepEqual(getRouteDirections("/"), { previous: null, next: { to: "/projects", label: "Next: Work" } });
     assert.deepEqual(getRouteDirections("/projects"), { previous: { to: "/", label: "Previous: Home" }, next: { to: "/writing", label: "Next: Journal" } });
-    assert.deepEqual(getRouteDirections("/contact").next, { to: "/", label: "Next: Home" });
+    assert.deepEqual(getRouteDirections("/writing"), { previous: { to: "/projects", label: "Previous: Work" }, next: { to: "/about", label: "Next: About" } });
+    assert.deepEqual(getRouteDirections("/about"), { previous: { to: "/writing", label: "Previous: Journal" }, next: { to: "/contact", label: "Next: Contact" } });
+    assert.deepEqual(getRouteDirections("/contact"), { previous: { to: "/about", label: "Previous: About" }, next: { to: "/", label: "Next: Home" } });
   });
   test("leaves detail-route back navigation to the in-content link", () => {
     assert.equal(getRouteDirections("/projects/example").previous, null);

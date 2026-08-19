@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedPosts } from "@/lib/posts.functions";
 import { SITE } from "@/lib/content";
+import { buildPublicPageHead } from "@/lib/seo";
 
 const postsQueryOptions = queryOptions({
   queryKey: ["posts", "published"],
@@ -11,19 +12,10 @@ const postsQueryOptions = queryOptions({
 });
 
 export const Route = createFileRoute("/writing")({
-  head: () => ({
-    meta: [
-      { title: `Journal — ${SITE.name}` },
-      {
-        name: "description",
-        content: "Writing, experiments, observations, and things learned along the way.",
-      },
-      { property: "og:title", content: `Journal — ${SITE.name}` },
-      {
-        property: "og:description",
-        content: "Writing, experiments, observations, and things learned along the way.",
-      },
-    ],
+  head: () => buildPublicPageHead({
+    path: "/writing",
+    title: `Journal — ${SITE.name}`,
+    description: "Writing, experiments, observations, and things learned along the way.",
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
   pendingComponent: JournalPending,

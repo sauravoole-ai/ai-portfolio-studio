@@ -4,7 +4,7 @@ A personal AI portfolio and publishing platform for showcasing products, writing
 
 ## Live Demo
 
-https://sauravoole-ai-ai-portfolio-studio.sauravkrjha.workers.dev
+https://studio.sauravkrjha.workers.dev
 
 ## What It Includes
 

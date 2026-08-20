@@ -31,7 +31,8 @@ describe("production discoverability", () => {
     );
     assert.match(xml, new RegExp(absoluteUrl("/projects/published-project")));
     assert.match(xml, new RegExp(absoluteUrl("/writing/published-post")));
-    assert.doesNotMatch(xml, /draft-project|draft-post|\/studio/);
+    assert.doesNotMatch(xml, /draft-project|draft-post/);
+    assert.doesNotMatch(xml, new RegExp(`<loc>${absoluteUrl("/studio")}</loc>`));
   });
 
   test("ProfilePage keeps only validated public social URLs", () => {

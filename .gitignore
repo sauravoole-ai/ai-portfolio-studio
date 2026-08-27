@@ -22,6 +22,9 @@ supabase/.temp/
 .wrangler/
 .dev.vars
 
+# Local environment / secrets
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

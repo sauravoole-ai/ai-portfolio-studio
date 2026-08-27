@@ -80,10 +80,10 @@ describe("Studio post behavior", () => {
 });
 
 describe("Studio project and authorization behavior", () => {
-  const validProject: ProjectDraft = { title: " Project ", slug: " project ", summary: " Summary ", problem: " Problem ", approach: " Approach ", keyFeatures: " Search\n Alerts ", stack: " React\nSupabase", outcome: " Learning ", status: "Live", liveUrl: "", githubUrl: " https://github.com/example/project ", coverImageUrl: "", published: true, sortOrder: "4" };
+  const validProject: ProjectDraft = { title: " Project ", slug: " project ", summary: " Summary ", problem: " Problem ", approach: " Approach ", keyFeatures: " Search\n Alerts ", stack: " React\nSupabase", outcome: " Learning ", status: "Live", liveUrl: "", githubUrl: " https://github.com/example/project ", coverImageUrl: "", published: true, sortOrder: "4", showInProductLauncher: true, productSortOrder: "7" };
 
   test("builds every project field and converts human-editable arrays", () => {
-    assert.deepEqual(buildProjectPayload(validProject), { title: "Project", slug: "project", summary: "Summary", problem: "Problem", approach: "Approach", key_features: ["Search", "Alerts"], stack: ["React", "Supabase"], outcome: "Learning", status: "Live", live_url: null, github_url: "https://github.com/example/project", cover_image_url: null, published: true, sort_order: 4 });
+    assert.deepEqual(buildProjectPayload(validProject), { title: "Project", slug: "project", summary: "Summary", problem: "Problem", approach: "Approach", key_features: ["Search", "Alerts"], stack: ["React", "Supabase"], outcome: "Learning", status: "Live", live_url: null, github_url: "https://github.com/example/project", cover_image_url: null, published: true, sort_order: 4, show_in_product_launcher: true, product_sort_order: 7 });
     assert.deepEqual(linesToArray(" first\n\n second \r\n"), ["first", "second"]);
   });
 

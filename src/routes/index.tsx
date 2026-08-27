@@ -1,6 +1,10 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
+import { listPublishedProjects } from "@/lib/projects.functions";
+import { selectLauncherProducts } from "@/lib/projects.logic";
 import { useSiteProfile } from "@/lib/site-profile";
 import { buildPublicPageHead, HOME_DESCRIPTION, HOME_TITLE } from "@/lib/seo";
 
@@ -11,6 +15,13 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const profile = useSiteProfile();
+  const [productsOpen, setProductsOpen] = useState(false);
+  const projects = useQuery({
+    queryKey: ["projects", "published"],
+    queryFn: () => listPublishedProjects(),
+  });
+  const launcherProducts = selectLauncherProducts(projects.data ?? []);
+  const launcherPanelId = "homepage-product-launcher";
   return (
     <SiteShell>
       <div className="home-page">
@@ -26,11 +37,47 @@ function Home() {
               <p className="mt-6 max-w-[30rem] text-sm leading-6 text-foreground-soft/82 sm:mt-7 sm:text-base sm:leading-7">
                 {profile.hero_supporting}
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 sm:mt-9">
-                <Link to="/projects" className="home-entry__primary-action button-primary focus-ring group">
-                  View work
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+              <div className="mt-8 sm:mt-9">
+                <button
+                  type="button"
+                  className="home-entry__primary-action button-primary focus-ring group"
+                  aria-expanded={productsOpen}
+                  aria-controls={launcherPanelId}
+                  onClick={() => setProductsOpen((open) => !open)}
+                >
+                  View products
+                  <ChevronDown className={`h-4 w-4 transition-transform${productsOpen ? " rotate-180" : ""}`} aria-hidden />
+                </button>
+                {productsOpen ? (
+                  <div id={launcherPanelId} className="home-product-launcher" aria-live="polite">
+                    <p className="home-product-launcher__label">Live products</p>
+                    {projects.isPending ? <p className="home-product-launcher__status">Loading products…</p> : null}
+                    {projects.isError ? (
+                      <p className="home-product-launcher__status">
+                        Products are temporarily unavailable. <Link to="/projects">Explore Work</Link>
+                      </p>
+                    ) : null}
+                    {projects.isSuccess && launcherProducts.length === 0 ? (
+                      <p className="home-product-launcher__status">No live products are available right now.</p>
+                    ) : null}
+                    {launcherProducts.length > 0 ? (
+                      <div className="home-product-launcher__links">
+                        {launcherProducts.map((project) => (
+                          <a
+                            key={project.id}
+                            className="home-product-launcher__link focus-ring group"
+                            href={project.live_url!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <span>{project.title ?? "Untitled product"}</span>
+                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                          </a>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

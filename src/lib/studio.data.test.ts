@@ -59,7 +59,7 @@ describe("Studio mocked Supabase data paths", () => {
   });
 
   test("creates and updates projects using the actual schema payload", async () => {
-    const payload = { title: "Project", slug: "project", summary: "Summary", problem: null, approach: "Built iteratively", key_features: ["Search"], stack: ["React"], outcome: null, status: "Live", live_url: null, github_url: null, cover_image_url: null, published: true, sort_order: 2 };
+    const payload = { title: "Project", slug: "project", summary: "Summary", problem: null, approach: "Built iteratively", key_features: ["Search"], stack: ["React"], outcome: null, status: "Live", live_url: null, github_url: null, cover_image_url: null, published: true, sort_order: 2, show_in_product_launcher: true, product_sort_order: 5 };
     const created = mockClient({ data: { id: 1 } });
     await createStudioData(created.client).createProject(payload);
     assert.deepEqual(created.calls.find((call) => call.method === "insert")?.args, [payload]);

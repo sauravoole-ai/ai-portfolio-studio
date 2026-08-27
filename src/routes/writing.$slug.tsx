@@ -1,9 +1,13 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi, Link, notFound } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 import { getPublishedPostBySlug } from "@/lib/posts.functions";
 import { SITE } from "@/lib/content";
 import { buildPublicPageHead } from "@/lib/seo";
+import { getRouteDirections } from "@/lib/apex.logic";
+import { selectJournalPreviousDirection } from "@/lib/posts.logic";
+
+const writingRouteApi = getRouteApi("/writing");
 
 const postQueryOptions = (slug: string) =>
   queryOptions({
@@ -63,11 +67,16 @@ function formatPublicationDate(value: string) {
 
 function PostPage() {
   const { post } = Route.useLoaderData();
+  const posts = writingRouteApi.useLoaderData();
   useSuspenseQuery(postQueryOptions(post.slug));
   const paragraphs = post.content.split(/\r?\n\s*\r?\n/).filter((paragraph) => paragraph.trim());
+  const routeDirections = {
+    ...getRouteDirections(`/writing/${post.slug}`),
+    previous: selectJournalPreviousDirection(posts, post.slug),
+  };
 
   return (
-    <SiteShell>
+    <SiteShell routeDirections={routeDirections}>
       <article className="journal-article animate-rise">
         <header className="container-editorial pt-16 pb-12 md:pt-24 md:pb-16">
           <Link to="/writing" className="eyebrow link-underline">

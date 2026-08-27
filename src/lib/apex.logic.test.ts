@@ -10,8 +10,19 @@ describe("Apex public presentation behavior", () => {
     assert.equal(selectLatestGenuinePost([{ title: "Journal QA Test", slug: "journal-qa-test" }]), null);
   });
   test("uses locked highlights with a safe stored-stack fallback", () => {
-    assert.deepEqual(getProjectHighlights("AI Internship Match Assistant", []), ["Embeddings", "Vector Retrieval", "pypdf"]);
+    assert.deepEqual(getProjectHighlights("AI Internship Match Assistant", []), [
+      "Document Chunking",
+      "Lexical Retrieval",
+      "RAG-style Follow-up",
+    ]);
     assert.deepEqual(getProjectHighlights("Future project", ["React", "Supabase", "Flask", "Render"]), ["React", "Supabase", "Flask"]);
+  });
+  test("uses ACComplish's curated Work-card highlights", () => {
+    assert.deepEqual(getProjectHighlights("ACComplish", ["Fallback one", "Fallback two", "Fallback three"]), [
+      "Adaptive Study Planning",
+      "Search & Resource Curation",
+      "LLM Reliability & Validation",
+    ]);
   });
   test("keeps Home forward-only and maps top-level routes", () => {
     assert.deepEqual(getRouteDirections("/"), { previous: null, next: { to: "/projects", label: "Next: Work" } });
@@ -20,10 +31,10 @@ describe("Apex public presentation behavior", () => {
     assert.deepEqual(getRouteDirections("/about"), { previous: { to: "/writing", label: "Previous: Journal" }, next: { to: "/contact", label: "Next: Contact" } });
     assert.deepEqual(getRouteDirections("/contact"), { previous: { to: "/about", label: "Previous: About" }, next: { to: "/", label: "Next: Home" } });
   });
-  test("leaves detail-route back navigation to the in-content link", () => {
-    assert.equal(getRouteDirections("/projects/example").previous, null);
-    assert.equal(getRouteDirections("/writing/example").previous, null);
-    assert.deepEqual(getRouteDirections("/projects/example").next, { to: "/writing", label: "Next: Journal" });
+  test("maps detail routes to their parent sections", () => {
+    assert.deepEqual(getRouteDirections("/projects/accomplish").previous, { to: "/projects", label: "Back to Work" });
+    assert.deepEqual(getRouteDirections("/writing/example-post").previous, { to: "/writing", label: "Back to Journal" });
+    assert.equal(getRouteDirections("/projects/example").next, null);
     assert.deepEqual(getRouteDirections("/writing/example").next, { to: "/about", label: "Next: About" });
   });
 });

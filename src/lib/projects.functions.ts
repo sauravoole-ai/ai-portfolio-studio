@@ -18,6 +18,8 @@ export type PublishedProject = {
   github_url: string | null;
   cover_image_url: string | null;
   sort_order: number;
+  show_in_product_launcher: boolean;
+  product_sort_order: number;
 };
 
 export const listPublishedProjects = createServerFn({ method: "GET" }).handler(
@@ -39,7 +41,7 @@ export const listPublishedProjects = createServerFn({ method: "GET" }).handler(
 
     const { data, error } = await supabase
       .from("projects")
-      .select("id, title, slug, summary, problem, approach, key_features, stack, outcome, status, live_url, github_url, cover_image_url, sort_order")
+      .select("id, title, slug, summary, problem, approach, key_features, stack, outcome, status, live_url, github_url, cover_image_url, sort_order, show_in_product_launcher, product_sort_order")
       .eq("published", true)
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });

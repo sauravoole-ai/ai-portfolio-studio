@@ -1,1 +1,4 @@
 project_id = "xmrxwbungwpdlhdyxcdp"
+
+[functions.notify-portfolio-enquiry]
+verify_jwt = false

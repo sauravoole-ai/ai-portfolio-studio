@@ -187,7 +187,9 @@ export type Database = {
           live_url: string | null
           outcome: string | null
           problem: string | null
+          product_sort_order: number
           published: boolean | null
+          show_in_product_launcher: boolean
           slug: string | null
           sort_order: number
           stack: string[]
@@ -205,7 +207,9 @@ export type Database = {
           live_url?: string | null
           outcome?: string | null
           problem?: string | null
+          product_sort_order?: number
           published?: boolean | null
+          show_in_product_launcher?: boolean
           slug?: string | null
           sort_order?: number
           stack?: string[]
@@ -223,7 +227,9 @@ export type Database = {
           live_url?: string | null
           outcome?: string | null
           problem?: string | null
+          product_sort_order?: number
           published?: boolean | null
+          show_in_product_launcher?: boolean
           slug?: string | null
           sort_order?: number
           stack?: string[]

@@ -503,8 +503,10 @@ function ProjectForm({ project, onClose }: { project: StudioProject | null; onCl
   const [coverImageUrl, setCoverImageUrl] = useState(project?.cover_image_url ?? "");
   const [published, setPublished] = useState(project?.published ?? false);
   const [sortOrder, setSortOrder] = useState(String(project?.sort_order ?? 0));
+  const [showInProductLauncher, setShowInProductLauncher] = useState(project?.show_in_product_launcher ?? false);
+  const [productSortOrder, setProductSortOrder] = useState(String(project?.product_sort_order ?? 0));
   const [feedback, setFeedback] = useState("");
-  const draft = { title, slug, summary, problem, approach, keyFeatures, stack, outcome, status, liveUrl, githubUrl, coverImageUrl, published, sortOrder };
+  const draft = { title, slug, summary, problem, approach, keyFeatures, stack, outcome, status, liveUrl, githubUrl, coverImageUrl, published, sortOrder, showInProductLauncher, productSortOrder };
   const save = useMutation({
     mutationFn: () => {
       const values = buildProjectPayload(draft);
@@ -550,6 +552,8 @@ function ProjectForm({ project, onClose }: { project: StudioProject | null; onCl
       </div>
       <StudioField label="Cover Image URL"><input type="url" value={coverImageUrl} onChange={(event) => setCoverImageUrl(event.target.value)} /></StudioField>
       <label className="studio-check"><input type="checkbox" checked={published} onChange={(event) => setPublished(event.target.checked)} /><span>Published</span></label>
+      <label className="studio-check"><input type="checkbox" checked={showInProductLauncher} onChange={(event) => setShowInProductLauncher(event.target.checked)} /><span>Show in homepage product launcher</span></label>
+      <StudioField label="Product launcher order"><input type="number" value={productSortOrder} onChange={(event) => setProductSortOrder(event.target.value)} /></StudioField>
       {feedback ? <p className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`} role="status">{feedback}</p> : null}
       <div className="studio-form__actions"><button className="studio-button studio-button--primary" disabled={save.isPending}>{save.isPending ? "Saving…" : "Save project"}</button><button type="button" className="studio-button" onClick={onClose}>Close</button></div>
     </form>

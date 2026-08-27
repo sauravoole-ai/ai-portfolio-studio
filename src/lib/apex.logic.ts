@@ -1,14 +1,15 @@
 export type RouteDirection = { to: string; label: string };
-
-export function getRouteDirections(pathname: string): {
+export type RouteDirections = {
   previous: RouteDirection | null;
-  next: RouteDirection;
-} {
+  next: RouteDirection | null;
+};
+
+export function getRouteDirections(pathname: string): RouteDirections {
   if (pathname.startsWith("/projects/")) {
-    return { previous: null, next: { to: "/writing", label: "Next: Journal" } };
+    return { previous: { to: "/projects", label: "Back to Work" }, next: null };
   }
   if (pathname.startsWith("/writing/")) {
-    return { previous: null, next: { to: "/about", label: "Next: About" } };
+    return { previous: { to: "/writing", label: "Back to Journal" }, next: { to: "/about", label: "Next: About" } };
   }
   if (pathname === "/") return { previous: null, next: { to: "/projects", label: "Next: Work" } };
   if (pathname.startsWith("/projects")) return { previous: { to: "/", label: "Previous: Home" }, next: { to: "/writing", label: "Next: Journal" } };
@@ -18,7 +19,8 @@ export function getRouteDirections(pathname: string): {
 }
 
 const PROJECT_HIGHLIGHTS: Record<string, readonly string[]> = {
-  "AI Internship Match Assistant": ["Embeddings", "Vector Retrieval", "pypdf"],
+  ACComplish: ["Adaptive Study Planning", "Search & Resource Curation", "LLM Reliability & Validation"],
+  "AI Internship Match Assistant": ["Document Chunking", "Lexical Retrieval", "RAG-style Follow-up"],
   "AI Health Advisory Assistant": ["Groq API", "Sensor Integration", "ESP32 Prototyping"],
   "AI Poetry Chatbot": ["Mood-Conditioned Generation", "ReportLab", "Flask"],
 };

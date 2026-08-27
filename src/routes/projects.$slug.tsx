@@ -4,6 +4,7 @@ import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects, type PublishedProject } from "@/lib/projects.functions";
 import { SITE } from "@/lib/content";
 import { buildPublicPageHead } from "@/lib/seo";
+import { selectProjectDetailDirections } from "@/lib/projects.logic";
 
 const projectsQueryOptions = queryOptions({
   queryKey: ["projects", "published"],
@@ -60,9 +61,10 @@ function ProjectPage() {
   const { data: projects } = useSuspenseQuery(projectsQueryOptions);
   const idx = projects.findIndex((p: PublishedProject) => p.slug === project.slug);
   const next = projects.length > 1 ? projects[(idx + 1) % projects.length] : null;
+  const routeDirections = selectProjectDetailDirections(projects, project.slug ?? "");
 
   return (
-    <SiteShell>
+    <SiteShell routeDirections={routeDirections}>
       <article className="animate-rise">
         <header className="container-editorial pt-16 pb-12 md:pt-24 md:pb-16">
           <Link to="/projects" className="eyebrow link-underline">

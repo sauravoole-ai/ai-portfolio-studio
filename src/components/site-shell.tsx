@@ -3,8 +3,9 @@ import { useRouterState } from "@tanstack/react-router";
 import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
 import { PoeticAtmosphere } from "./poetic-atmosphere";
+import type { RouteDirections } from "@/lib/apex.logic";
 
-export function SiteShell({ children }: { children: ReactNode }) {
+export function SiteShell({ children, routeDirections }: { children: ReactNode; routeDirections?: RouteDirections }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const hasInnerAtmosphere = ["/projects", "/writing", "/about", "/contact"].includes(pathname);
 
@@ -19,7 +20,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
-      <SiteHeader />
+      <SiteHeader routeDirections={routeDirections} />
       <main id="main-content" tabIndex={-1} className="relative z-0 flex-1 outline-none">
         {children}
       </main>

@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
-import { getRouteDirections } from "@/lib/apex.logic";
+import { getRouteDirections, type RouteDirections } from "@/lib/apex.logic";
 import { useSiteProfile } from "@/lib/site-profile";
 
 const nav = [
@@ -12,7 +12,7 @@ const nav = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-export function SiteHeader() {
+export function SiteHeader({ routeDirections }: { routeDirections?: RouteDirections } = {}) {
   const [open, setOpen] = useState(false);
   const [brandHidden, setBrandHidden] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +30,7 @@ export function SiteHeader() {
           : pathname.startsWith("/contact")
             ? "connect"
             : "inner";
-  const { previous: previousRoute, next: nextRoute } = getRouteDirections(pathname);
+  const { previous: previousRoute, next: nextRoute } = routeDirections ?? getRouteDirections(pathname);
 
   useEffect(() => {
     if (open) {
@@ -180,7 +180,7 @@ export function SiteHeader() {
         </span>
       </div> : null}
 
-      <div
+      {nextRoute ? <div
         className={`site-next-route${open ? " site-next-route--hidden" : ""}`}
         aria-hidden={open || undefined}
       >
@@ -195,7 +195,7 @@ export function SiteHeader() {
         >
           <ArrowRight className="site-route-control__icon" aria-hidden />
         </Link>
-      </div>
+      </div> : null}
     </nav>
   </>;
 }

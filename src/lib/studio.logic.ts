@@ -24,6 +24,8 @@ export type ProjectDraft = {
   coverImageUrl: string;
   published: boolean;
   sortOrder: string;
+  showInProductLauncher: boolean;
+  productSortOrder: string;
 };
 
 export const PROJECT_STATUSES = ["Live", "In Progress", "Archived"] as const;
@@ -125,6 +127,8 @@ export function buildProjectPayload(draft: ProjectDraft) {
     cover_image_url: draft.coverImageUrl.trim() || null,
     published: draft.published,
     sort_order: Number.parseInt(draft.sortOrder, 10) || 0,
+    show_in_product_launcher: draft.showInProductLauncher,
+    product_sort_order: Number.parseInt(draft.productSortOrder, 10) || 0,
   };
 }
 

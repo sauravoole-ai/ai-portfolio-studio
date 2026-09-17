@@ -1,7 +1,7 @@
 import { SITE } from "./content.ts";
 
 export const PRODUCTION_ORIGIN =
-  "https://studio.sauravkrjha.workers.dev";
+  "https://ai-portfolio-studio-sauravoole-1831s-projects.vercel.app";
 export const SOCIAL_IMAGE_PATH = "/home-studio-master-hq.webp";
 export const SOCIAL_IMAGE_URL = `${PRODUCTION_ORIGIN}${SOCIAL_IMAGE_PATH}`;
 export const SOCIAL_IMAGE_WIDTH = "2400";

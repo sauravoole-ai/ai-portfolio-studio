@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ai-portfolio-studio-sauravoole-1831s-projects.vercel.app/sitemap.xml
+Sitemap: https://sauravkrjha.vercel.app/sitemap.xml

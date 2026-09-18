@@ -1,6 +1,7 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
+import { PremiumEmptyState } from "@/components/premium-empty-state";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects } from "@/lib/projects.functions";
 import { SITE } from "@/lib/content";
@@ -75,16 +76,12 @@ function ProjectsIndex() {
       </section>
       <section className="work-project-index container-editorial pb-8 md:pb-12">
         {projects.length === 0 ? (
-          <div className="work-project-empty">
-            <p className="eyebrow text-accent">Project index</p>
-            <h2 className="mt-4 text-2xl leading-tight tracking-[-0.035em] sm:text-3xl">
-              Case studies will appear here once projects are published.
-            </h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-foreground-soft">
-              This index is ready for genuine project work, with space for a clear problem,
-              approach, and outcome.
-            </p>
-          </div>
+          <PremiumEmptyState
+            eyebrow="Project index"
+            heading="Case studies will appear here once projects are published."
+            explanation="This index is ready for genuine project work, with space for a clear problem, approach, and outcome."
+            action={{ label: "Start a conversation", to: "/contact" }}
+          />
         ) : (
           <ul className="work-project-grid">
             {projects.map((p, i) => {

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
+import { BookingCTA } from "@/components/booking-cta";
+import { ServicePathways } from "@/components/service-pathways";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedProjects } from "@/lib/projects.functions";
 import { selectLauncherProducts } from "@/lib/projects.logic";
@@ -102,6 +104,29 @@ function Home() {
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground-soft">Read journal <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden /></span>
               </Link>
             </div>
+          </div>
+        </section>
+
+        <section className="border-t border-border-subtle bg-surface-inset/45">
+          <div className="container-wide section-rhythm">
+            <div className="grid gap-12 lg:grid-cols-[0.62fr_1.38fr] lg:gap-24">
+              <div>
+                <p className="eyebrow text-mint">Ways to collaborate</p>
+                <h2 className="mt-5 max-w-lg text-[clamp(2.35rem,5vw,4.25rem)] leading-[1.03] tracking-[-0.05em]">
+                  Different paths into the work.
+                </h2>
+                <p className="mt-6 max-w-md text-base leading-7 text-foreground-soft sm:text-lg sm:leading-8">
+                  Broad directions for exploring product, workflow, and creative digital ideas together.
+                </p>
+              </div>
+              <ServicePathways />
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-border-subtle">
+          <div className="container-wide section-rhythm">
+            <BookingCTA variant="collaboration" />
           </div>
         </section>
       </div>

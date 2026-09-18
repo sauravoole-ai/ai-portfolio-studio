@@ -1,6 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { PremiumEmptyState } from "@/components/premium-empty-state";
 import { SiteShell } from "@/components/site-shell";
 import { listPublishedPosts } from "@/lib/posts.functions";
 import { SITE } from "@/lib/content";
@@ -92,14 +93,13 @@ function WritingIndex() {
       </section>
       <section className="journal-empty-index container-editorial pb-16 md:pb-24">
         {posts.length === 0 ? (
-          <div className="journal-empty-notice">
-            <h2 className="font-sans text-2xl font-medium leading-tight tracking-[-0.035em] sm:text-3xl">
-              Nothing published yet.
-            </h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-foreground-soft">
-              New writing will appear here when it’s ready.
-            </p>
-          </div>
+          <PremiumEmptyState
+            eyebrow="Journal"
+            heading="Nothing published yet."
+            explanation="New writing will appear here when it’s ready."
+            action={{ label: "Explore projects", to: "/projects" }}
+            atmosphere="mist"
+          />
         ) : (
           <ul className="journal-post-grid">
             {posts.map((post) => (

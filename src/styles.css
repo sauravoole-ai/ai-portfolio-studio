@@ -2126,7 +2126,11 @@
   z-index: 0;
   height: 100svh;
   margin-bottom: -100svh;
-  background-image: url("/home-studio-master-hq.webp");
+  background-image:
+    url("/home-studio-master-hq.webp"),
+    radial-gradient(ellipse at 74% 38%, oklch(0.76 0.055 190 / 0.13), transparent 30%),
+    radial-gradient(ellipse at 86% 72%, oklch(0.44 0.045 68 / 0.13), transparent 34%),
+    linear-gradient(118deg, oklch(0.105 0.019 253), oklch(0.16 0.024 230) 58%, oklch(0.13 0.025 80));
   background-position: 52% 50%;
   background-size: cover;
   background-repeat: no-repeat;

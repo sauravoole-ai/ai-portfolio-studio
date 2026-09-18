@@ -11,7 +11,17 @@ import { useSiteProfile } from "@/lib/site-profile";
 import { buildPublicPageHead, HOME_DESCRIPTION, HOME_TITLE } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => buildPublicPageHead({ path: "/", title: HOME_TITLE, description: HOME_DESCRIPTION }),
+  head: () => {
+    const publicPageHead = buildPublicPageHead({ path: "/", title: HOME_TITLE, description: HOME_DESCRIPTION });
+
+    return {
+      ...publicPageHead,
+      links: [
+        ...publicPageHead.links,
+        { rel: "preload", href: "/home-studio-master-hq.webp", as: "image", type: "image/webp", fetchPriority: "high" },
+      ],
+    };
+  },
   component: Home,
 });
 

@@ -2,11 +2,11 @@ import { SITE } from "./content.ts";
 
 export const PRODUCTION_ORIGIN =
   "https://sauravkrjha.vercel.app";
-export const SOCIAL_IMAGE_PATH = "/home-studio-master-hq.webp";
+export const SOCIAL_IMAGE_PATH = "/social-preview.jpg";
 export const SOCIAL_IMAGE_URL = `${PRODUCTION_ORIGIN}${SOCIAL_IMAGE_PATH}`;
-export const SOCIAL_IMAGE_WIDTH = "2400";
-export const SOCIAL_IMAGE_HEIGHT = "1800";
-export const SOCIAL_IMAGE_TYPE = "image/webp";
+export const SOCIAL_IMAGE_WIDTH = "1200";
+export const SOCIAL_IMAGE_HEIGHT = "627";
+export const SOCIAL_IMAGE_TYPE = "image/jpeg";
 
 export function absoluteUrl(path = "/") {
   if (path === "/") return PRODUCTION_ORIGIN;

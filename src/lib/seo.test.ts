@@ -11,10 +11,16 @@ import {
 } from "./seo.ts";
 
 describe("production discoverability", () => {
-  test("builds absolute canonical and fallback social metadata", () => {
+  test("builds the portfolio social-preview fallback metadata", () => {
     const head = buildPublicPageHead({ path: "/projects/example", title: "Example", description: "Summary" });
     assert.equal(head.links[0]?.href, `${PRODUCTION_ORIGIN}/projects/example`);
+    assert.equal(SOCIAL_IMAGE_URL, `${PRODUCTION_ORIGIN}/social-preview.jpg`);
     assert(head.meta.some((item) => item.property === "og:image" && item.content === SOCIAL_IMAGE_URL));
+    assert(head.meta.some((item) => item.name === "twitter:image" && item.content === SOCIAL_IMAGE_URL));
+    assert(head.meta.some((item) => item.property === "og:image:width" && item.content === "1200"));
+    assert(head.meta.some((item) => item.property === "og:image:height" && item.content === "627"));
+    assert(head.meta.some((item) => item.property === "og:image:type" && item.content === "image/jpeg"));
+    assert.equal(existsSync(new URL("../../public/social-preview.jpg", import.meta.url)), true);
   });
 
   test("uses a valid public cover and rejects a local cover", () => {

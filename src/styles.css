@@ -2102,9 +2102,23 @@
 }
 
 @media (max-width: 47.999rem) {
+  /* Lift the mobile floor without amplifying white text or accent highlights. */
+  :root {
+    --background: oklch(0.17 0.018 248);
+    --background-deep: oklch(0.145 0.016 252);
+    --surface-1: oklch(0.205 0.021 248);
+    --surface-2: oklch(0.235 0.024 246);
+    --surface-3: oklch(0.265 0.027 244);
+    --surface-inset: oklch(0.155 0.018 250);
+    --muted-foreground: oklch(0.73 0.022 230);
+    --quiet-foreground: oklch(0.65 0.025 232);
+    --border: oklch(0.37 0.026 240 / 0.78);
+    --border-subtle: oklch(0.34 0.024 242 / 0.6);
+  }
+
   .site-ambient {
     background:
-      radial-gradient(circle at 88% 3%, oklch(0.79 0.125 194 / 0.05), transparent 22rem),
+      radial-gradient(circle at 88% 3%, oklch(0.79 0.125 194 / 0.085), transparent 22rem),
       linear-gradient(var(--background), var(--background));
   }
 }
@@ -2292,9 +2306,10 @@
 
 @media (max-width: 47.999rem) {
   .home-page__backdrop {
-    background-color: oklch(0.105 0.019 253);
+    background-color: var(--background-deep);
     background-position: 58% bottom;
     background-size: auto 86svh;
+    filter: brightness(1) saturate(0.82) contrast(1.02);
   }
 
   .home-entry {
@@ -2308,11 +2323,11 @@
 
   .home-entry__wash {
     background:
-      linear-gradient(180deg, oklch(0.055 0.014 250 / 0.5), oklch(0.055 0.014 250 / 0.2) 60%, transparent 90%),
+      linear-gradient(180deg, oklch(0.055 0.014 250 / 0.32), oklch(0.055 0.014 250 / 0.12) 60%, transparent 90%),
       radial-gradient(
         ellipse 94% 58% at 24% 32%,
-        oklch(0.055 0.014 250 / 0.54) 0%,
-        oklch(0.055 0.014 250 / 0.28) 48%,
+        oklch(0.055 0.014 250 / 0.4) 0%,
+        oklch(0.055 0.014 250 / 0.2) 48%,
         transparent 100%
       );
   }
@@ -2591,14 +2606,14 @@
 @media (max-width: 47.999rem) {
   .site-ambient--inner {
     background:
-      radial-gradient(ellipse 34rem 30rem at 90% 4rem, oklch(0.72 0.06 205 / 0.14), transparent 76%),
-      radial-gradient(ellipse 30rem 28rem at 0% 19rem, oklch(0.46 0.055 68 / 0.13), transparent 78%),
-      radial-gradient(ellipse 34rem 52rem at 88% 72%, oklch(0.5 0.055 280 / 0.05), transparent 82%),
-      linear-gradient(to bottom, var(--background-deep), oklch(0.128 0.019 248) 32rem, oklch(0.11 0.018 250));
+      radial-gradient(ellipse 34rem 30rem at 90% 4rem, oklch(0.72 0.06 205 / 0.18), transparent 76%),
+      radial-gradient(ellipse 30rem 28rem at 0% 19rem, oklch(0.46 0.055 68 / 0.15), transparent 78%),
+      radial-gradient(ellipse 34rem 52rem at 88% 72%, oklch(0.5 0.055 280 / 0.07), transparent 82%),
+      linear-gradient(to bottom, var(--background-deep), var(--background) 32rem, var(--surface-inset));
   }
 
   .site-ambient--inner .poetic-atmosphere--shell {
-    opacity: 0.56;
+    opacity: 0.7;
     mask-image: linear-gradient(to bottom, black, black 52%, transparent 100%);
   }
 
@@ -2611,7 +2626,7 @@
   }
 
   .poetic-atmosphere {
-    opacity: 0.58;
+    opacity: 0.66;
   }
   .poetic-atmosphere__contours path:nth-child(n + 2),
   .poetic-atmosphere__grain {
@@ -2625,7 +2640,7 @@
   }
 
   .poetic-atmosphere--wall {
-    opacity: 0.82;
+    opacity: 0.94;
   }
 
   .poetic-atmosphere--wall .poetic-atmosphere__light {
@@ -2678,9 +2693,7 @@
     animation: none;
   }
 
-  .poetic-atmosphere {
-    opacity: 0.52;
-  }
+  /* The atmosphere is static; reduced motion should not dim its lighting. */
   .poetic-atmosphere__grain {
     display: none;
   }

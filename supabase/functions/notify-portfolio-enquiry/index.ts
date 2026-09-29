@@ -21,7 +21,7 @@ type ContactRecord = {
 };
 
 const ALERT_TO = "sauravoole@gmail.com";
-const STUDIO_MESSAGES_URL = "https://studio.sauravkrjha.workers.dev/studio";
+const STUDIO_MESSAGES_URL = "https://sauravkrjha.vercel.app/studio";
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 
 function escapeHtml(value: string) {
@@ -157,4 +157,3 @@ Deno.serve(async (req: Request) => {
 
   return Response.json({ ok: true });
 });
-

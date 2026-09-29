@@ -4,7 +4,7 @@ A personal AI portfolio and publishing platform for showcasing products, writing
 
 ## Live Demo
 
-https://studio.sauravkrjha.workers.dev
+https://sauravkrjha.vercel.app
 
 ## What It Includes
 
@@ -52,8 +52,7 @@ https://studio.sauravkrjha.workers.dev
 ### Deployment
 
 - Nitro
-- Cloudflare Workers
-- Wrangler
+- Vercel
 
 ### Development
 
@@ -67,7 +66,7 @@ https://studio.sauravkrjha.workers.dev
 Browser
   → TanStack Start application
   → Supabase for data and authentication
-  → Cloudflare Worker for the production runtime
+  → Vercel for the production runtime
 ```
 
 Studio is private and protected through Supabase Auth, an admin allowlist, and RLS. Route obscurity is not treated as a security boundary.
@@ -112,7 +111,7 @@ Environment values must remain local and must never be committed.
 
 ## Deployment
 
-Production uses the existing Nitro → Cloudflare Workers architecture. Wrangler deploys the generated Nitro Worker configuration with the required runtime bindings supplied securely by the deployment environment.
+Production runs on Vercel at [sauravkrjha.vercel.app](https://sauravkrjha.vercel.app). Deployments use the linked Vercel project and its securely configured production environment variables. Run `npx vercel --prod` to publish a production release after the build succeeds.
 
 ## Security
 

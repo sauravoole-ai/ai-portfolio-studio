@@ -85,8 +85,9 @@
 ## Deployment
 
 - TanStack Start with Vite.
-- Nitro targets the Cloudflare module preset.
-- Production runs as a Cloudflare Worker with a Supabase backend.
+- Nitro targets the Vercel runtime during production builds.
+- Production runs on Vercel at `https://sauravkrjha.vercel.app` with a Supabase backend.
+- Production releases use the linked Vercel project and `npx vercel --prod`.
 - Required runtime binding names:
   - `SUPABASE_URL`
   - `SUPABASE_PUBLISHABLE_KEY`

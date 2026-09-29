@@ -40,15 +40,63 @@ export const bioFragments = [
 ] as const;
 
 export const technologyGroups = [
-  { title: "AI, LLM & Retrieval", items: [
-    { label: "LLM Integration", content: "Groq API · Gemini API · Prompt Engineering · Structured Outputs · Conversational Flows" },
-    { label: "Retrieval & Grounding", content: "Embeddings · Vector Search · Evidence Retrieval · Retrieval-grounded Analysis" },
-    { label: "Applied AI Patterns", content: "Document Analysis · Classification & Scoring · Conversational Assistants · Context-aware Generation" },
-  ] },
-  { title: "Languages & Web", items: [{ label: null, content: "Python · TypeScript · JavaScript · HTML · CSS" }] },
-  { title: "Application Frameworks & UI", items: [{ label: null, content: "Flask · FastAPI · React · TanStack Start / Router / Query · Tailwind CSS" }] },
-  { title: "Data, APIs & Documents", items: [{ label: null, content: "Supabase · Auth · Postgres · RLS · Migrations · REST APIs · pypdf · ReportLab" }] },
-  { title: "AI-Assisted Product Development", items: [{ label: null, content: "ChatGPT · Claude · Codex · Lovable" }] },
-  { title: "Development, Testing & Delivery", items: [{ label: null, content: "VS Code · Git · GitHub · Postman · Node.js / npm · Render" }] },
-  { title: "Connected Systems & AIoT", items: [{ label: null, content: "MCU boards such as ESP32 · Sensors · Display modules · Arduino IDE · AIoT prototyping" }] },
+  {
+    title: "AI, LLM & Retrieval",
+    items: [
+      {
+        label: "LLM Integration",
+        content:
+          "Groq API · Gemini API · Prompt Engineering · Structured Outputs · Conversational Flows",
+      },
+      {
+        label: "Retrieval & Grounding",
+        content: "Embeddings · Vector Search · Evidence Retrieval · Retrieval-grounded Analysis",
+      },
+      {
+        label: "Applied AI Patterns",
+        content:
+          "Document Analysis · Classification & Scoring · Conversational Assistants · Context-aware Generation",
+      },
+    ],
+  },
+  {
+    title: "Languages & Web",
+    items: [{ label: null, content: "Python · TypeScript · JavaScript · HTML · CSS" }],
+  },
+  {
+    title: "Application Frameworks & UI",
+    items: [
+      {
+        label: null,
+        content: "Flask · FastAPI · React · TanStack Start / Router / Query · Tailwind CSS",
+      },
+    ],
+  },
+  {
+    title: "Data, APIs & Documents",
+    items: [
+      {
+        label: null,
+        content: "Supabase · Auth · Postgres · RLS · Migrations · REST APIs · pypdf · ReportLab",
+      },
+    ],
+  },
+  {
+    title: "AI-Assisted Product Development",
+    items: [{ label: null, content: "ChatGPT · Claude · Codex · Lovable" }],
+  },
+  {
+    title: "Development, Testing & Delivery",
+    items: [{ label: null, content: "VS Code · Git · GitHub · Postman · Node.js / npm · Render" }],
+  },
+  {
+    title: "Connected Systems & AIoT",
+    items: [
+      {
+        label: null,
+        content:
+          "MCU boards such as ESP32 · Sensors · Display modules · Arduino IDE · AIoT prototyping",
+      },
+    ],
+  },
 ] as const;

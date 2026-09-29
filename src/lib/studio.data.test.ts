@@ -8,7 +8,16 @@ function mockClient(result: { data?: unknown; error?: { message: string } | null
   const calls: Call[] = [];
   const response = { data: result.data ?? null, error: result.error ?? null };
   const builder: Record<string, (...args: unknown[]) => unknown> = {};
-  for (const method of ["select", "eq", "maybeSingle", "order", "insert", "update", "delete", "single"]) {
+  for (const method of [
+    "select",
+    "eq",
+    "maybeSingle",
+    "order",
+    "insert",
+    "update",
+    "delete",
+    "single",
+  ]) {
     builder[method] = (...args: unknown[]) => {
       calls.push({ method, args });
       return builder;
@@ -59,21 +68,46 @@ describe("Studio mocked Supabase data paths", () => {
   });
 
   test("creates and updates projects using the actual schema payload", async () => {
-    const payload = { title: "Project", slug: "project", summary: "Summary", problem: null, approach: "Built iteratively", key_features: ["Search"], stack: ["React"], outcome: null, status: "Live", live_url: null, github_url: null, cover_image_url: null, published: true, sort_order: 2, show_in_product_launcher: true, product_sort_order: 5 };
+    const payload = {
+      title: "Project",
+      slug: "project",
+      summary: "Summary",
+      problem: null,
+      approach: "Built iteratively",
+      key_features: ["Search"],
+      stack: ["React"],
+      outcome: null,
+      status: "Live",
+      live_url: null,
+      github_url: null,
+      cover_image_url: null,
+      published: true,
+      sort_order: 2,
+      show_in_product_launcher: true,
+      product_sort_order: 5,
+    };
     const created = mockClient({ data: { id: 1 } });
     await createStudioData(created.client).createProject(payload);
     assert.deepEqual(created.calls.find((call) => call.method === "insert")?.args, [payload]);
 
     const updated = mockClient({ data: { id: 1 } });
     await createStudioData(updated.client).updateProject(1, { published: false });
-    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [{ published: false }]);
+    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [
+      { published: false },
+    ]);
     assert.deepEqual(updated.calls.find((call) => call.method === "eq")?.args, ["id", 1]);
   });
 
   test("lists projects in sort order with a stable secondary order", async () => {
     const { client, calls } = mockClient({ data: [] });
     await createStudioData(client).listProjects();
-    assert.deepEqual(calls.filter((call) => call.method === "order").map((call) => call.args), [["sort_order", { ascending: true }], ["created_at", { ascending: false }]]);
+    assert.deepEqual(
+      calls.filter((call) => call.method === "order").map((call) => call.args),
+      [
+        ["sort_order", { ascending: true }],
+        ["created_at", { ascending: false }],
+      ],
+    );
   });
 
   test("deletes only the selected project", async () => {
@@ -85,10 +119,15 @@ describe("Studio mocked Supabase data paths", () => {
   test("lists newest messages first and updates only the selected status", async () => {
     const listed = mockClient({ data: [] });
     await createStudioData(listed.client).listMessages();
-    assert.deepEqual(listed.calls.find((call) => call.method === "order")?.args, ["created_at", { ascending: false }]);
+    assert.deepEqual(listed.calls.find((call) => call.method === "order")?.args, [
+      "created_at",
+      { ascending: false },
+    ]);
     const updated = mockClient({ data: { id: "message-1", status: "Read" } });
     await createStudioData(updated.client).updateMessageStatus("message-1", "Read");
-    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [{ status: "Read" }]);
+    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [
+      { status: "Read" },
+    ]);
     assert.deepEqual(updated.calls.find((call) => call.method === "eq")?.args, ["id", "message-1"]);
   });
 
@@ -104,7 +143,9 @@ describe("Studio mocked Supabase data paths", () => {
     assert.deepEqual(loaded.calls.find((call) => call.method === "eq")?.args, ["id", true]);
     const updated = mockClient({ data: { id: true, name: "Updated" } });
     await createStudioData(updated.client).updateSiteProfile({ name: "Updated" });
-    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [{ name: "Updated" }]);
+    assert.deepEqual(updated.calls.find((call) => call.method === "update")?.args, [
+      { name: "Updated" },
+    ]);
     assert.deepEqual(updated.calls.find((call) => call.method === "eq")?.args, ["id", true]);
   });
 

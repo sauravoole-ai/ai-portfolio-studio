@@ -35,14 +35,17 @@ import {
   isMessageStatus,
 } from "@/lib/studio.logic";
 import { fallbackSiteProfile } from "@/lib/site-profile";
-import { buildSiteProfileUpdate, parseBioFragments, parseCapabilities, parseTechnologyGroups, validateSiteProfile } from "@/lib/site-profile.logic";
+import {
+  buildSiteProfileUpdate,
+  parseBioFragments,
+  parseCapabilities,
+  parseTechnologyGroups,
+  validateSiteProfile,
+} from "@/lib/site-profile.logic";
 
 export const Route = createFileRoute("/studio")({
   head: () => ({
-    meta: [
-      { title: "Studio" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
+    meta: [{ title: "Studio" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: StudioRoute,
 });
@@ -81,7 +84,9 @@ function StudioRoute() {
   if (authState === "loading") {
     return (
       <StudioFrame>
-        <p className="studio-status" aria-live="polite">Checking session…</p>
+        <p className="studio-status" aria-live="polite">
+          Checking session…
+        </p>
       </StudioFrame>
     );
   }
@@ -118,7 +123,9 @@ function SignIn() {
     <StudioFrame>
       <section className="studio-auth-panel" aria-labelledby="studio-sign-in">
         <p className="eyebrow text-accent">Studio</p>
-        <h1 id="studio-sign-in" className="mt-4 font-display text-4xl">Sign in</h1>
+        <h1 id="studio-sign-in" className="mt-4 font-display text-4xl">
+          Sign in
+        </h1>
         <form onSubmit={submit} className="studio-form mt-8">
           <StudioField label="Email">
             <input
@@ -136,7 +143,11 @@ function SignIn() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </StudioField>
-          {message ? <p className="studio-feedback studio-feedback--error" role="alert">{message}</p> : null}
+          {message ? (
+            <p className="studio-feedback studio-feedback--error" role="alert">
+              {message}
+            </p>
+          ) : null}
           <button className="studio-button studio-button--primary" disabled={signIn.isPending}>
             {signIn.isPending ? "Signing in…" : "Sign in"}
           </button>
@@ -178,7 +189,9 @@ function AdminGate({ session }: { session: Session }) {
   if (authState === "checking-admin") {
     return (
       <StudioFrame>
-        <p className="studio-status" aria-live="polite">Checking access…</p>
+        <p className="studio-status" aria-live="polite">
+          Checking access…
+        </p>
       </StudioFrame>
     );
   }
@@ -187,7 +200,9 @@ function AdminGate({ session }: { session: Session }) {
       <StudioFrame>
         <section className="studio-auth-panel text-center">
           <h1 className="font-display text-3xl">Access check failed</h1>
-          <div className="mt-6"><SignOutButton /></div>
+          <div className="mt-6">
+            <SignOutButton />
+          </div>
         </section>
       </StudioFrame>
     );
@@ -197,7 +212,9 @@ function AdminGate({ session }: { session: Session }) {
       <StudioFrame>
         <section className="studio-auth-panel text-center">
           <h1 className="font-display text-3xl">Access denied</h1>
-          <div className="mt-6"><SignOutButton /></div>
+          <div className="mt-6">
+            <SignOutButton />
+          </div>
         </section>
       </StudioFrame>
     );
@@ -214,18 +231,55 @@ function Studio() {
         <SignOutButton />
       </header>
       <div className="studio-tabs" aria-label="Studio sections">
-        <button type="button" aria-pressed={section === "posts"} onClick={() => setSection("posts")}>Posts</button>
-        <button type="button" aria-pressed={section === "projects"} onClick={() => setSection("projects")}>Projects</button>
-        <button type="button" aria-pressed={section === "messages"} onClick={() => setSection("messages")}>Messages</button>
-        <button type="button" aria-pressed={section === "profile"} onClick={() => setSection("profile")}>Profile</button>
+        <button
+          type="button"
+          aria-pressed={section === "posts"}
+          onClick={() => setSection("posts")}
+        >
+          Posts
+        </button>
+        <button
+          type="button"
+          aria-pressed={section === "projects"}
+          onClick={() => setSection("projects")}
+        >
+          Projects
+        </button>
+        <button
+          type="button"
+          aria-pressed={section === "messages"}
+          onClick={() => setSection("messages")}
+        >
+          Messages
+        </button>
+        <button
+          type="button"
+          aria-pressed={section === "profile"}
+          onClick={() => setSection("profile")}
+        >
+          Profile
+        </button>
       </div>
-      {section === "posts" ? <PostsManager /> : section === "projects" ? <ProjectsManager /> : section === "messages" ? <MessagesManager /> : <ProfileManager />}
+      {section === "posts" ? (
+        <PostsManager />
+      ) : section === "projects" ? (
+        <ProjectsManager />
+      ) : section === "messages" ? (
+        <MessagesManager />
+      ) : (
+        <ProfileManager />
+      )}
     </StudioFrame>
   );
 }
 
 function StudioField({ label, children }: { label: string; children: React.ReactNode }) {
-  return <label className="studio-field"><span>{label}</span>{children}</label>;
+  return (
+    <label className="studio-field">
+      <span>{label}</span>
+      {children}
+    </label>
+  );
 }
 
 function toLocalDateTime(value: string | null) {
@@ -253,13 +307,20 @@ function PostsManager() {
   });
 
   if (posts.isPending) return <p className="studio-status">Loading posts…</p>;
-  if (posts.isError) return <p className="studio-feedback studio-feedback--error">Posts could not be loaded.</p>;
+  if (posts.isError)
+    return <p className="studio-feedback studio-feedback--error">Posts could not be loaded.</p>;
 
   return (
     <section className="studio-section">
       <div className="studio-section__heading">
         <h2 className="font-display text-3xl">Posts</h2>
-        <button type="button" className="studio-button studio-button--primary" onClick={() => setEditing("new")}>New post</button>
+        <button
+          type="button"
+          className="studio-button studio-button--primary"
+          onClick={() => setEditing("new")}
+        >
+          New post
+        </button>
       </div>
       {editing ? (
         <PostForm
@@ -271,23 +332,56 @@ function PostsManager() {
       <ul className="studio-records">
         {posts.data.map((post) => (
           <li key={post.id} className="studio-record">
-            <div><strong>{post.title}</strong><span>{post.published ? "Published" : "Draft"}</span></div>
+            <div>
+              <strong>{post.title}</strong>
+              <span>{post.published ? "Published" : "Draft"}</span>
+            </div>
             <div className="studio-record__actions">
-              <button type="button" className="studio-button" onClick={() => setEditing(post)}>Edit</button>
+              <button type="button" className="studio-button" onClick={() => setEditing(post)}>
+                Edit
+              </button>
               {isDeleteConfirmed(confirming, post.id) ? (
                 <>
-                  <button type="button" className="studio-button studio-button--danger" disabled={remove.isPending} onClick={() => remove.mutate(post.id)}>Confirm delete</button>
-                  <button type="button" className="studio-button" onClick={() => setConfirming(null)}>Cancel</button>
+                  <button
+                    type="button"
+                    className="studio-button studio-button--danger"
+                    disabled={remove.isPending}
+                    onClick={() => remove.mutate(post.id)}
+                  >
+                    Confirm delete
+                  </button>
+                  <button
+                    type="button"
+                    className="studio-button"
+                    onClick={() => setConfirming(null)}
+                  >
+                    Cancel
+                  </button>
                 </>
               ) : (
-                <button type="button" className="studio-button studio-button--danger" onClick={() => { setDeleteFeedback(""); setConfirming(post.id); }}>Delete</button>
+                <button
+                  type="button"
+                  className="studio-button studio-button--danger"
+                  onClick={() => {
+                    setDeleteFeedback("");
+                    setConfirming(post.id);
+                  }}
+                >
+                  Delete
+                </button>
               )}
             </div>
           </li>
         ))}
       </ul>
-      {deleteFeedback ? <p className="studio-feedback" role="status">{deleteFeedback}</p> : null}
-      {remove.isError ? <p className="studio-feedback studio-feedback--error">Post deletion failed.</p> : null}
+      {deleteFeedback ? (
+        <p className="studio-feedback" role="status">
+          {deleteFeedback}
+        </p>
+      ) : null}
+      {remove.isError ? (
+        <p className="studio-feedback studio-feedback--error">Post deletion failed.</p>
+      ) : null}
     </section>
   );
 }
@@ -306,7 +400,16 @@ function PostForm({ post, onClose }: { post: StudioPost | null; onClose: () => v
   const [feedback, setFeedback] = useState("");
   const save = useMutation({
     mutationFn: async () => {
-      const values = buildPostPayload({ title, slug, excerpt, content, category, cover, published, publishedAt });
+      const values = buildPostPayload({
+        title,
+        slug,
+        excerpt,
+        content,
+        category,
+        cover,
+        published,
+        publishedAt,
+      });
       return post ? updateStudioPost(post.id, values) : createStudioPost(values);
     },
     onSuccess: async () => {
@@ -321,7 +424,9 @@ function PostForm({ post, onClose }: { post: StudioPost | null; onClose: () => v
   function submit(event: FormEvent) {
     event.preventDefault();
     setFeedback("");
-    if (!validatePostDraft({ title, slug, excerpt, content, category, cover, published, publishedAt })) {
+    if (
+      !validatePostDraft({ title, slug, excerpt, content, category, cover, published, publishedAt })
+    ) {
       setFeedback("Title, slug, excerpt, and content are required.");
       return;
     }
@@ -330,22 +435,71 @@ function PostForm({ post, onClose }: { post: StudioPost | null; onClose: () => v
 
   return (
     <form className="studio-editor studio-form" onSubmit={submit}>
-      <StudioField label="Title"><input value={title} onChange={(event) => { const value = event.target.value; setTitle(value); if (!post) setSlug(nextCreateSlug(value, slug, slugEdited)); }} /></StudioField>
-      <StudioField label="Slug"><input value={slug} onChange={(event) => { setSlugEdited(true); setSlug(event.target.value); }} /></StudioField>
-      <StudioField label="Excerpt"><textarea rows={3} value={excerpt} onChange={(event) => setExcerpt(event.target.value)} /></StudioField>
-      <StudioField label="Content"><textarea rows={12} value={content} onChange={(event) => setContent(event.target.value)} /></StudioField>
+      <StudioField label="Title">
+        <input
+          value={title}
+          onChange={(event) => {
+            const value = event.target.value;
+            setTitle(value);
+            if (!post) setSlug(nextCreateSlug(value, slug, slugEdited));
+          }}
+        />
+      </StudioField>
+      <StudioField label="Slug">
+        <input
+          value={slug}
+          onChange={(event) => {
+            setSlugEdited(true);
+            setSlug(event.target.value);
+          }}
+        />
+      </StudioField>
+      <StudioField label="Excerpt">
+        <textarea rows={3} value={excerpt} onChange={(event) => setExcerpt(event.target.value)} />
+      </StudioField>
+      <StudioField label="Content">
+        <textarea rows={12} value={content} onChange={(event) => setContent(event.target.value)} />
+      </StudioField>
       <div className="studio-form__columns">
-        <StudioField label="Category"><input value={category} onChange={(event) => setCategory(event.target.value)} /></StudioField>
-        <StudioField label="Cover image URL"><input type="url" value={cover} onChange={(event) => setCover(event.target.value)} /></StudioField>
+        <StudioField label="Category">
+          <input value={category} onChange={(event) => setCategory(event.target.value)} />
+        </StudioField>
+        <StudioField label="Cover image URL">
+          <input type="url" value={cover} onChange={(event) => setCover(event.target.value)} />
+        </StudioField>
       </div>
       <div className="studio-form__columns">
-        <label className="studio-check"><input type="checkbox" checked={published} onChange={(event) => setPublished(event.target.checked)} /><span>Published</span></label>
-        <StudioField label="Published at"><input type="datetime-local" value={publishedAt} onChange={(event) => setPublishedAt(event.target.value)} /></StudioField>
+        <label className="studio-check">
+          <input
+            type="checkbox"
+            checked={published}
+            onChange={(event) => setPublished(event.target.checked)}
+          />
+          <span>Published</span>
+        </label>
+        <StudioField label="Published at">
+          <input
+            type="datetime-local"
+            value={publishedAt}
+            onChange={(event) => setPublishedAt(event.target.value)}
+          />
+        </StudioField>
       </div>
-      {feedback ? <p className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`} role="status">{feedback}</p> : null}
+      {feedback ? (
+        <p
+          className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`}
+          role="status"
+        >
+          {feedback}
+        </p>
+      ) : null}
       <div className="studio-form__actions">
-        <button className="studio-button studio-button--primary" disabled={save.isPending}>{save.isPending ? "Saving…" : "Save post"}</button>
-        <button type="button" className="studio-button" onClick={onClose}>Close</button>
+        <button className="studio-button studio-button--primary" disabled={save.isPending}>
+          {save.isPending ? "Saving…" : "Save post"}
+        </button>
+        <button type="button" className="studio-button" onClick={onClose}>
+          Close
+        </button>
       </div>
     </form>
   );
@@ -368,24 +522,80 @@ function ProjectsManager() {
     },
   });
   if (projects.isPending) return <p className="studio-status">Loading projects…</p>;
-  if (projects.isError) return <p className="studio-feedback studio-feedback--error">Projects could not be loaded.</p>;
+  if (projects.isError)
+    return <p className="studio-feedback studio-feedback--error">Projects could not be loaded.</p>;
   return (
     <section className="studio-section">
-      <div className="studio-section__heading"><h2 className="font-display text-3xl">Projects</h2><button type="button" className="studio-button studio-button--primary" onClick={() => setEditing("new")}>New project</button></div>
-      {editing ? <ProjectForm key={editing === "new" ? "new" : editing.id} project={editing === "new" ? null : editing} onClose={() => setEditing(null)} /> : null}
+      <div className="studio-section__heading">
+        <h2 className="font-display text-3xl">Projects</h2>
+        <button
+          type="button"
+          className="studio-button studio-button--primary"
+          onClick={() => setEditing("new")}
+        >
+          New project
+        </button>
+      </div>
+      {editing ? (
+        <ProjectForm
+          key={editing === "new" ? "new" : editing.id}
+          project={editing === "new" ? null : editing}
+          onClose={() => setEditing(null)}
+        />
+      ) : null}
       <ul className="studio-records">
         {projects.data.map((project) => (
           <li key={project.id} className="studio-record">
-            <div><strong>{project.title || "Untitled"}</strong><span>{project.published ? "Published" : "Draft"}</span></div>
+            <div>
+              <strong>{project.title || "Untitled"}</strong>
+              <span>{project.published ? "Published" : "Draft"}</span>
+            </div>
             <div className="studio-record__actions">
-              <button type="button" className="studio-button" onClick={() => setEditing(project)}>Edit</button>
-              {isDeleteConfirmed(confirming, project.id) ? <><button type="button" className="studio-button studio-button--danger" disabled={remove.isPending} onClick={() => remove.mutate(project.id)}>Confirm delete</button><button type="button" className="studio-button" onClick={() => setConfirming(null)}>Cancel</button></> : <button type="button" className="studio-button studio-button--danger" onClick={() => { setDeleteFeedback(""); setConfirming(project.id); }}>Delete</button>}
+              <button type="button" className="studio-button" onClick={() => setEditing(project)}>
+                Edit
+              </button>
+              {isDeleteConfirmed(confirming, project.id) ? (
+                <>
+                  <button
+                    type="button"
+                    className="studio-button studio-button--danger"
+                    disabled={remove.isPending}
+                    onClick={() => remove.mutate(project.id)}
+                  >
+                    Confirm delete
+                  </button>
+                  <button
+                    type="button"
+                    className="studio-button"
+                    onClick={() => setConfirming(null)}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="studio-button studio-button--danger"
+                  onClick={() => {
+                    setDeleteFeedback("");
+                    setConfirming(project.id);
+                  }}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </li>
         ))}
       </ul>
-      {deleteFeedback ? <p className="studio-feedback" role="status">{deleteFeedback}</p> : null}
-      {remove.isError ? <p className="studio-feedback studio-feedback--error">Project deletion failed.</p> : null}
+      {deleteFeedback ? (
+        <p className="studio-feedback" role="status">
+          {deleteFeedback}
+        </p>
+      ) : null}
+      {remove.isError ? (
+        <p className="studio-feedback studio-feedback--error">Project deletion failed.</p>
+      ) : null}
     </section>
   );
 }
@@ -402,7 +612,9 @@ function MessagesManager() {
     },
     onSuccess: async () => {
       setFeedback("Message updated.");
-      await Promise.all(studioQueryKeys.messages.map((queryKey) => client.invalidateQueries({ queryKey })));
+      await Promise.all(
+        studioQueryKeys.messages.map((queryKey) => client.invalidateQueries({ queryKey })),
+      );
     },
     onError: () => setFeedback("Message update failed."),
   });
@@ -411,35 +623,111 @@ function MessagesManager() {
     onSuccess: async () => {
       setConfirming(null);
       setFeedback("Message deleted.");
-      await Promise.all(studioQueryKeys.messages.map((queryKey) => client.invalidateQueries({ queryKey })));
+      await Promise.all(
+        studioQueryKeys.messages.map((queryKey) => client.invalidateQueries({ queryKey })),
+      );
     },
     onError: () => setFeedback("Message deletion failed."),
   });
 
   if (messages.isPending) return <p className="studio-status">Loading messages…</p>;
-  if (messages.isError) return <p className="studio-feedback studio-feedback--error">Messages could not be loaded.</p>;
+  if (messages.isError)
+    return <p className="studio-feedback studio-feedback--error">Messages could not be loaded.</p>;
   return (
     <section className="studio-section">
-      <div className="studio-section__heading"><h2 className="font-display text-3xl">Messages</h2></div>
-      {messages.data.length === 0 ? <p className="studio-status">No messages yet.</p> : (
+      <div className="studio-section__heading">
+        <h2 className="font-display text-3xl">Messages</h2>
+      </div>
+      {messages.data.length === 0 ? (
+        <p className="studio-status">No messages yet.</p>
+      ) : (
         <ul className="studio-records">
           {messages.data.map((message: StudioMessage) => (
             <li key={message.id} className="studio-message">
-              <div className="studio-message__header"><div><strong>{message.name}</strong><a href={`mailto:${message.email}`}>{message.email}</a></div><span>{new Date(message.created_at).toLocaleString()}</span></div>
-              {message.project_type ? <p className="studio-message__project-type"><strong>Project type:</strong> {message.project_type}</p> : null}
-              {message.build_idea ? <div className="studio-message__body"><strong>Build idea</strong><p>{message.build_idea}</p></div> : null}
-              <div className="studio-message__body"><strong>Context</strong><p>{message.message}</p></div>
+              <div className="studio-message__header">
+                <div>
+                  <strong>{message.name}</strong>
+                  <a href={`mailto:${message.email}`}>{message.email}</a>
+                </div>
+                <span>{new Date(message.created_at).toLocaleString()}</span>
+              </div>
+              {message.project_type ? (
+                <p className="studio-message__project-type">
+                  <strong>Project type:</strong> {message.project_type}
+                </p>
+              ) : null}
+              {message.build_idea ? (
+                <div className="studio-message__body">
+                  <strong>Build idea</strong>
+                  <p>{message.build_idea}</p>
+                </div>
+              ) : null}
+              <div className="studio-message__body">
+                <strong>Context</strong>
+                <p>{message.message}</p>
+              </div>
               <div className="studio-record__actions">
                 <span className="studio-message__status">{message.status}</span>
-                {message.status === "New" ? <button type="button" className="studio-button" disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: message.id, status: "Read" })}>Mark read</button> : null}
-                {message.status !== "Archived" ? <button type="button" className="studio-button" disabled={updateStatus.isPending} onClick={() => updateStatus.mutate({ id: message.id, status: "Archived" })}>Archive</button> : null}
-                {isDeleteConfirmed(confirming, message.id) ? <><button type="button" className="studio-button studio-button--danger" disabled={remove.isPending} onClick={() => remove.mutate(message.id)}>Confirm delete</button><button type="button" className="studio-button" onClick={() => setConfirming(null)}>Cancel</button></> : <button type="button" className="studio-button studio-button--danger" onClick={() => setConfirming(message.id)}>Delete</button>}
+                {message.status === "New" ? (
+                  <button
+                    type="button"
+                    className="studio-button"
+                    disabled={updateStatus.isPending}
+                    onClick={() => updateStatus.mutate({ id: message.id, status: "Read" })}
+                  >
+                    Mark read
+                  </button>
+                ) : null}
+                {message.status !== "Archived" ? (
+                  <button
+                    type="button"
+                    className="studio-button"
+                    disabled={updateStatus.isPending}
+                    onClick={() => updateStatus.mutate({ id: message.id, status: "Archived" })}
+                  >
+                    Archive
+                  </button>
+                ) : null}
+                {isDeleteConfirmed(confirming, message.id) ? (
+                  <>
+                    <button
+                      type="button"
+                      className="studio-button studio-button--danger"
+                      disabled={remove.isPending}
+                      onClick={() => remove.mutate(message.id)}
+                    >
+                      Confirm delete
+                    </button>
+                    <button
+                      type="button"
+                      className="studio-button"
+                      onClick={() => setConfirming(null)}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="studio-button studio-button--danger"
+                    onClick={() => setConfirming(message.id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
             </li>
           ))}
         </ul>
       )}
-      {feedback ? <p className={`studio-feedback${feedback.includes("failed") ? " studio-feedback--error" : ""}`} role="status">{feedback}</p> : null}
+      {feedback ? (
+        <p
+          className={`studio-feedback${feedback.includes("failed") ? " studio-feedback--error" : ""}`}
+          role="status"
+        >
+          {feedback}
+        </p>
+      ) : null}
     </section>
   );
 }
@@ -448,11 +736,28 @@ function ProfileManager() {
   const client = useQueryClient();
   const profile = useQuery({ queryKey: ["studio", "profile"], queryFn: getStudioSiteProfile });
   if (profile.isPending) return <p className="studio-status">Loading profile…</p>;
-  if (profile.isError || !profile.data) return <p className="studio-feedback studio-feedback--error">Profile could not be loaded.</p>;
-  return <ProfileForm key={profile.data.updated_at} profile={profile.data} onSaved={async () => { await Promise.all(studioQueryKeys.profile.map((queryKey) => client.invalidateQueries({ queryKey }))); }} />;
+  if (profile.isError || !profile.data)
+    return <p className="studio-feedback studio-feedback--error">Profile could not be loaded.</p>;
+  return (
+    <ProfileForm
+      key={profile.data.updated_at}
+      profile={profile.data}
+      onSaved={async () => {
+        await Promise.all(
+          studioQueryKeys.profile.map((queryKey) => client.invalidateQueries({ queryKey })),
+        );
+      }}
+    />
+  );
 }
 
-function ProfileForm({ profile, onSaved }: { profile: NonNullable<Awaited<ReturnType<typeof getStudioSiteProfile>>>; onSaved: () => Promise<void> }) {
+function ProfileForm({
+  profile,
+  onSaved,
+}: {
+  profile: NonNullable<Awaited<ReturnType<typeof getStudioSiteProfile>>>;
+  onSaved: () => Promise<void>;
+}) {
   const [name, setName] = useState(profile.name);
   const [role, setRole] = useState(profile.role);
   const [location, setLocation] = useState(profile.location);
@@ -469,21 +774,283 @@ function ProfileForm({ profile, onSaved }: { profile: NonNullable<Awaited<Return
   const [githubUrl, setGithubUrl] = useState(profile.github_url);
   const [linkedinUrl, setLinkedinUrl] = useState(profile.linkedin_url);
   const [instagramUrl, setInstagramUrl] = useState(profile.instagram_url);
-  const [bio, setBio] = useState(() => parseBioFragments(profile.bio_fragments, fallbackSiteProfile.bio_fragments));
-  const [profileCapabilities, setProfileCapabilities] = useState(() => parseCapabilities(profile.capabilities, fallbackSiteProfile.capabilities));
-  const [technologyGroups, setTechnologyGroups] = useState(() => parseTechnologyGroups(profile.technology_groups, fallbackSiteProfile.technology_groups));
+  const [bio, setBio] = useState(() =>
+    parseBioFragments(profile.bio_fragments, fallbackSiteProfile.bio_fragments),
+  );
+  const [profileCapabilities, setProfileCapabilities] = useState(() =>
+    parseCapabilities(profile.capabilities, fallbackSiteProfile.capabilities),
+  );
+  const [technologyGroups, setTechnologyGroups] = useState(() =>
+    parseTechnologyGroups(profile.technology_groups, fallbackSiteProfile.technology_groups),
+  );
   const [feedback, setFeedback] = useState("");
-  const draft = { name, role, location, degree, university, graduation_year: graduationYear, hero_tagline: heroTagline, hero_supporting: heroSupporting, home_bridge_text: homeBridgeText, home_work_blurb: homeWorkBlurb, home_journal_blurb: homeJournalBlurb, footer_connect_context: footerConnectContext, connect_cta: connectCta, github_url: githubUrl, linkedin_url: linkedinUrl, instagram_url: instagramUrl, bio_fragments: bio, capabilities: profileCapabilities, technology_groups: technologyGroups };
-  const save = useMutation({ mutationFn: () => updateStudioSiteProfile(buildSiteProfileUpdate(draft)), onSuccess: async () => { setFeedback("Saved."); await onSaved(); }, onError: () => setFeedback("Save failed.") });
-  function submit(event: FormEvent) { event.preventDefault(); setFeedback(""); const error = validateSiteProfile(draft); if (error) { setFeedback(error); return; } save.mutate(); }
-  return <section className="studio-section"><div className="studio-section__heading"><div><h2 className="font-display text-3xl">Profile / Site Details</h2><p className="mt-2 text-sm text-muted-foreground">Objective facts and mutable public branding used across the site.</p></div></div><form className="studio-editor studio-form" onSubmit={submit}>
-    <h3 className="text-lg font-medium">Profile</h3><StudioField label="Name"><input value={name} onChange={(event) => setName(event.target.value)} /></StudioField><StudioField label="Role"><input value={role} onChange={(event) => setRole(event.target.value)} /></StudioField><div className="studio-form__columns"><StudioField label="Location"><input value={location} onChange={(event) => setLocation(event.target.value)} /></StudioField><StudioField label="Graduation year"><input inputMode="numeric" value={graduationYear} onChange={(event) => setGraduationYear(event.target.value)} /></StudioField></div><StudioField label="Degree"><input value={degree} onChange={(event) => setDegree(event.target.value)} /></StudioField><StudioField label="University"><input value={university} onChange={(event) => setUniversity(event.target.value)} /></StudioField>
-    <h3 className="mt-5 text-lg font-medium">Branding</h3><StudioField label="Hero tagline"><input value={heroTagline} onChange={(event) => setHeroTagline(event.target.value)} /></StudioField><StudioField label="Hero supporting line"><textarea rows={3} value={heroSupporting} onChange={(event) => setHeroSupporting(event.target.value)} /></StudioField><StudioField label="Home bridge"><textarea rows={3} value={homeBridgeText} onChange={(event) => setHomeBridgeText(event.target.value)} /></StudioField><div className="studio-form__columns"><StudioField label="Home Work blurb"><textarea rows={3} value={homeWorkBlurb} onChange={(event) => setHomeWorkBlurb(event.target.value)} /></StudioField><StudioField label="Home Journal blurb"><textarea rows={3} value={homeJournalBlurb} onChange={(event) => setHomeJournalBlurb(event.target.value)} /></StudioField></div><StudioField label="Connect CTA"><input value={connectCta} onChange={(event) => setConnectCta(event.target.value)} /></StudioField><StudioField label="Footer connect context"><textarea rows={3} value={footerConnectContext} onChange={(event) => setFooterConnectContext(event.target.value)} /></StudioField>
-    <h3 className="mt-5 text-lg font-medium">Social links</h3><StudioField label="GitHub"><input type="url" value={githubUrl} onChange={(event) => setGithubUrl(event.target.value)} /></StudioField><StudioField label="LinkedIn"><input type="url" value={linkedinUrl} onChange={(event) => setLinkedinUrl(event.target.value)} /></StudioField><StudioField label="Instagram"><input type="url" value={instagramUrl} onChange={(event) => setInstagramUrl(event.target.value)} /></StudioField>
-    <h3 className="mt-5 text-lg font-medium">Biography</h3>{bio.map((fragment, index) => <StudioField key={index} label={`Fragment ${index + 1}`}><textarea rows={4} value={fragment} onChange={(event) => setBio((current) => current.map((item, itemIndex) => itemIndex === index ? event.target.value : item))} /></StudioField>)}
-    <h3 className="mt-5 text-lg font-medium">Capabilities</h3>{profileCapabilities.map((capability, index) => <div className="studio-form__columns" key={index}><StudioField label={`Capability ${index + 1}`}><input value={capability.title} onChange={(event) => setProfileCapabilities((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, title: event.target.value } : item))} /></StudioField><StudioField label="Description"><textarea rows={3} value={capability.description} onChange={(event) => setProfileCapabilities((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, description: event.target.value } : item))} /></StudioField></div>)}
-    <h3 className="mt-5 text-lg font-medium">Tools & Technologies</h3>{technologyGroups.map((group, groupIndex) => <div key={groupIndex}><StudioField label={`Group ${groupIndex + 1}`}><input value={group.title} onChange={(event) => setTechnologyGroups((current) => current.map((item, itemIndex) => itemIndex === groupIndex ? { ...item, title: event.target.value } : item))} /></StudioField>{group.items.map((item, itemIndex) => <div className="studio-form__columns" key={itemIndex}><StudioField label="Item label (optional)"><input value={item.label ?? ""} onChange={(event) => setTechnologyGroups((current) => current.map((currentGroup, currentGroupIndex) => currentGroupIndex === groupIndex ? { ...currentGroup, items: currentGroup.items.map((currentItem, currentItemIndex) => currentItemIndex === itemIndex ? { ...currentItem, label: event.target.value || null } : currentItem) } : currentGroup))} /></StudioField><StudioField label="Technologies"><textarea rows={2} value={item.content} onChange={(event) => setTechnologyGroups((current) => current.map((currentGroup, currentGroupIndex) => currentGroupIndex === groupIndex ? { ...currentGroup, items: currentGroup.items.map((currentItem, currentItemIndex) => currentItemIndex === itemIndex ? { ...currentItem, content: event.target.value } : currentItem) } : currentGroup))} /></StudioField></div>)}</div>)}
-    {feedback ? <p className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`} role="status">{feedback}</p> : null}<div className="studio-form__actions"><button className="studio-button studio-button--primary" disabled={save.isPending}>{save.isPending ? "Saving…" : "Save profile"}</button></div></form></section>;
+  const draft = {
+    name,
+    role,
+    location,
+    degree,
+    university,
+    graduation_year: graduationYear,
+    hero_tagline: heroTagline,
+    hero_supporting: heroSupporting,
+    home_bridge_text: homeBridgeText,
+    home_work_blurb: homeWorkBlurb,
+    home_journal_blurb: homeJournalBlurb,
+    footer_connect_context: footerConnectContext,
+    connect_cta: connectCta,
+    github_url: githubUrl,
+    linkedin_url: linkedinUrl,
+    instagram_url: instagramUrl,
+    bio_fragments: bio,
+    capabilities: profileCapabilities,
+    technology_groups: technologyGroups,
+  };
+  const save = useMutation({
+    mutationFn: () => updateStudioSiteProfile(buildSiteProfileUpdate(draft)),
+    onSuccess: async () => {
+      setFeedback("Saved.");
+      await onSaved();
+    },
+    onError: () => setFeedback("Save failed."),
+  });
+  function submit(event: FormEvent) {
+    event.preventDefault();
+    setFeedback("");
+    const error = validateSiteProfile(draft);
+    if (error) {
+      setFeedback(error);
+      return;
+    }
+    save.mutate();
+  }
+  return (
+    <section className="studio-section">
+      <div className="studio-section__heading">
+        <div>
+          <h2 className="font-display text-3xl">Profile / Site Details</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Objective facts and mutable public branding used across the site.
+          </p>
+        </div>
+      </div>
+      <form className="studio-editor studio-form" onSubmit={submit}>
+        <h3 className="text-lg font-medium">Profile</h3>
+        <StudioField label="Name">
+          <input value={name} onChange={(event) => setName(event.target.value)} />
+        </StudioField>
+        <StudioField label="Role">
+          <input value={role} onChange={(event) => setRole(event.target.value)} />
+        </StudioField>
+        <div className="studio-form__columns">
+          <StudioField label="Location">
+            <input value={location} onChange={(event) => setLocation(event.target.value)} />
+          </StudioField>
+          <StudioField label="Graduation year">
+            <input
+              inputMode="numeric"
+              value={graduationYear}
+              onChange={(event) => setGraduationYear(event.target.value)}
+            />
+          </StudioField>
+        </div>
+        <StudioField label="Degree">
+          <input value={degree} onChange={(event) => setDegree(event.target.value)} />
+        </StudioField>
+        <StudioField label="University">
+          <input value={university} onChange={(event) => setUniversity(event.target.value)} />
+        </StudioField>
+        <h3 className="mt-5 text-lg font-medium">Branding</h3>
+        <StudioField label="Hero tagline">
+          <input value={heroTagline} onChange={(event) => setHeroTagline(event.target.value)} />
+        </StudioField>
+        <StudioField label="Hero supporting line">
+          <textarea
+            rows={3}
+            value={heroSupporting}
+            onChange={(event) => setHeroSupporting(event.target.value)}
+          />
+        </StudioField>
+        <StudioField label="Home bridge">
+          <textarea
+            rows={3}
+            value={homeBridgeText}
+            onChange={(event) => setHomeBridgeText(event.target.value)}
+          />
+        </StudioField>
+        <div className="studio-form__columns">
+          <StudioField label="Home Work blurb">
+            <textarea
+              rows={3}
+              value={homeWorkBlurb}
+              onChange={(event) => setHomeWorkBlurb(event.target.value)}
+            />
+          </StudioField>
+          <StudioField label="Home Journal blurb">
+            <textarea
+              rows={3}
+              value={homeJournalBlurb}
+              onChange={(event) => setHomeJournalBlurb(event.target.value)}
+            />
+          </StudioField>
+        </div>
+        <StudioField label="Connect CTA">
+          <input value={connectCta} onChange={(event) => setConnectCta(event.target.value)} />
+        </StudioField>
+        <StudioField label="Footer connect context">
+          <textarea
+            rows={3}
+            value={footerConnectContext}
+            onChange={(event) => setFooterConnectContext(event.target.value)}
+          />
+        </StudioField>
+        <h3 className="mt-5 text-lg font-medium">Social links</h3>
+        <StudioField label="GitHub">
+          <input
+            type="url"
+            value={githubUrl}
+            onChange={(event) => setGithubUrl(event.target.value)}
+          />
+        </StudioField>
+        <StudioField label="LinkedIn">
+          <input
+            type="url"
+            value={linkedinUrl}
+            onChange={(event) => setLinkedinUrl(event.target.value)}
+          />
+        </StudioField>
+        <StudioField label="Instagram">
+          <input
+            type="url"
+            value={instagramUrl}
+            onChange={(event) => setInstagramUrl(event.target.value)}
+          />
+        </StudioField>
+        <h3 className="mt-5 text-lg font-medium">Biography</h3>
+        {bio.map((fragment, index) => (
+          <StudioField key={index} label={`Fragment ${index + 1}`}>
+            <textarea
+              rows={4}
+              value={fragment}
+              onChange={(event) =>
+                setBio((current) =>
+                  current.map((item, itemIndex) =>
+                    itemIndex === index ? event.target.value : item,
+                  ),
+                )
+              }
+            />
+          </StudioField>
+        ))}
+        <h3 className="mt-5 text-lg font-medium">Capabilities</h3>
+        {profileCapabilities.map((capability, index) => (
+          <div className="studio-form__columns" key={index}>
+            <StudioField label={`Capability ${index + 1}`}>
+              <input
+                value={capability.title}
+                onChange={(event) =>
+                  setProfileCapabilities((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === index ? { ...item, title: event.target.value } : item,
+                    ),
+                  )
+                }
+              />
+            </StudioField>
+            <StudioField label="Description">
+              <textarea
+                rows={3}
+                value={capability.description}
+                onChange={(event) =>
+                  setProfileCapabilities((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === index ? { ...item, description: event.target.value } : item,
+                    ),
+                  )
+                }
+              />
+            </StudioField>
+          </div>
+        ))}
+        <h3 className="mt-5 text-lg font-medium">Tools & Technologies</h3>
+        {technologyGroups.map((group, groupIndex) => (
+          <div key={groupIndex}>
+            <StudioField label={`Group ${groupIndex + 1}`}>
+              <input
+                value={group.title}
+                onChange={(event) =>
+                  setTechnologyGroups((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === groupIndex ? { ...item, title: event.target.value } : item,
+                    ),
+                  )
+                }
+              />
+            </StudioField>
+            {group.items.map((item, itemIndex) => (
+              <div className="studio-form__columns" key={itemIndex}>
+                <StudioField label="Item label (optional)">
+                  <input
+                    value={item.label ?? ""}
+                    onChange={(event) =>
+                      setTechnologyGroups((current) =>
+                        current.map((currentGroup, currentGroupIndex) =>
+                          currentGroupIndex === groupIndex
+                            ? {
+                                ...currentGroup,
+                                items: currentGroup.items.map((currentItem, currentItemIndex) =>
+                                  currentItemIndex === itemIndex
+                                    ? { ...currentItem, label: event.target.value || null }
+                                    : currentItem,
+                                ),
+                              }
+                            : currentGroup,
+                        ),
+                      )
+                    }
+                  />
+                </StudioField>
+                <StudioField label="Technologies">
+                  <textarea
+                    rows={2}
+                    value={item.content}
+                    onChange={(event) =>
+                      setTechnologyGroups((current) =>
+                        current.map((currentGroup, currentGroupIndex) =>
+                          currentGroupIndex === groupIndex
+                            ? {
+                                ...currentGroup,
+                                items: currentGroup.items.map((currentItem, currentItemIndex) =>
+                                  currentItemIndex === itemIndex
+                                    ? { ...currentItem, content: event.target.value }
+                                    : currentItem,
+                                ),
+                              }
+                            : currentGroup,
+                        ),
+                      )
+                    }
+                  />
+                </StudioField>
+              </div>
+            ))}
+          </div>
+        ))}
+        {feedback ? (
+          <p
+            className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`}
+            role="status"
+          >
+            {feedback}
+          </p>
+        ) : null}
+        <div className="studio-form__actions">
+          <button className="studio-button studio-button--primary" disabled={save.isPending}>
+            {save.isPending ? "Saving…" : "Save profile"}
+          </button>
+        </div>
+      </form>
+    </section>
+  );
 }
 
 function ProjectForm({ project, onClose }: { project: StudioProject | null; onClose: () => void }) {
@@ -503,10 +1070,31 @@ function ProjectForm({ project, onClose }: { project: StudioProject | null; onCl
   const [coverImageUrl, setCoverImageUrl] = useState(project?.cover_image_url ?? "");
   const [published, setPublished] = useState(project?.published ?? false);
   const [sortOrder, setSortOrder] = useState(String(project?.sort_order ?? 0));
-  const [showInProductLauncher, setShowInProductLauncher] = useState(project?.show_in_product_launcher ?? false);
-  const [productSortOrder, setProductSortOrder] = useState(String(project?.product_sort_order ?? 0));
+  const [showInProductLauncher, setShowInProductLauncher] = useState(
+    project?.show_in_product_launcher ?? false,
+  );
+  const [productSortOrder, setProductSortOrder] = useState(
+    String(project?.product_sort_order ?? 0),
+  );
   const [feedback, setFeedback] = useState("");
-  const draft = { title, slug, summary, problem, approach, keyFeatures, stack, outcome, status, liveUrl, githubUrl, coverImageUrl, published, sortOrder, showInProductLauncher, productSortOrder };
+  const draft = {
+    title,
+    slug,
+    summary,
+    problem,
+    approach,
+    keyFeatures,
+    stack,
+    outcome,
+    status,
+    liveUrl,
+    githubUrl,
+    coverImageUrl,
+    published,
+    sortOrder,
+    showInProductLauncher,
+    productSortOrder,
+  };
   const save = useMutation({
     mutationFn: () => {
       const values = buildProjectPayload(draft);
@@ -532,30 +1120,130 @@ function ProjectForm({ project, onClose }: { project: StudioProject | null; onCl
   }
   return (
     <form className="studio-editor studio-form" onSubmit={submit}>
-      <StudioField label="Title"><input required value={title} onChange={(event) => { const value = event.target.value; setTitle(value); if (!project) setSlug(nextCreateSlug(value, slug, slugEdited)); }} /></StudioField>
-      <StudioField label="Slug"><input required value={slug} onChange={(event) => { setSlugEdited(true); setSlug(event.target.value); }} /></StudioField>
-      <StudioField label="Summary"><textarea required rows={4} value={summary} onChange={(event) => setSummary(event.target.value)} /></StudioField>
-      <StudioField label="Problem"><textarea rows={5} value={problem} onChange={(event) => setProblem(event.target.value)} /></StudioField>
-      <StudioField label="Approach"><textarea rows={5} value={approach} onChange={(event) => setApproach(event.target.value)} /></StudioField>
+      <StudioField label="Title">
+        <input
+          required
+          value={title}
+          onChange={(event) => {
+            const value = event.target.value;
+            setTitle(value);
+            if (!project) setSlug(nextCreateSlug(value, slug, slugEdited));
+          }}
+        />
+      </StudioField>
+      <StudioField label="Slug">
+        <input
+          required
+          value={slug}
+          onChange={(event) => {
+            setSlugEdited(true);
+            setSlug(event.target.value);
+          }}
+        />
+      </StudioField>
+      <StudioField label="Summary">
+        <textarea
+          required
+          rows={4}
+          value={summary}
+          onChange={(event) => setSummary(event.target.value)}
+        />
+      </StudioField>
+      <StudioField label="Problem">
+        <textarea rows={5} value={problem} onChange={(event) => setProblem(event.target.value)} />
+      </StudioField>
+      <StudioField label="Approach">
+        <textarea rows={5} value={approach} onChange={(event) => setApproach(event.target.value)} />
+      </StudioField>
       <div className="studio-form__columns">
-        <StudioField label="Key features (one per line)"><textarea rows={6} value={keyFeatures} onChange={(event) => setKeyFeatures(event.target.value)} /></StudioField>
-        <StudioField label="Stack (one item per line)"><textarea rows={6} value={stack} onChange={(event) => setStack(event.target.value)} /></StudioField>
+        <StudioField label="Key features (one per line)">
+          <textarea
+            rows={6}
+            value={keyFeatures}
+            onChange={(event) => setKeyFeatures(event.target.value)}
+          />
+        </StudioField>
+        <StudioField label="Stack (one item per line)">
+          <textarea rows={6} value={stack} onChange={(event) => setStack(event.target.value)} />
+        </StudioField>
       </div>
-      <StudioField label="Outcome / Learning"><textarea rows={5} value={outcome} onChange={(event) => setOutcome(event.target.value)} /></StudioField>
+      <StudioField label="Outcome / Learning">
+        <textarea rows={5} value={outcome} onChange={(event) => setOutcome(event.target.value)} />
+      </StudioField>
       <div className="studio-form__columns">
-        <StudioField label="Status"><select value={status} onChange={(event) => setStatus(event.target.value)}>{PROJECT_STATUSES.map((item) => <option key={item}>{item}</option>)}</select></StudioField>
-        <StudioField label="Sort order"><input type="number" value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} /></StudioField>
+        <StudioField label="Status">
+          <select value={status} onChange={(event) => setStatus(event.target.value)}>
+            {PROJECT_STATUSES.map((item) => (
+              <option key={item}>{item}</option>
+            ))}
+          </select>
+        </StudioField>
+        <StudioField label="Sort order">
+          <input
+            type="number"
+            value={sortOrder}
+            onChange={(event) => setSortOrder(event.target.value)}
+          />
+        </StudioField>
       </div>
       <div className="studio-form__columns">
-        <StudioField label="Live URL"><input type="url" value={liveUrl} onChange={(event) => setLiveUrl(event.target.value)} /></StudioField>
-        <StudioField label="GitHub URL"><input type="url" value={githubUrl} onChange={(event) => setGithubUrl(event.target.value)} /></StudioField>
+        <StudioField label="Live URL">
+          <input type="url" value={liveUrl} onChange={(event) => setLiveUrl(event.target.value)} />
+        </StudioField>
+        <StudioField label="GitHub URL">
+          <input
+            type="url"
+            value={githubUrl}
+            onChange={(event) => setGithubUrl(event.target.value)}
+          />
+        </StudioField>
       </div>
-      <StudioField label="Cover Image URL"><input type="url" value={coverImageUrl} onChange={(event) => setCoverImageUrl(event.target.value)} /></StudioField>
-      <label className="studio-check"><input type="checkbox" checked={published} onChange={(event) => setPublished(event.target.checked)} /><span>Published</span></label>
-      <label className="studio-check"><input type="checkbox" checked={showInProductLauncher} onChange={(event) => setShowInProductLauncher(event.target.checked)} /><span>Show in homepage product launcher</span></label>
-      <StudioField label="Product launcher order"><input type="number" value={productSortOrder} onChange={(event) => setProductSortOrder(event.target.value)} /></StudioField>
-      {feedback ? <p className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`} role="status">{feedback}</p> : null}
-      <div className="studio-form__actions"><button className="studio-button studio-button--primary" disabled={save.isPending}>{save.isPending ? "Saving…" : "Save project"}</button><button type="button" className="studio-button" onClick={onClose}>Close</button></div>
+      <StudioField label="Cover Image URL">
+        <input
+          type="url"
+          value={coverImageUrl}
+          onChange={(event) => setCoverImageUrl(event.target.value)}
+        />
+      </StudioField>
+      <label className="studio-check">
+        <input
+          type="checkbox"
+          checked={published}
+          onChange={(event) => setPublished(event.target.checked)}
+        />
+        <span>Published</span>
+      </label>
+      <label className="studio-check">
+        <input
+          type="checkbox"
+          checked={showInProductLauncher}
+          onChange={(event) => setShowInProductLauncher(event.target.checked)}
+        />
+        <span>Show in homepage product launcher</span>
+      </label>
+      <StudioField label="Product launcher order">
+        <input
+          type="number"
+          value={productSortOrder}
+          onChange={(event) => setProductSortOrder(event.target.value)}
+        />
+      </StudioField>
+      {feedback ? (
+        <p
+          className={`studio-feedback${feedback === "Saved." ? "" : " studio-feedback--error"}`}
+          role="status"
+        >
+          {feedback}
+        </p>
+      ) : null}
+      <div className="studio-form__actions">
+        <button className="studio-button studio-button--primary" disabled={save.isPending}>
+          {save.isPending ? "Saving…" : "Save project"}
+        </button>
+        <button type="button" className="studio-button" onClick={onClose}>
+          Close
+        </button>
+      </div>
     </form>
   );
 }

@@ -7,11 +7,12 @@ import { useSiteProfile } from "@/lib/site-profile";
 import { buildPublicPageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => buildPublicPageHead({
-    path: "/contact",
-    title: `Contact — ${SITE.name}`,
-    description: "Share what you’re looking to build, or send a general message.",
-  }),
+  head: () =>
+    buildPublicPageHead({
+      path: "/contact",
+      title: `Contact — ${SITE.name}`,
+      description: "Share what you’re looking to build, or send a general message.",
+    }),
   component: Contact,
 });
 

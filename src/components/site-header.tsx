@@ -19,18 +19,20 @@ export function SiteHeader({ routeDirections }: { routeDirections?: RouteDirecti
   const menuRootRef = useRef<HTMLDivElement>(null);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const profile = useSiteProfile();
-  const routeTone = pathname === "/"
-    ? "home"
-    : pathname.startsWith("/projects")
-      ? "work"
-      : pathname.startsWith("/writing")
-        ? "journal"
-        : pathname.startsWith("/about")
-          ? "about"
-          : pathname.startsWith("/contact")
-            ? "connect"
-            : "inner";
-  const { previous: previousRoute, next: nextRoute } = routeDirections ?? getRouteDirections(pathname);
+  const routeTone =
+    pathname === "/"
+      ? "home"
+      : pathname.startsWith("/projects")
+        ? "work"
+        : pathname.startsWith("/writing")
+          ? "journal"
+          : pathname.startsWith("/about")
+            ? "about"
+            : pathname.startsWith("/contact")
+              ? "connect"
+              : "inner";
+  const { previous: previousRoute, next: nextRoute } =
+    routeDirections ?? getRouteDirections(pathname);
 
   useEffect(() => {
     if (open) {
@@ -97,105 +99,119 @@ export function SiteHeader({ routeDirections }: { routeDirections?: RouteDirecti
     };
   }, [open]);
 
-  return <>
-    <header
-      className={`site-header site-header--${routeTone} fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4`}
-    >
-      <div className="container-wide site-header__layout">
-        <div className={`site-brand-capsule${brandHidden ? " site-brand-capsule--hidden" : ""}`}>
-          <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent-muted/60 bg-accent/10" aria-hidden>
-            <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_oklch(0.79_0.125_194/0.5)]" />
-          </span>
-          <span className="ml-3 whitespace-nowrap text-[0.9375rem] font-semibold tracking-[-0.015em] text-foreground">
-            {profile.name}
-          </span>
-          <span className="site-brand-capsule__role ml-3 border-l border-border pl-3 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-            {profile.role}
-          </span>
-        </div>
-
-        <div ref={menuRootRef} className="site-nav-control">
-          <button
-            ref={triggerRef}
-            type="button"
-            onClick={() => setOpen((value) => !value)}
-            className="site-nav-trigger focus-ring"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="site-navigation"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            <span>Menu</span>
-          </button>
-
-          {open ? (
-            <nav
-              id="site-navigation"
-              className="site-nav-dropdown animate-menu-reveal"
-              aria-label="Primary"
+  return (
+    <>
+      <header
+        className={`site-header site-header--${routeTone} fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4`}
+      >
+        <div className="container-wide site-header__layout">
+          <div className={`site-brand-capsule${brandHidden ? " site-brand-capsule--hidden" : ""}`}>
+            <span
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent-muted/60 bg-accent/10"
+              aria-hidden
             >
-              {nav.map((item, index) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => {
-                  setOpen(false);
-                  requestAnimationFrame(() => triggerRef.current?.focus());
-                }}
-                className="site-nav-dropdown__item focus-ring group"
-                activeProps={{ className: "text-foreground" }}
-                activeOptions={{ exact: item.to === "/" }}
+              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_oklch(0.79_0.125_194/0.5)]" />
+            </span>
+            <span className="ml-3 whitespace-nowrap text-[0.9375rem] font-semibold tracking-[-0.015em] text-foreground">
+              {profile.name}
+            </span>
+            <span className="site-brand-capsule__role ml-3 border-l border-border pl-3 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+              {profile.role}
+            </span>
+          </div>
+
+          <div ref={menuRootRef} className="site-nav-control">
+            <button
+              ref={triggerRef}
+              type="button"
+              onClick={() => setOpen((value) => !value)}
+              className="site-nav-trigger focus-ring"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="site-navigation"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <span>Menu</span>
+            </button>
+
+            {open ? (
+              <nav
+                id="site-navigation"
+                className="site-nav-dropdown animate-menu-reveal"
+                aria-label="Primary"
               >
-                <span className="flex items-center gap-3">
-                  <span className="site-nav-dropdown__indicator" aria-hidden />
-                  {item.label}
-                </span>
-                <span className="site-nav-dropdown__number font-mono text-xs text-quiet-foreground" aria-hidden>
-                  0{index + 1}
-                </span>
-              </Link>
-              ))}
-            </nav>
-          ) : null}
+                {nav.map((item, index) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => {
+                      setOpen(false);
+                      requestAnimationFrame(() => triggerRef.current?.focus());
+                    }}
+                    className="site-nav-dropdown__item focus-ring group"
+                    activeProps={{ className: "text-foreground" }}
+                    activeOptions={{ exact: item.to === "/" }}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span className="site-nav-dropdown__indicator" aria-hidden />
+                      {item.label}
+                    </span>
+                    <span
+                      className="site-nav-dropdown__number font-mono text-xs text-quiet-foreground"
+                      aria-hidden
+                    >
+                      0{index + 1}
+                    </span>
+                  </Link>
+                ))}
+              </nav>
+            ) : null}
+          </div>
         </div>
-      </div>
+      </header>
 
-    </header>
-
-    <nav className={`site-route-navigation site-route-navigation--${routeTone}`} aria-label="Route navigation">
-      {previousRoute ? <div
-        className={`site-previous-route${open ? " site-route-control--hidden" : ""}`}
-        aria-hidden={open || undefined}
+      <nav
+        className={`site-route-navigation site-route-navigation--${routeTone}`}
+        aria-label="Route navigation"
       >
-        <Link
-          to={previousRoute.to}
-          className="site-route-control__link focus-ring"
-          aria-label={previousRoute.label}
-          tabIndex={open ? -1 : undefined}
-        >
-          <ArrowLeft className="site-route-control__icon" aria-hidden />
-        </Link>
-        <span className="site-route-control__label" aria-hidden>
-          {previousRoute.label}
-        </span>
-      </div> : null}
+        {previousRoute ? (
+          <div
+            className={`site-previous-route${open ? " site-route-control--hidden" : ""}`}
+            aria-hidden={open || undefined}
+          >
+            <Link
+              to={previousRoute.to}
+              className="site-route-control__link focus-ring"
+              aria-label={previousRoute.label}
+              tabIndex={open ? -1 : undefined}
+            >
+              <ArrowLeft className="site-route-control__icon" aria-hidden />
+            </Link>
+            <span className="site-route-control__label" aria-hidden>
+              {previousRoute.label}
+            </span>
+          </div>
+        ) : null}
 
-      {nextRoute ? <div
-        className={`site-next-route${open ? " site-next-route--hidden" : ""}`}
-        aria-hidden={open || undefined}
-      >
-        <span className="site-route-control__label" aria-hidden>
-          {nextRoute.label}
-        </span>
-        <Link
-          to={nextRoute.to}
-          className="site-route-control__link focus-ring"
-          aria-label={nextRoute.label}
-          tabIndex={open ? -1 : undefined}
-        >
-          <ArrowRight className="site-route-control__icon" aria-hidden />
-        </Link>
-      </div> : null}
-    </nav>
-  </>;
+        {nextRoute ? (
+          <div
+            className={`site-next-route${open ? " site-next-route--hidden" : ""}`}
+            aria-hidden={open || undefined}
+          >
+            <span className="site-route-control__label" aria-hidden>
+              {nextRoute.label}
+            </span>
+            <Link
+              to={nextRoute.to}
+              className="site-route-control__link focus-ring"
+              aria-label={nextRoute.label}
+              tabIndex={open ? -1 : undefined}
+            >
+              <ArrowRight className="site-route-control__icon" aria-hidden />
+            </Link>
+          </div>
+        ) : null}
+      </nav>
+    </>
+  );
 }

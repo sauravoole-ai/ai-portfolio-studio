@@ -5,7 +5,13 @@ import { SiteFooter } from "./site-footer";
 import { PoeticAtmosphere } from "./poetic-atmosphere";
 import type { RouteDirections } from "@/lib/apex.logic";
 
-export function SiteShell({ children, routeDirections }: { children: ReactNode; routeDirections?: RouteDirections }) {
+export function SiteShell({
+  children,
+  routeDirections,
+}: {
+  children: ReactNode;
+  routeDirections?: RouteDirections;
+}) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const hasInnerAtmosphere = ["/projects", "/writing", "/about", "/contact"].includes(pathname);
 

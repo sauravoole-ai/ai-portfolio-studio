@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { normalizePublishedProject, selectLauncherProducts, selectProjectDetailDirections } from "./projects.logic.ts";
+import {
+  normalizePublishedProject,
+  selectLauncherProducts,
+  selectProjectDetailDirections,
+} from "./projects.logic.ts";
 import type { PublishedProject } from "./projects.functions.ts";
 
 function launcherProject(overrides: Partial<PublishedProject>): PublishedProject {
@@ -13,33 +17,50 @@ function launcherProject(overrides: Partial<PublishedProject>): PublishedProject
   });
 }
 
-function navigationProject(id: number, title: string, slug: string, sortOrder: number): PublishedProject {
+function navigationProject(
+  id: number,
+  title: string,
+  slug: string,
+  sortOrder: number,
+): PublishedProject {
   return normalizePublishedProject({ id, title, slug, sort_order: sortOrder });
 }
 
 test("safely consumes a partially populated legacy project row", () => {
-  assert.deepEqual(normalizePublishedProject({ id: 1, title: "AI Internship Match Assistant", slug: "ai-internship-match-assistant", summary: "Summary" }), {
-    id: 1,
-    title: "AI Internship Match Assistant",
-    slug: "ai-internship-match-assistant",
-    summary: "Summary",
-    problem: null,
-    approach: null,
-    key_features: [],
-    stack: [],
-    outcome: null,
-    status: "Live",
-    live_url: null,
-    github_url: null,
-    cover_image_url: null,
-    sort_order: 0,
-    show_in_product_launcher: false,
-    product_sort_order: 0,
-  });
+  assert.deepEqual(
+    normalizePublishedProject({
+      id: 1,
+      title: "AI Internship Match Assistant",
+      slug: "ai-internship-match-assistant",
+      summary: "Summary",
+    }),
+    {
+      id: 1,
+      title: "AI Internship Match Assistant",
+      slug: "ai-internship-match-assistant",
+      summary: "Summary",
+      problem: null,
+      approach: null,
+      key_features: [],
+      stack: [],
+      outcome: null,
+      status: "Live",
+      live_url: null,
+      github_url: null,
+      cover_image_url: null,
+      sort_order: 0,
+      show_in_product_launcher: false,
+      product_sort_order: 0,
+    },
+  );
 });
 
 test("selects eligible launcher products in deterministic launcher order without mutating input", () => {
-  const excludedHidden = launcherProject({ id: 1, title: "Hidden", show_in_product_launcher: false });
+  const excludedHidden = launcherProject({
+    id: 1,
+    title: "Hidden",
+    show_in_product_launcher: false,
+  });
   const excludedMissingUrl = launcherProject({ id: 2, title: "Missing URL", live_url: null });
   const excludedBlankUrl = launcherProject({ id: 3, title: "Blank URL", live_url: "   " });
   const alpha = launcherProject({ id: 4, title: "Alpha", product_sort_order: 2, sort_order: 3 });
@@ -49,7 +70,10 @@ test("selects eligible launcher products in deterministic launcher order without
   const input = [alpha, excludedHidden, zeta, excludedMissingUrl, beta, excludedBlankUrl, gamma];
   const originalOrder = [...input];
 
-  assert.deepEqual(selectLauncherProducts(input).map((project) => project.title), ["Beta", "Gamma", "Alpha", "Zeta"]);
+  assert.deepEqual(
+    selectLauncherProducts(input).map((project) => project.title),
+    ["Beta", "Gamma", "Alpha", "Zeta"],
+  );
   assert.deepEqual(input, originalOrder);
 });
 

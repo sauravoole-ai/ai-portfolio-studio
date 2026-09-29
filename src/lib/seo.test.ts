@@ -12,28 +12,64 @@ import {
 
 describe("production discoverability", () => {
   test("builds the portfolio social-preview fallback metadata", () => {
-    const head = buildPublicPageHead({ path: "/projects/example", title: "Example", description: "Summary" });
+    const head = buildPublicPageHead({
+      path: "/projects/example",
+      title: "Example",
+      description: "Summary",
+    });
     assert.equal(head.links[0]?.href, `${PRODUCTION_ORIGIN}/projects/example`);
     assert.equal(SOCIAL_IMAGE_URL, `${PRODUCTION_ORIGIN}/social-preview.jpg`);
-    assert(head.meta.some((item) => item.property === "og:image" && item.content === SOCIAL_IMAGE_URL));
-    assert(head.meta.some((item) => item.name === "twitter:image" && item.content === SOCIAL_IMAGE_URL));
+    assert(
+      head.meta.some((item) => item.property === "og:image" && item.content === SOCIAL_IMAGE_URL),
+    );
+    assert(
+      head.meta.some((item) => item.name === "twitter:image" && item.content === SOCIAL_IMAGE_URL),
+    );
     assert(head.meta.some((item) => item.property === "og:image:width" && item.content === "1200"));
     assert(head.meta.some((item) => item.property === "og:image:height" && item.content === "627"));
-    assert(head.meta.some((item) => item.property === "og:image:type" && item.content === "image/jpeg"));
+    assert(
+      head.meta.some((item) => item.property === "og:image:type" && item.content === "image/jpeg"),
+    );
     assert.equal(existsSync(new URL("../../public/social-preview.jpg", import.meta.url)), true);
   });
 
   test("uses a valid public cover and rejects a local cover", () => {
-    const publicHead = buildPublicPageHead({ path: "/writing/post", title: "Post", description: "Excerpt", type: "article", image: "https://images.example.com/post.webp" });
-    assert(publicHead.meta.some((item) => item.property === "og:image" && item.content === "https://images.example.com/post.webp"));
-    const localHead = buildPublicPageHead({ path: "/writing/post", title: "Post", description: "Excerpt", image: "http://localhost/post.webp" });
-    assert(localHead.meta.some((item) => item.property === "og:image" && item.content === SOCIAL_IMAGE_URL));
+    const publicHead = buildPublicPageHead({
+      path: "/writing/post",
+      title: "Post",
+      description: "Excerpt",
+      type: "article",
+      image: "https://images.example.com/post.webp",
+    });
+    assert(
+      publicHead.meta.some(
+        (item) =>
+          item.property === "og:image" && item.content === "https://images.example.com/post.webp",
+      ),
+    );
+    const localHead = buildPublicPageHead({
+      path: "/writing/post",
+      title: "Post",
+      description: "Excerpt",
+      image: "http://localhost/post.webp",
+    });
+    assert(
+      localHead.meta.some(
+        (item) => item.property === "og:image" && item.content === SOCIAL_IMAGE_URL,
+      ),
+    );
   });
 
   test("sitemap includes published content and excludes drafts and Studio", () => {
     const xml = buildSitemapXml(
-      [{ slug: "published-project", published: true }, { slug: "draft-project", published: false }],
-      [{ slug: "published-post", published: true }, { slug: "draft-post", published: false }],
+      [
+        { slug: "published-project", published: true },
+        { slug: "draft-project", published: false },
+      ],
+      [
+        { slug: "published-post", published: true },
+        { slug: "draft-post", published: false },
+      ],
     );
     assert.match(xml, new RegExp(absoluteUrl("/projects/published-project")));
     assert.match(xml, new RegExp(absoluteUrl("/writing/published-post")));
@@ -42,9 +78,18 @@ describe("production discoverability", () => {
   });
 
   test("ProfilePage keeps only validated public social URLs", () => {
-    const data = buildProfilePageJsonLd({ name: "Saurav Kumar Jha", role: "AI Product Builder", github_url: "https://github.com/sauravoole-ai", linkedin_url: "not-a-url", instagram_url: "https://www.instagram.com/sauravjha_ai/" });
+    const data = buildProfilePageJsonLd({
+      name: "Saurav Kumar Jha",
+      role: "AI Product Builder",
+      github_url: "https://github.com/sauravoole-ai",
+      linkedin_url: "not-a-url",
+      instagram_url: "https://www.instagram.com/sauravjha_ai/",
+    });
     assert.equal(data["@type"], "ProfilePage");
-    assert.deepEqual(data.mainEntity.sameAs, ["https://github.com/sauravoole-ai", "https://www.instagram.com/sauravjha_ai/"]);
+    assert.deepEqual(data.mainEntity.sameAs, [
+      "https://github.com/sauravoole-ai",
+      "https://www.instagram.com/sauravjha_ai/",
+    ]);
   });
 
   test("robots references the production sitemap", () => {

@@ -5,10 +5,7 @@ type PoeticAtmosphereProps = {
   variant?: "horizon" | "mist" | "quiet";
 };
 
-export function PoeticAtmosphere({
-  className = "",
-  variant = "horizon",
-}: PoeticAtmosphereProps) {
+export function PoeticAtmosphere({ className = "", variant = "horizon" }: PoeticAtmosphereProps) {
   const grainId = useId().replaceAll(":", "");
 
   return (
@@ -37,12 +34,7 @@ export function PoeticAtmosphere({
         <path d="M-100 424C142 330 318 476 552 392S878 260 1300 366" />
         <path d="M-60 300C176 222 336 360 554 288S862 154 1250 242" />
       </svg>
-      <svg
-        className="poetic-atmosphere__grain"
-        width="100%"
-        height="100%"
-        focusable="false"
-      >
+      <svg className="poetic-atmosphere__grain" width="100%" height="100%" focusable="false">
         <filter id={grainId}>
           <feTurbulence type="fractalNoise" baseFrequency="0.78" numOctaves="2" seed="17" />
           <feColorMatrix type="saturate" values="0" />

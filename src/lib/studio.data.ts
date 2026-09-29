@@ -20,7 +20,10 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
       return Boolean(data);
     },
     async listPosts() {
-      const { data, error } = await client.from("posts").select("*").order("updated_at", { ascending: false });
+      const { data, error } = await client
+        .from("posts")
+        .select("*")
+        .order("updated_at", { ascending: false });
       if (error) fail("Post listing failed.", error);
       return data ?? [];
     },
@@ -58,7 +61,12 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
       return data;
     },
     async updateProject(id: number, values: TablesUpdate<"projects">) {
-      const { data, error } = await client.from("projects").update(values).eq("id", id).select().single();
+      const { data, error } = await client
+        .from("projects")
+        .update(values)
+        .eq("id", id)
+        .select()
+        .single();
       if (error) fail("Project update failed.", error);
       return data;
     },
@@ -67,12 +75,20 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
       if (error) fail("Project deletion failed.", error);
     },
     async listMessages() {
-      const { data, error } = await client.from("contact_messages").select("*").order("created_at", { ascending: false });
+      const { data, error } = await client
+        .from("contact_messages")
+        .select("*")
+        .order("created_at", { ascending: false });
       if (error) fail("Message listing failed.", error);
       return data ?? [];
     },
     async updateMessageStatus(id: string, status: "New" | "Read" | "Archived") {
-      const { data, error } = await client.from("contact_messages").update({ status }).eq("id", id).select().single();
+      const { data, error } = await client
+        .from("contact_messages")
+        .update({ status })
+        .eq("id", id)
+        .select()
+        .single();
       if (error) fail("Message update failed.", error);
       return data;
     },
@@ -81,12 +97,21 @@ export function createStudioData(client: StudioDataClient, now = () => new Date(
       if (error) fail("Message deletion failed.", error);
     },
     async getSiteProfile() {
-      const { data, error } = await client.from("site_profile").select("*").eq("id", true).maybeSingle();
+      const { data, error } = await client
+        .from("site_profile")
+        .select("*")
+        .eq("id", true)
+        .maybeSingle();
       if (error) fail("Profile loading failed.", error);
       return data;
     },
     async updateSiteProfile(values: TablesUpdate<"site_profile">) {
-      const { data, error } = await client.from("site_profile").update(values).eq("id", true).select().single();
+      const { data, error } = await client
+        .from("site_profile")
+        .update(values)
+        .eq("id", true)
+        .select()
+        .single();
       if (error) fail("Profile update failed.", error);
       return data;
     },

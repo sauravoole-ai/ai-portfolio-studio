@@ -1,6 +1,8 @@
 import type { PublishedProject } from "./projects.functions";
 
-export function normalizePublishedProject(project: Partial<PublishedProject> & Pick<PublishedProject, "id">): PublishedProject {
+export function normalizePublishedProject(
+  project: Partial<PublishedProject> & Pick<PublishedProject, "id">,
+): PublishedProject {
   return {
     title: null,
     slug: null,
@@ -39,7 +41,10 @@ export function selectLauncherProducts(projects: readonly PublishedProject[]): P
     );
 }
 
-export function selectProjectDetailDirections(projects: readonly PublishedProject[], currentSlug: string) {
+export function selectProjectDetailDirections(
+  projects: readonly PublishedProject[],
+  currentSlug: string,
+) {
   const currentIndex = projects.findIndex((project) => project.slug === currentSlug);
   const previousProject = currentIndex > 0 ? projects[currentIndex - 1] : undefined;
   const previousSlug = previousProject?.slug?.trim();

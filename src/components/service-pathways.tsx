@@ -32,9 +32,7 @@ export function ServicePathways() {
           <h3 className="text-xl font-medium leading-tight tracking-[-0.03em] text-foreground md:text-2xl">
             {pathway.title}
           </h3>
-          <p className="max-w-xl text-base leading-7 text-foreground-soft">
-            {pathway.description}
-          </p>
+          <p className="max-w-xl text-base leading-7 text-foreground-soft">{pathway.description}</p>
           <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface-inset text-muted-foreground transition-[border-color,color,transform] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-accent-muted group-hover:text-accent">
             <ArrowUpRight className="h-4 w-4" />
           </span>

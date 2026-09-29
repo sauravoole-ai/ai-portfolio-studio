@@ -36,7 +36,10 @@ export function isMessageStatus(value: string): value is (typeof MESSAGE_STATUSE
 }
 
 export function linesToArray(value: string) {
-  return value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+  return value
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function isOptionalUrlValid(value: string) {
@@ -63,8 +66,14 @@ export function validateProjectDraft(draft: ProjectDraft) {
 }
 
 export const studioQueryKeys = {
-  posts: [["studio", "posts"], ["posts", "published"]] as const,
-  projects: [["studio", "projects"], ["projects", "published"]] as const,
+  posts: [
+    ["studio", "posts"],
+    ["posts", "published"],
+  ] as const,
+  projects: [
+    ["studio", "projects"],
+    ["projects", "published"],
+  ] as const,
   messages: [["studio", "messages"]] as const,
   profile: [["studio", "profile"], ["site-profile"]] as const,
 };
@@ -85,10 +94,7 @@ export function nextCreateSlug(title: string, currentSlug: string, slugEdited: b
 
 export function validatePostDraft(draft: PostDraft) {
   return Boolean(
-    draft.title.trim() &&
-      draft.slug.trim() &&
-      draft.excerpt.trim() &&
-      draft.content.trim(),
+    draft.title.trim() && draft.slug.trim() && draft.excerpt.trim() && draft.content.trim(),
   );
 }
 
@@ -132,7 +138,8 @@ export function buildProjectPayload(draft: ProjectDraft) {
   };
 }
 
-export type StudioAuthState = "loading" | "signed-out" | "checking-admin" | "denied" | "authorized" | "error";
+export type StudioAuthState =
+  "loading" | "signed-out" | "checking-admin" | "denied" | "authorized" | "error";
 
 export function resolveStudioAuthState(
   sessionLoading: boolean,

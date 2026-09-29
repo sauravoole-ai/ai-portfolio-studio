@@ -80,25 +80,67 @@ describe("Studio post behavior", () => {
 });
 
 describe("Studio project and authorization behavior", () => {
-  const validProject: ProjectDraft = { title: " Project ", slug: " project ", summary: " Summary ", problem: " Problem ", approach: " Approach ", keyFeatures: " Search\n Alerts ", stack: " React\nSupabase", outcome: " Learning ", status: "Live", liveUrl: "", githubUrl: " https://github.com/example/project ", coverImageUrl: "", published: true, sortOrder: "4", showInProductLauncher: true, productSortOrder: "7" };
+  const validProject: ProjectDraft = {
+    title: " Project ",
+    slug: " project ",
+    summary: " Summary ",
+    problem: " Problem ",
+    approach: " Approach ",
+    keyFeatures: " Search\n Alerts ",
+    stack: " React\nSupabase",
+    outcome: " Learning ",
+    status: "Live",
+    liveUrl: "",
+    githubUrl: " https://github.com/example/project ",
+    coverImageUrl: "",
+    published: true,
+    sortOrder: "4",
+    showInProductLauncher: true,
+    productSortOrder: "7",
+  };
 
   test("builds every project field and converts human-editable arrays", () => {
-    assert.deepEqual(buildProjectPayload(validProject), { title: "Project", slug: "project", summary: "Summary", problem: "Problem", approach: "Approach", key_features: ["Search", "Alerts"], stack: ["React", "Supabase"], outcome: "Learning", status: "Live", live_url: null, github_url: "https://github.com/example/project", cover_image_url: null, published: true, sort_order: 4, show_in_product_launcher: true, product_sort_order: 7 });
+    assert.deepEqual(buildProjectPayload(validProject), {
+      title: "Project",
+      slug: "project",
+      summary: "Summary",
+      problem: "Problem",
+      approach: "Approach",
+      key_features: ["Search", "Alerts"],
+      stack: ["React", "Supabase"],
+      outcome: "Learning",
+      status: "Live",
+      live_url: null,
+      github_url: "https://github.com/example/project",
+      cover_image_url: null,
+      published: true,
+      sort_order: 4,
+      show_in_product_launcher: true,
+      product_sort_order: 7,
+    });
     assert.deepEqual(linesToArray(" first\n\n second \r\n"), ["first", "second"]);
   });
 
   test("requires title, slug, and summary", () => {
-    for (const field of ["title", "slug", "summary"] as const) assert.match(validateProjectDraft({ ...validProject, [field]: " " }) ?? "", /required/);
+    for (const field of ["title", "slug", "summary"] as const)
+      assert.match(validateProjectDraft({ ...validProject, [field]: " " }) ?? "", /required/);
   });
 
   test("accepts allowed statuses and rejects invalid statuses", () => {
-    for (const status of ["Live", "In Progress", "Archived"]) assert.equal(validateProjectDraft({ ...validProject, status }), null);
-    assert.match(validateProjectDraft({ ...validProject, status: "Planned" }) ?? "", /valid project status/);
+    for (const status of ["Live", "In Progress", "Archived"])
+      assert.equal(validateProjectDraft({ ...validProject, status }), null);
+    assert.match(
+      validateProjectDraft({ ...validProject, status: "Planned" }) ?? "",
+      /valid project status/,
+    );
   });
 
   test("accepts blank optional URLs and rejects invalid supplied URLs", () => {
     assert.equal(validateProjectDraft({ ...validProject, githubUrl: "" }), null);
-    assert.match(validateProjectDraft({ ...validProject, liveUrl: "not-a-url" }) ?? "", /valid http or https/);
+    assert.match(
+      validateProjectDraft({ ...validProject, liveUrl: "not-a-url" }) ?? "",
+      /valid http or https/,
+    );
   });
 
   test("represents all authorization states without authorizing early", () => {
@@ -117,8 +159,14 @@ describe("Studio project and authorization behavior", () => {
   });
 
   test("declares Studio and public invalidation keys for both resources", () => {
-    assert.deepEqual(studioQueryKeys.posts, [["studio", "posts"], ["posts", "published"]]);
-    assert.deepEqual(studioQueryKeys.projects, [["studio", "projects"], ["projects", "published"]]);
+    assert.deepEqual(studioQueryKeys.posts, [
+      ["studio", "posts"],
+      ["posts", "published"],
+    ]);
+    assert.deepEqual(studioQueryKeys.projects, [
+      ["studio", "projects"],
+      ["projects", "published"],
+    ]);
     assert.deepEqual(studioQueryKeys.messages, [["studio", "messages"]]);
     assert.deepEqual(studioQueryKeys.profile, [["studio", "profile"], ["site-profile"]]);
   });

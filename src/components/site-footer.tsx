@@ -24,11 +24,19 @@ export function SiteFooter() {
     <footer className="site-footer relative mt-16 border-t border-border-subtle md:mt-24">
       <div className="container-wide grid gap-9 py-10 md:grid-cols-[1.3fr_0.8fr_1fr] md:items-start md:gap-10 md:py-12">
         <div>
-          <Link to="/contact" className="site-footer__cta focus-ring group inline-flex min-h-11 items-center gap-2.5 rounded-md font-sans text-xl font-medium tracking-[-0.03em] text-foreground md:text-2xl">
+          <Link
+            to="/contact"
+            className="site-footer__cta focus-ring group inline-flex min-h-11 items-center gap-2.5 rounded-md font-sans text-xl font-medium tracking-[-0.03em] text-foreground md:text-2xl"
+          >
             {profile.connect_cta}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            <ArrowRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden
+            />
           </Link>
-          <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">{profile.footer_connect_context}</p>
+          <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
+            {profile.footer_connect_context}
+          </p>
         </div>
 
         <div>
@@ -66,7 +74,9 @@ export function SiteFooter() {
 
       <div className="border-t border-border-subtle">
         <div className="container-wide py-5 text-sm text-muted-foreground">
-          <span>© {new Date().getFullYear()} {profile.name}</span>
+          <span>
+            © {new Date().getFullYear()} {profile.name}
+          </span>
         </div>
       </div>
     </footer>

@@ -33,10 +33,7 @@ export const Route = createFileRoute("/writing/$slug")({
           publishedAt: loaderData.post.published_at,
         })
       : {
-          meta: [
-            { title: `Not found — ${SITE.name}` },
-            { name: "robots", content: "noindex" },
-          ],
+          meta: [{ title: `Not found — ${SITE.name}` }, { name: "robots", content: "noindex" }],
         },
   notFoundComponent: NotFound,
   component: PostPage,

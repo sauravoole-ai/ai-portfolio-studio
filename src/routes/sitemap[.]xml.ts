@@ -8,7 +8,10 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         try {
-          const [projects, posts] = await Promise.all([listPublishedProjects(), listPublishedPosts()]);
+          const [projects, posts] = await Promise.all([
+            listPublishedProjects(),
+            listPublishedPosts(),
+          ]);
           return new Response(buildSitemapXml(projects, posts), {
             headers: {
               "Content-Type": "application/xml; charset=utf-8",

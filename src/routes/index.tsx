@@ -12,13 +12,23 @@ import { buildPublicPageHead, HOME_DESCRIPTION, HOME_TITLE } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   head: () => {
-    const publicPageHead = buildPublicPageHead({ path: "/", title: HOME_TITLE, description: HOME_DESCRIPTION });
+    const publicPageHead = buildPublicPageHead({
+      path: "/",
+      title: HOME_TITLE,
+      description: HOME_DESCRIPTION,
+    });
 
     return {
       ...publicPageHead,
       links: [
         ...publicPageHead.links,
-        { rel: "preload", href: "/home-studio-master-hq.webp", as: "image", type: "image/webp", fetchPriority: "high" },
+        {
+          rel: "preload",
+          href: "/home-studio-master-hq.webp",
+          as: "image",
+          type: "image/webp",
+          fetchPriority: "high",
+        },
       ],
     };
   },
@@ -58,19 +68,27 @@ function Home() {
                   onClick={() => setProductsOpen((open) => !open)}
                 >
                   View products
-                  <ChevronDown className={`h-4 w-4 transition-transform${productsOpen ? " rotate-180" : ""}`} aria-hidden />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform${productsOpen ? " rotate-180" : ""}`}
+                    aria-hidden
+                  />
                 </button>
                 {productsOpen ? (
                   <div id={launcherPanelId} className="home-product-launcher" aria-live="polite">
                     <p className="home-product-launcher__label">Live products</p>
-                    {projects.isPending ? <p className="home-product-launcher__status">Loading products…</p> : null}
+                    {projects.isPending ? (
+                      <p className="home-product-launcher__status">Loading products…</p>
+                    ) : null}
                     {projects.isError ? (
                       <p className="home-product-launcher__status">
-                        Products are temporarily unavailable. <Link to="/projects">Explore Work</Link>
+                        Products are temporarily unavailable.{" "}
+                        <Link to="/projects">Explore Work</Link>
                       </p>
                     ) : null}
                     {projects.isSuccess && launcherProducts.length === 0 ? (
-                      <p className="home-product-launcher__status">No live products are available right now.</p>
+                      <p className="home-product-launcher__status">
+                        No live products are available right now.
+                      </p>
                     ) : null}
                     {launcherProducts.length > 0 ? (
                       <div className="home-product-launcher__links">
@@ -83,7 +101,10 @@ function Home() {
                             rel="noopener noreferrer"
                           >
                             <span>{project.title ?? "Untitled product"}</span>
-                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                            <ArrowUpRight
+                              className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                              aria-hidden
+                            />
                           </a>
                         ))}
                       </div>
@@ -93,7 +114,6 @@ function Home() {
               </div>
             </div>
           </div>
-
         </section>
 
         <section className="home-bridge relative isolate overflow-hidden">
@@ -103,15 +123,38 @@ function Home() {
               {profile.home_bridge_text}
             </p>
             <div className="home-bridge__paths mt-14 grid gap-10 border-t border-border-subtle pt-9 sm:grid-cols-2 sm:gap-12 md:mt-16 md:pt-10">
-              <Link to="/projects" className="home-bridge__path home-bridge__path--work focus-ring group rounded-md">
-                <span className="text-xl font-semibold tracking-[-0.025em] text-foreground">Work</span>
-                <span className="mt-3 block max-w-md text-sm leading-6 text-foreground-soft sm:text-base sm:leading-7">{profile.home_work_blurb}</span>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-accent">Explore work <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden /></span>
+              <Link
+                to="/projects"
+                className="home-bridge__path home-bridge__path--work focus-ring group rounded-md"
+              >
+                <span className="text-xl font-semibold tracking-[-0.025em] text-foreground">
+                  Work
+                </span>
+                <span className="mt-3 block max-w-md text-sm leading-6 text-foreground-soft sm:text-base sm:leading-7">
+                  {profile.home_work_blurb}
+                </span>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-accent">
+                  Explore work{" "}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
+                </span>
               </Link>
               <Link to="/writing" className="home-bridge__path focus-ring group rounded-md">
-                <span className="text-lg font-medium tracking-[-0.02em] text-foreground-soft">Journal</span>
-                <span className="mt-3 block max-w-md text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">{profile.home_journal_blurb}</span>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground-soft">Read journal <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden /></span>
+                <span className="text-lg font-medium tracking-[-0.02em] text-foreground-soft">
+                  Journal
+                </span>
+                <span className="mt-3 block max-w-md text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+                  {profile.home_journal_blurb}
+                </span>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground-soft">
+                  Read journal{" "}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
+                </span>
               </Link>
             </div>
           </div>
@@ -126,7 +169,8 @@ function Home() {
                   Different paths into the work.
                 </h2>
                 <p className="mt-6 max-w-md text-base leading-7 text-foreground-soft sm:text-lg sm:leading-8">
-                  Broad directions for exploring product, workflow, and creative digital ideas together.
+                  Broad directions for exploring product, workflow, and creative digital ideas
+                  together.
                 </p>
               </div>
               <ServicePathways />

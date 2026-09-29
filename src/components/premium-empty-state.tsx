@@ -26,7 +26,10 @@ export function PremiumEmptyState({
       <div className="relative z-10 grid gap-8 md:grid-cols-[minmax(0,1.35fr)_auto] md:items-end">
         <div>
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent-muted/40 bg-accent/5" aria-hidden>
+            <span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent-muted/40 bg-accent/5"
+              aria-hidden
+            >
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
             <p className="eyebrow">{eyebrow}</p>
@@ -34,9 +37,7 @@ export function PremiumEmptyState({
           <h3 className="mt-6 max-w-2xl text-2xl leading-tight tracking-[-0.035em] sm:text-3xl">
             {heading}
           </h3>
-          <p className="mt-4 max-w-xl text-base leading-7 text-foreground-soft">
-            {explanation}
-          </p>
+          <p className="mt-4 max-w-xl text-base leading-7 text-foreground-soft">{explanation}</p>
         </div>
         {action ? (
           <Link to={action.to} className="button-secondary focus-ring group w-full sm:w-auto">

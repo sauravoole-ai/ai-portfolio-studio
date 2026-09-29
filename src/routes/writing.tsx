@@ -13,11 +13,12 @@ const postsQueryOptions = queryOptions({
 });
 
 export const Route = createFileRoute("/writing")({
-  head: () => buildPublicPageHead({
-    path: "/writing",
-    title: `Journal — ${SITE.name}`,
-    description: "Writing, experiments, observations, and things learned along the way.",
-  }),
+  head: () =>
+    buildPublicPageHead({
+      path: "/writing",
+      title: `Journal — ${SITE.name}`,
+      description: "Writing, experiments, observations, and things learned along the way.",
+    }),
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQueryOptions),
   pendingComponent: JournalPending,
   errorComponent: JournalError,

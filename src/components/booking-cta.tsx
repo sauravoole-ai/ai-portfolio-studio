@@ -10,8 +10,7 @@ const content = {
   project: {
     eyebrow: "Project enquiries",
     title: "Have an idea that needs a thoughtful shape?",
-    description:
-      "Share the context, the ambition, and where the work currently stands.",
+    description: "Share the context, the ambition, and where the work currently stands.",
     action: "Start a project enquiry",
   },
   collaboration: {

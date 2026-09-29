@@ -14,11 +14,12 @@ const projectsQueryOptions = queryOptions({
 });
 
 export const Route = createFileRoute("/projects")({
-  head: () => buildPublicPageHead({
-    path: "/projects",
-    title: `Projects — ${SITE.name}`,
-    description: `Selected AI product work by ${SITE.name}.`,
-  }),
+  head: () =>
+    buildPublicPageHead({
+      path: "/projects",
+      title: `Projects — ${SITE.name}`,
+      description: `Selected AI product work by ${SITE.name}.`,
+    }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQueryOptions),
   errorComponent: () => (
     <SiteShell>

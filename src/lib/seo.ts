@@ -1,7 +1,6 @@
 import { SITE } from "./content.ts";
 
-export const PRODUCTION_ORIGIN =
-  "https://sauravkrjha.vercel.app";
+export const PRODUCTION_ORIGIN = "https://sauravkrjha.vercel.app";
 export const SOCIAL_IMAGE_PATH = "/social-preview.jpg";
 export const SOCIAL_IMAGE_URL = `${PRODUCTION_ORIGIN}${SOCIAL_IMAGE_PATH}`;
 export const SOCIAL_IMAGE_WIDTH = "1200";
@@ -17,7 +16,9 @@ export function isPublicHttpsUrl(value: string | null | undefined) {
   if (!value) return false;
   try {
     const url = new URL(value);
-    return url.protocol === "https:" && url.hostname !== "localhost" && !url.hostname.endsWith(".local");
+    return (
+      url.protocol === "https:" && url.hostname !== "localhost" && !url.hostname.endsWith(".local")
+    );
   } catch {
     return false;
   }
@@ -83,7 +84,10 @@ function escapeXml(value: string) {
     .replaceAll("'", "&apos;");
 }
 
-export function buildSitemapXml(projects: readonly SitemapRecord[], posts: readonly SitemapRecord[]) {
+export function buildSitemapXml(
+  projects: readonly SitemapRecord[],
+  posts: readonly SitemapRecord[],
+) {
   const staticPaths = ["/", "/projects", "/writing", "/about", "/contact"];
   const projectPaths = projects
     .filter((item) => item.published !== false && Boolean(item.slug))
@@ -92,7 +96,9 @@ export function buildSitemapXml(projects: readonly SitemapRecord[], posts: reado
     .filter((item) => item.published !== false && Boolean(item.slug))
     .map((item) => `/writing/${encodeURIComponent(item.slug!)}`);
   const paths = [...new Set([...staticPaths, ...projectPaths, ...postPaths])];
-  const urls = paths.map((path) => `  <url><loc>${escapeXml(absoluteUrl(path))}</loc></url>`).join("\n");
+  const urls = paths
+    .map((path) => `  <url><loc>${escapeXml(absoluteUrl(path))}</loc></url>`)
+    .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 

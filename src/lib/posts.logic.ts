@@ -14,7 +14,7 @@ export function selectJournalPreviousDirection(
   return previousSlug
     ? {
         to: `/writing/${encodeURIComponent(previousSlug)}`,
-        label: `Previous: ${previousPost.title.trim() || "Untitled post"}`,
+        label: `Previous: ${previousPost?.title.trim() || "Untitled post"}`,
       }
     : { to: "/writing", label: "Back to Journal" };
 }

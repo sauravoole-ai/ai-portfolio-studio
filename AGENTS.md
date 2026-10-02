@@ -10,3 +10,11 @@
 > the editor, so keep the branch in a working state.
 
 <!-- LOVABLE:END -->
+
+## Analytics maintenance
+
+- Preserve the public-only analytics boundary: `/studio` and nested Studio paths are excluded.
+- Keep analytics URL redaction covered by tests; do not send query strings or fragments.
+- Do not describe backend request counts as verified visitors.
+- Analytics must remain non-blocking: failures in telemetry must not break rendering or navigation.
+

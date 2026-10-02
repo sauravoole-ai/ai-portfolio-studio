@@ -3,7 +3,7 @@ import type { PublishedProject } from "./projects.functions";
 export function normalizePublishedProject(
   project: Partial<PublishedProject> & Pick<PublishedProject, "id">,
 ): PublishedProject {
-  return {
+  const normalized = {
     title: null,
     slug: null,
     summary: null,
@@ -20,12 +20,16 @@ export function normalizePublishedProject(
     show_in_product_launcher: false,
     product_sort_order: 0,
     ...project,
-    key_features: project.key_features ?? [],
-    stack: project.stack ?? [],
-    status: project.status ?? "Live",
-    sort_order: project.sort_order ?? 0,
-    show_in_product_launcher: project.show_in_product_launcher ?? false,
-    product_sort_order: project.product_sort_order ?? 0,
+  };
+
+  return {
+    ...normalized,
+    key_features: normalized.key_features ?? [],
+    stack: normalized.stack ?? [],
+    status: normalized.status ?? "Live",
+    sort_order: normalized.sort_order ?? 0,
+    show_in_product_launcher: normalized.show_in_product_launcher ?? false,
+    product_sort_order: normalized.product_sort_order ?? 0,
   };
 }
 

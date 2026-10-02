@@ -135,3 +135,8 @@ Apex V1.1 — live.
 
 Saurav Kumar Jha<br>
 AI Product Builder
+
+
+## Analytics
+
+Privacy-friendly traffic analytics are instrumented with Vercel Web Analytics. Private `/studio` navigation is excluded from tracking.

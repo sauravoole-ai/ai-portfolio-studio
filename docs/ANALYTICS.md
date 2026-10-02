@@ -20,6 +20,10 @@ Not tracked by this integration:
 
 The filtering policy lives in `src/lib/analytics.ts` and is covered by `src/lib/analytics.test.ts`.
 
+## Deployment Trigger
+
+For a Git-connected Vercel project, a normal push to the production branch can trigger a production deployment when automatic Git deployments are enabled. This provides a dashboard-free release path while preserving Git history and CI.
+
 ## Activation
 
 The code integration alone does not create historical analytics data.

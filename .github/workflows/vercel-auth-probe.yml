@@ -1,0 +1,27 @@
+name: Vercel auth probe
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check configured Vercel auth without exposing secrets
+        shell: bash
+        env:
+          HAS_VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN != '' }}
+          HAS_VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID != '' }}
+          HAS_VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID != '' }}
+          HAS_VAR_ORG_ID: ${{ vars.VERCEL_ORG_ID != '' }}
+          HAS_VAR_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID != '' }}
+        run: |
+          echo "VERCEL_TOKEN_CONFIGURED=$HAS_VERCEL_TOKEN"
+          echo "VERCEL_ORG_ID_SECRET_CONFIGURED=$HAS_VERCEL_ORG_ID"
+          echo "VERCEL_PROJECT_ID_SECRET_CONFIGURED=$HAS_VERCEL_PROJECT_ID"
+          echo "VERCEL_ORG_ID_VAR_CONFIGURED=$HAS_VAR_ORG_ID"
+          echo "VERCEL_PROJECT_ID_VAR_CONFIGURED=$HAS_VAR_PROJECT_ID"

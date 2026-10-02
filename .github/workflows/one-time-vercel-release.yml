@@ -1,0 +1,76 @@
+name: One-time Vercel authenticated release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_ORG_ID: team_ISTUgoCnWOCTM7XdmYWfO451
+      VERCEL_PROJECT_ID: prj_ay3n8Fi1l8IC2Dea0nx8Cz72oaVD
+
+    steps:
+      - name: Checkout exact main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Authenticate to Vercel with device flow
+        shell: bash
+        env:
+          CI: ""
+        run: script -q -e -c "vercel login" /dev/null
+
+      - name: Verify Vercel identity
+        run: vercel whoami
+
+      - name: Remove this one-time workflow from main
+        shell: bash
+        run: |
+          rm .github/workflows/one-time-vercel-release.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/one-time-vercel-release.yml
+          git commit -m "chore: remove one-time Vercel release workflow"
+          git push origin HEAD:main
+
+      - name: Install project dependencies
+        run: npm install --ignore-scripts
+
+      - name: Verify final release tree
+        run: |
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Enable Vercel Web Analytics
+        run: vercel project web-analytics ai-portfolio-studio --scope sauravoole-1831s-projects --format json
+
+      - name: Deploy final main to production
+        run: vercel deploy --prod --yes --scope sauravoole-1831s-projects
+
+      - name: Report release commit
+        run: |
+          echo "RELEASE_SHA=$(git rev-parse HEAD)"
+          git status --short

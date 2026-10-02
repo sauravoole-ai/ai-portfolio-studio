@@ -1,79 +1,41 @@
 # AI Portfolio Studio
 
-A personal AI portfolio and publishing platform for showcasing products, writing, experiments, and professional work enquiries.
+A full-stack personal portfolio and publishing platform for presenting AI products, writing, experiments, and professional enquiries through a private-editor/public-site workflow.
 
-## Live Demo
+**Production:** https://sauravkrjha.vercel.app
 
-https://sauravkrjha.vercel.app
+## Product Surfaces
 
-## What It Includes
+- **Home** — editorial introduction and portfolio navigation.
+- **Work** — published projects presented as structured case studies.
+- **Journal** — writing, observations, and build notes.
+- **About** — dynamic profile, capabilities, and technology context.
+- **Contact** — validated professional enquiry flow.
+- **Studio** — private administration for profile, projects, posts, and messages.
 
-- **Home:** An editorial introduction with responsive navigation into the portfolio.
-- **Work:** Published projects presented as structured case studies.
-- **Journal:** Publishing for writing, observations, and experiments.
-- **About:** A dynamic personal profile, capabilities, and tool ecosystem.
-- **Contact:** A validated, structured professional enquiry flow.
-- **Studio:** A private administration interface for profile, project, post, and message management.
-- **Responsive experience:** Purposefully composed mobile, tablet, and desktop layouts.
-- **Discoverability:** Canonical URLs, social metadata, sitemap, robots directives, and structured profile data.
+## Stack
 
-## Key Product Features
+- **Application:** React, TypeScript, TanStack Start / Router / Query, Vite, Tailwind CSS
+- **Data:** Supabase, PostgreSQL, Auth, Row Level Security, versioned migrations
+- **Runtime:** Nitro on Vercel
+- **Operations:** GitHub, Vercel Web Analytics, Supabase logging
 
-- Supabase-driven published projects and case studies
-- Journal publishing
-- Private Studio administration
-- Dynamic Site Profile content
-- Structured Contact enquiries and admin message management
-- Responsive route navigation
-- Open Graph and Twitter metadata
-- Canonical URLs
-- Dynamic `sitemap.xml`
-- `robots.txt`
-- Structured `ProfilePage` metadata
-
-## Architecture / Stack
-
-### Frontend / App
-
-- React
-- TypeScript
-- TanStack Start, Router, and Query
-- Vite
-- Tailwind CSS
-
-### Backend / Data
-
-- Supabase
-- Postgres
-- Supabase Auth
-- Row Level Security (RLS)
-- Versioned database migrations
-
-### Deployment
-
-- Nitro
-- Vercel
-
-### Development
-
-- Git and GitHub
-- VS Code
-- AI-assisted development workflow
-
-## Architecture Overview
+## Architecture
 
 ```text
-Browser
-  → TanStack Start application
-  → Supabase for data and authentication
-  → Vercel for the production runtime
+Public browser
+  → TanStack Start application on Vercel
+  → published reads / validated writes through Supabase
+
+Private Studio
+  → Supabase Auth
+  → admin allowlist
+  → RLS-protected administration
 ```
 
-Studio is private and protected through Supabase Auth, an admin allowlist, and RLS. Route obscurity is not treated as a security boundary.
+Route obscurity is not treated as a security boundary.
 
-## Routes
-
-Public:
+## Public Routes
 
 - `/`
 - `/projects`
@@ -83,60 +45,72 @@ Public:
 - `/about`
 - `/contact`
 
-Private:
+Private route: `/studio`.
 
-- `/studio`
+## Analytics & Privacy
+
+The repository integrates Vercel Web Analytics for public portfolio traffic.
+
+- `/studio` and nested Studio paths are excluded before analytics events are sent.
+- Public analytics URLs have query strings and fragments removed.
+- Analytics data is not backfilled; collection starts only after the Vercel project has Web Analytics enabled and an instrumented production build is deployed.
+- Supabase/Vercel backend request counts are operational telemetry, not a substitute for verified unique-visitor metrics.
+
+See [docs/ANALYTICS.md](docs/ANALYTICS.md) for the analytics contract, activation, and verification procedure.
+
+## Security Boundaries
+
+- Supabase Auth protects authenticated access.
+- An admin allowlist restricts Studio authorization.
+- RLS enforces database access boundaries.
+- Studio retains `noindex, nofollow` metadata.
+- Public contact access is limited to validated inserts; message reading and management remain admin-only.
+
+These are implemented controls, not a security certification.
 
 ## Local Development
 
-Required environment variable names:
+Required runtime variable names:
 
 ```text
 SUPABASE_URL
 SUPABASE_PUBLISHABLE_KEY
 ```
 
-Available project commands:
+Keep all environment values local; never commit secret values.
 
 ```bash
+npm install
 npm run dev
 npm run build
-npm run build:dev
-npm run preview
 npm run lint
-npm run format
+npm run typecheck
+npm run format:check
 ```
 
-Environment values must remain local and must never be committed.
+The repository also retains a Bun lockfile for the connected development workflow. TypeScript-native tests and the full verification command use Bun:
+
+```bash
+bun test
+bun run verify
+```
 
 ## Deployment
 
-Production runs on Vercel at [sauravkrjha.vercel.app](https://sauravkrjha.vercel.app). Deployments use the linked Vercel project and its securely configured production environment variables. Run `npx vercel --prod` to publish a production release after the build succeeds.
+Production releases target the linked Vercel project. Before release:
 
-## Security
+1. run the repository verification checks;
+2. inspect the rendered site on mobile, tablet, and desktop;
+3. deploy the verified commit;
+4. confirm public routes, private Studio behavior, analytics collection, and error-free production logs.
 
-- Supabase Auth protects authenticated access.
-- An admin allowlist restricts Studio authorization.
-- RLS enforces database access boundaries.
-- Studio retains `noindex, nofollow` metadata.
-- Public Contact access is restricted to validated inserts; message reading and management remain admin-only.
-
-This describes the implemented controls and is not a security certification.
-
-## Product Specification
-
-See [docs/APEX_PRODUCT_SPEC.md](docs/APEX_PRODUCT_SPEC.md) for the locked product, responsive, navigation, content, security, deployment, and change-discipline contracts.
+The current project specification is in [docs/APEX_PRODUCT_SPEC.md](docs/APEX_PRODUCT_SPEC.md).
 
 ## Status
 
-Apex V1.1 — live.
+**Apex V1.1 — production live.**
 
 ## Author
 
-Saurav Kumar Jha<br>
+Saurav Kumar Jha  
 AI Product Builder
-
-
-## Analytics
-
-Privacy-friendly traffic analytics are instrumented with Vercel Web Analytics. Private `/studio` navigation is excluded from tracking.

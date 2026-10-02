@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Analytics, type BeforeSendEvent } from "@vercel/analytics/react";
 import {
   Outlet,
   Link,
@@ -12,6 +13,12 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SITE } from "../lib/content";
+
+function filterAnalyticsEvent(event: BeforeSendEvent) {
+  // Keep private Studio/admin navigation out of portfolio traffic metrics.
+  if (event.url.includes("/studio")) return null;
+  return event;
+}
 
 function NotFoundComponent() {
   return (
@@ -120,6 +127,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
+        <Analytics beforeSend={filterAnalyticsEvent} />
         <Scripts />
       </body>
     </html>

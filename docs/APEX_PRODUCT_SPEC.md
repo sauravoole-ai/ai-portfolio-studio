@@ -82,6 +82,14 @@
 - Studio manages profile, project, post, and message records.
 - Hiding the route is not a security control.
 
+## Analytics contract
+
+- Public traffic measurement uses Vercel Web Analytics when enabled for the production project.
+- Private `/studio` navigation and nested Studio paths must never be sent as analytics page views.
+- Query strings and URL fragments must be removed before public analytics events are sent.
+- Analytics instrumentation must not become a rendering dependency; telemetry failure must not break the portfolio.
+- Operational request logs must not be presented as exact unique-visitor counts.
+
 ## Deployment
 
 - TanStack Start with Vite.

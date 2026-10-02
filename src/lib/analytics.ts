@@ -7,6 +7,7 @@ function isPrivateStudioPath(pathname: string) {
 }
 
 /**
+ * Deployment note: this module is intentionally runtime-safe and side-effect free.
  * Portfolio analytics policy:
  * - never report private Studio/admin navigation;
  * - remove query strings and fragments before public page views are sent.

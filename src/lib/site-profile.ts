@@ -26,7 +26,7 @@ export const fallbackSiteProfile = {
   github_url: SITE.githubUrl,
   linkedin_url: SITE.linkedinUrl,
   instagram_url: SITE.instagramUrl,
-  bio_fragments: [...bioFragments],
+  bio_fragments: [...bioFragments] as string[],
   capabilities: capabilities.map(({ heading, description }) => ({ title: heading, description })),
   technology_groups: technologyGroups.map((group) => ({
     title: group.title,

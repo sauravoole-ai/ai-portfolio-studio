@@ -17,4 +17,3 @@
 - Keep analytics URL redaction covered by tests; do not send query strings or fragments.
 - Do not describe backend request counts as verified visitors.
 - Analytics must remain non-blocking: failures in telemetry must not break rendering or navigation.
-

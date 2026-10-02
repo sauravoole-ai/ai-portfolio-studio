@@ -1,0 +1,104 @@
+name: One-time Vercel device release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      VERCEL_ORG_ID: team_ISTUgoCnWOCTM7XdmYWfO451
+      VERCEL_PROJECT_ID: prj_ay3n8Fi1l8IC2Dea0nx8Cz72oaVD
+
+    steps:
+      - name: Checkout exact main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Start Vercel device authorization
+        shell: bash
+        env:
+          CI: ""
+        run: |
+          LOGIN_LOG="$RUNNER_TEMP/vercel-login.log"
+          PID_FILE="$RUNNER_TEMP/vercel-login.pid"
+          script -q -f -e -c "vercel login" "$LOGIN_LOG" &
+          echo $! > "$PID_FILE"
+          for i in {1..30}; do
+            if grep -Eqi 'https://|authorize|device|code' "$LOGIN_LOG"; then
+              break
+            fi
+            sleep 1
+          done
+          cp "$LOGIN_LOG" "$RUNNER_TEMP/vercel-device-flow.txt"
+
+      - name: Upload device authorization prompt
+        uses: actions/upload-artifact@v4
+        with:
+          name: vercel-device-flow
+          path: ${{ runner.temp }}/vercel-device-flow.txt
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Wait for Vercel authorization
+        shell: bash
+        run: |
+          wait "$(cat "$RUNNER_TEMP/vercel-login.pid")"
+
+      - name: Verify Vercel identity and project access
+        shell: bash
+        run: |
+          vercel whoami
+          vercel project inspect ai-portfolio-studio --scope sauravoole-1831s-projects --non-interactive
+
+      - name: Remove one-time release workflows from main
+        shell: bash
+        run: |
+          rm -f .github/workflows/one-time-vercel-release.yml
+          rm -f .github/workflows/one-time-vercel-device-release.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows
+          git commit -m "chore: remove one-time Vercel auth workflows"
+          git push origin HEAD:main
+
+      - name: Install project dependencies
+        run: npm install --ignore-scripts
+
+      - name: Verify final release tree
+        run: |
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Enable Vercel Web Analytics
+        run: vercel project web-analytics ai-portfolio-studio --scope sauravoole-1831s-projects --format json
+
+      - name: Deploy final main to production
+        run: vercel deploy --prod --yes --scope sauravoole-1831s-projects
+
+      - name: Report final release SHA
+        run: |
+          echo "RELEASE_SHA=$(git rev-parse HEAD)"
+          git status --short

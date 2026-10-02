@@ -13,11 +13,10 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SITE } from "../lib/content";
+import { sanitizePortfolioAnalyticsEvent } from "../lib/analytics";
 
 function filterAnalyticsEvent(event: BeforeSendEvent) {
-  // Keep private Studio/admin navigation out of portfolio traffic metrics.
-  if (event.url.includes("/studio")) return null;
-  return event;
+  return sanitizePortfolioAnalyticsEvent(event);
 }
 
 function NotFoundComponent() {

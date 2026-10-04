@@ -64,7 +64,7 @@ function formatPublicationDate(value: string) {
 
 function PostPage() {
   const { post } = Route.useLoaderData();
-  const posts = writingRouteApi.useLoaderData();
+  const posts = writingRouteApi.useLoaderData() ?? [];
   useSuspenseQuery(postQueryOptions(post.slug));
   const paragraphs = post.content.split(/\r?\n\s*\r?\n/).filter((paragraph) => paragraph.trim());
   const routeDirections = {

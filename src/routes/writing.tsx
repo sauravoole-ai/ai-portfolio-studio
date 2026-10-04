@@ -1,5 +1,11 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useMatches,
+  type ErrorComponentProps,
+} from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PremiumEmptyState } from "@/components/premium-empty-state";
 import { SiteShell } from "@/components/site-shell";
@@ -36,7 +42,7 @@ function JournalPending() {
   );
 }
 
-function JournalError({ reset }: { error: Error; reset: () => void }) {
+function JournalError({ reset }: ErrorComponentProps) {
   return (
     <SiteShell>
       <div className="container-editorial py-32 text-center">

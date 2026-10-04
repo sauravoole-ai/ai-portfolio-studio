@@ -1,0 +1,111 @@
+name: One-time patched production release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, 'trigger patched production release')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VERCEL_ORG_ID: team_ISTUgoCnWOCTM7XdmYWfO451
+      VERCEL_PROJECT_ID: prj_ay3n8Fi1l8IC2Dea0nx8Cz72oaVD
+      EXPECTED_TREE: 4a965b6cedc10997cf924f8aa917ef2c189c5560
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Start Vercel device authorization
+        shell: bash
+        env:
+          CI: ""
+        run: |
+          LOGIN_LOG="$RUNNER_TEMP/vercel-login.log"
+          EXIT_FILE="$RUNNER_TEMP/vercel-login.exit"
+          rm -f "$LOGIN_LOG" "$EXIT_FILE"
+          (
+            unset RUNNER_TRACKING_ID
+            script -q -f -e -c "vercel login" "$LOGIN_LOG"
+            echo "$?" > "$EXIT_FILE"
+          ) >/dev/null 2>&1 &
+          for i in {1..90}; do
+            if grep -Eq 'https://vercel.com/oauth/device\?user_code=' "$LOGIN_LOG" 2>/dev/null; then
+              break
+            fi
+            if [[ -f "$EXIT_FILE" ]]; then
+              break
+            fi
+            sleep 1
+          done
+          if ! grep -Eq 'https://vercel.com/oauth/device\?user_code=' "$LOGIN_LOG" 2>/dev/null; then
+            cat "$LOGIN_LOG" || true
+            exit 1
+          fi
+          cp "$LOGIN_LOG" "$RUNNER_TEMP/vercel-device-auth.txt"
+
+      - name: Upload authorization prompt
+        uses: actions/upload-artifact@v4
+        with:
+          name: vercel-device-auth
+          path: ${{ runner.temp }}/vercel-device-auth.txt
+          retention-days: 1
+
+      - name: Wait for authorization
+        shell: bash
+        run: |
+          EXIT_FILE="$RUNNER_TEMP/vercel-login.exit"
+          for i in {1..180}; do
+            if [[ -f "$EXIT_FILE" ]]; then
+              exit "$(cat "$EXIT_FILE")"
+            fi
+            sleep 4
+          done
+          exit 1
+
+      - name: Link existing project
+        run: |
+          vercel whoami
+          vercel link --yes --project ai-portfolio-studio --scope sauravoole-1831s-projects
+          git checkout -- .gitignore || true
+
+      - name: Restore clean release tree
+        shell: bash
+        run: |
+          rm -f .github/workflows/one-time-patched-production-release.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/one-time-patched-production-release.yml
+          git commit -m "chore: remove temporary patched production-release workflow"
+          test "$(git rev-parse HEAD^{tree})" = "$EXPECTED_TREE"
+          git push origin HEAD:main
+          echo "RELEASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Deploy patched tree to production
+        run: vercel deploy --prod --yes --scope sauravoole-1831s-projects
+
+      - name: Try enabling Web Analytics
+        continue-on-error: true
+        shell: bash
+        env:
+          CI: ""
+        run: |
+          printf 'y\n' | script -q -e -c "vercel project web-analytics ai-portfolio-studio --scope sauravoole-1831s-projects --format json" /dev/null
+
+      - name: Report release
+        run: |
+          echo "RELEASE_SHA=$RELEASE_SHA"
+          echo "RELEASE_TREE=$(git rev-parse HEAD^{tree})"

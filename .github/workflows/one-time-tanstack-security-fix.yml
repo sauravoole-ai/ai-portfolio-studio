@@ -1,4 +1,5 @@
 name: One-time TanStack security fix
+# retry after route-type compatibility patch
 
 on:
   push:

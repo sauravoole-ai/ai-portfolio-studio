@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   release:
-    if: github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, 'trigger Vercel GitHub code auth')
+    if: github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, 'trigger Vercel device code auth')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -34,22 +34,23 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Start GitHub-based Vercel authorization
+      - name: Start Vercel device authorization
         shell: bash
         env:
           CI: ""
         run: |
-          LOGIN_LOG="$RUNNER_TEMP/vercel-github-login.log"
-          EXIT_FILE="$RUNNER_TEMP/vercel-github-login.exit"
+          LOGIN_LOG="$RUNNER_TEMP/vercel-login.log"
+          EXIT_FILE="$RUNNER_TEMP/vercel-login.exit"
           rm -f "$LOGIN_LOG" "$EXIT_FILE"
           (
             unset RUNNER_TRACKING_ID
-            script -q -f -e -c "vercel login --github" "$LOGIN_LOG"
+            script -q -f -e -c "vercel login" "$LOGIN_LOG"
             echo "$?" > "$EXIT_FILE"
           ) >/dev/null 2>&1 &
-          echo "$!" > "$RUNNER_TEMP/vercel-github-login.pid"
-          for i in {1..60}; do
-            if grep -Eqi 'https://|code|authorize|github' "$LOGIN_LOG" 2>/dev/null; then
+          echo "$!" > "$RUNNER_TEMP/vercel-login.pid"
+
+          for i in {1..90}; do
+            if grep -Eq 'https://vercel.com/oauth/device\?user_code=' "$LOGIN_LOG" 2>/dev/null; then
               break
             fi
             if [[ -f "$EXIT_FILE" ]]; then
@@ -57,33 +58,36 @@ jobs:
             fi
             sleep 1
           done
-          cp "$LOGIN_LOG" "$RUNNER_TEMP/vercel-github-auth.txt"
-          if [[ ! -s "$RUNNER_TEMP/vercel-github-auth.txt" ]]; then
-            echo "No Vercel authorization prompt was produced."
+
+          if ! grep -Eq 'https://vercel.com/oauth/device\?user_code=' "$LOGIN_LOG" 2>/dev/null; then
+            echo "Device authorization URL was not produced."
+            cat "$LOGIN_LOG" || true
             exit 1
           fi
+
+          cp "$LOGIN_LOG" "$RUNNER_TEMP/vercel-device-auth.txt"
 
       - name: Upload authorization prompt
         uses: actions/upload-artifact@v4
         with:
-          name: vercel-github-auth
-          path: ${{ runner.temp }}/vercel-github-auth.txt
+          name: vercel-device-auth
+          path: ${{ runner.temp }}/vercel-device-auth.txt
           retention-days: 1
           if-no-files-found: error
 
       - name: Wait for authorization
         shell: bash
         run: |
-          EXIT_FILE="$RUNNER_TEMP/vercel-github-login.exit"
+          EXIT_FILE="$RUNNER_TEMP/vercel-login.exit"
           for i in {1..180}; do
             if [[ -f "$EXIT_FILE" ]]; then
               code="$(cat "$EXIT_FILE")"
-              cat "$RUNNER_TEMP/vercel-github-login.log" || true
+              cat "$RUNNER_TEMP/vercel-login.log" || true
               exit "$code"
             fi
             sleep 4
           done
-          echo "Timed out waiting for Vercel GitHub authorization."
+          echo "Timed out waiting for Vercel device authorization."
           exit 1
 
       - name: Verify identity
@@ -119,5 +123,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .github/workflows/one-time-vercel-github-auth.yml
-          git commit -m "chore: remove temporary Vercel GitHub auth workflow"
+          git commit -m "chore: remove temporary Vercel device auth workflow"
           git push origin HEAD:main
